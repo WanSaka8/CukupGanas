@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teka-Teki Challenge</title>
+  <style>
+    /* Global Styles */
+    :root {
+      --primary: #1a2a6c;
+      --secondary: #b21f1f;
+      --accent: #fdbb2d;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #2c3e50;
+    }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Layout */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    /* Home Page */
+    .home-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    .hero-section {
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.8s ease-out;
+    }
+    
+    /* Game Page */
+    .game-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      min-height: 70vh;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    
+    /* Results Page */
+    .results-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    
+    /* Components */
+    .timer-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .timer-circle {
+      position: relative;
+      width: 60px;
+      height: 60px;
+    }
+    
+    /* Buttons */
+    .start-button, .action-button {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Add all other CSS classes from previous components here */
+    /* ... */
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section, .game-container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SPA Container -->
+  <div id="app">
+    <!-- Content will be dynamically inserted here -->
+  </div>
+
+  <script>
+    // Data
+    const questions = [
+      {
+        type: 'riddle',
+        text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
+        answer: 'Peta'
+      },
+      // Add all other questions here
+    ];
+    
+    // State
+    let currentState = 'home'; // 'home', 'game', 'results'
+    let score = 0;
+    let timeLeft = 60;
+    let timerInterval;
+    let currentQuestion = {};
+    
+    // DOM Elements
+    const app = document.getElementById('app');
+    
+    // Render Functions
+    function renderHome() {
+      app.innerHTML = `
+        <div class="home-container">
+          <div class="hero-section">
+            <h1 class="title">Teka-Teki Challenge</h1>
+            <p class="subtitle">Uji kecerdasan dan kecepatan berpikir Anda!</p>
+            
+            <div class="features">
+              <div class="feature-card">
+                <span class="feature-icon">🔀</span>
+                <p>Pertanyaan acak setiap kali main</p>
+              </div>
+              <!-- Add other feature cards -->
+            </div>
+            
+            <button id="startButton" class="start-button">
+              Mulai Bermain
+              <span class="button-icon">🚀</span>
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('startButton').addEventListener('click', startGame);
+    }
+    
+    function renderGame() {
+      currentQuestion = getRandomQuestion();
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="#e0e0e0" stroke-width="3"></circle>
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="#4CAF50" stroke-width="3"
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+                <span class="timer-text">1:00</span>
+              </div>
+            </div>
+            <div class="score">Skor: ${score}</div>
+          </div>
+          
+          <div class="question-container">
+            <h2 class="question">${currentQuestion.text}</h2>
+            
+            ${currentQuestion.type === 'multiple-choice' ? `
+              <div class="options">
+                ${currentQuestion.options.map(option => `
+                  <button class="option-button">${option}</button>
+                `).join('')}
+              </div>
+            ` : `
+              <div class="answer-input">
+                <input id="userAnswer" class="answer-field" placeholder="Ketik jawaban Anda...">
+                <button id="submitAnswer" class="submit-button">Submit</button>
+              </div>
+            `}
+          </div>
+        </div>
+      `;
+      
+      startTimer();
+      setupGameEventListeners();
+    }
+    
+    function renderResults() {
+      app.innerHTML = `
+        <div class="results-container">
+          <div class="results-card">
+            <h1 class="results-title">Hasil Permainan</h1>
+            
+            <div class="score-display">
+              <div class="score-circle">
+                <span class="score-value">${score}</span>
+                <span class="score-label">Poin</span>
+              </div>
+            </div>
+            
+            <div class="feedback">
+              <h2 class="feedback-title">${getFeedbackTitle()}</h2>
+              <p class="feedback-text">${getFeedbackText()}</p>
+            </div>
+            
+            <div class="actions">
+              <button id="playAgain" class="action-button play-again">Main Lagi</button>
+              <button id="goHome" class="action-button go-home">Kembali ke Beranda</button>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      document.getElementById('playAgain').addEventListener('click', startGame);
+      document.getElementById('goHome').addEventListener('click', () => {
+        currentState = 'home';
+        renderHome();
+      });
+    }
+    
+    // Game Logic
+    function startGame() {
+      currentState = 'game';
+      score = 0;
+      timeLeft = 60;
+      renderGame();
+    }
+    
+    function getRandomQuestion() {
+      const randomIndex = Math.floor(Math.random() * questions.length);
+      return JSON.parse(JSON.stringify(questions[randomIndex]));
+    }
+    
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          currentState = 'results';
+          renderResults();
+        }
+      }, 1000);
+    }
+    
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      document.querySelector('.timer-text').textContent = 
+        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+    
+    // Initialize
+    renderHome();
+  </script>
+</body>
+</html>
