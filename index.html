@@ -10,17 +10,27 @@
       --primary: #1a2a6c;
       --secondary: #b21f1f;
       --accent: #fdbb2d;
+      --correct: #4CAF50;
+      --incorrect: #F44336;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-align: center;
+      color: #2c3e50;
       min-height: 100vh;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
-      color: #2c3e50;
+      line-height: 1.6;
     }
     
     @keyframes gradientBG {
@@ -29,11 +39,23 @@
       100% { background-position: 0% 50%; }
     }
     
+    button {
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+    }
+    
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+    
     /* Layout */
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem;
+    #app {
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     
     /* Home Page */
@@ -41,27 +63,210 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      flex: 1;
       padding: 2rem;
     }
     
     .hero-section {
       max-width: 800px;
-      background: rgba(255, 255, 255, 0.9);
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
       padding: 3rem;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       animation: fadeIn 0.8s ease-out;
     }
     
+    .title {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      color: #555;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    
+    .start-button {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .button-icon {
+      font-size: 1.5rem;
+    }
+    
     /* Game Page */
     .game-container {
-      background: rgba(255, 255, 255, 0.9);
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      min-height: 70vh;
       padding: 2rem;
-      margin-top: 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #eee;
+    }
+    
+    .score {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    
+    .question {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: #333;
+      line-height: 1.4;
+    }
+    
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .option-button {
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      background: white;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .option-button:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    
+    .option-button.correct {
+      background: var(--correct);
+      color: white;
+      border-color: var(--correct);
+    }
+    
+    .option-button.incorrect {
+      background: var(--incorrect);
+      color: white;
+      border-color: var(--incorrect);
+    }
+    
+    .answer-input {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .answer-field {
+      flex-grow: 1;
+      padding: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    
+    .answer-field:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .submit-button {
+      padding: 0 1.5rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 10px;
+      font-size: 1.1rem;
+    }
+    
+    .submit-button:hover {
+      background: var(--secondary);
+    }
+    
+    .feedback {
+      margin-top: auto;
+    }
+    
+    .correct-feedback {
+      color: var(--correct);
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    
+    .incorrect-feedback {
+      color: var(--incorrect);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    
+    .next-button {
+      padding: 0.8rem 2rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 50px;
+      font-size: 1.1rem;
+    }
+    
+    .next-button:hover {
+      background: var(--secondary);
+      transform: scale(1.05);
     }
     
     /* Results Page */
@@ -69,11 +274,112 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      flex: 1;
       padding: 2rem;
     }
     
-    /* Components */
+    .results-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      animation: slideUp 0.8s ease-out;
+    }
+    
+    .results-title {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 2rem;
+    }
+    
+    .score-display {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    
+    .score-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      animation: pulse 3s infinite;
+    }
+    
+    .score-value {
+      font-size: 4rem;
+      font-weight: bold;
+      line-height: 1;
+    }
+    
+    .score-label {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    .feedback-title {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    
+    .feedback-text {
+      font-size: 1.2rem;
+      color: #555;
+      line-height: 1.6;
+    }
+    
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    
+    .action-button {
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      min-width: 180px;
+    }
+    
+    .play-again {
+      background: linear-gradient(to right, var(--primary), #3a56b4);
+      color: white;
+    }
+    
+    .go-home {
+      background: linear-gradient(to right, var(--secondary), #d45f5f);
+      color: white;
+    }
+    
+    .action-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Timer */
     .timer-container {
       display: flex;
       align-items: center;
@@ -85,25 +391,15 @@
       height: 60px;
     }
     
-    /* Buttons */
-    .start-button, .action-button {
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
+    .timer-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       font-size: 1.2rem;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      font-weight: bold;
+      color: #333;
     }
-    
-    /* Add all other CSS classes from previous components here */
-    /* ... */
     
     /* Animations */
     @keyframes fadeIn {
@@ -111,41 +407,147 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.8); opacity: 0.8; }
+      50% { transform: scale(1.2); opacity: 0.4; }
+      100% { transform: scale(0.8); opacity: 0.8; }
+    }
+    
     /* Responsive */
     @media (max-width: 768px) {
-      .hero-section, .game-container {
-        padding: 1.5rem;
+      .features {
+        grid-template-columns: 1fr;
+      }
+      
+      .title {
+        font-size: 2.5rem;
+      }
+      
+      .subtitle {
+        font-size: 1.2rem;
+      }
+      
+      .options {
+        grid-template-columns: 1fr;
+      }
+      
+      .answer-input {
+        flex-direction: column;
+      }
+      
+      .submit-button {
+        padding: 1rem;
+      }
+      
+      .results-card {
+        padding: 2rem 1.5rem;
+      }
+      
+      .actions {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .action-button {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <!-- SPA Container -->
   <div id="app">
-    <!-- Content will be dynamically inserted here -->
+    <!-- Content will be dynamically rendered here -->
   </div>
 
   <script>
-    // Data
+    // Game Data
     const questions = [
       {
         type: 'riddle',
         text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
-        answer: 'Peta'
+        answer: 'Peta',
+        hint: 'Berkaitan dengan geografi'
       },
-      // Add all other questions here
+      {
+        type: 'multiple-choice',
+        text: 'Jika 2 orang ayah dan 2 orang anak pergi memancing, berapa minimal orang yang ada di situ?',
+        options: ['3', '4', '2', '5'],
+        answer: '3',
+        explanation: 'Mereka adalah kakek, ayah, dan anak (total 3 orang)'
+      },
+      {
+        type: 'riddle',
+        text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
+        answer: 'Langkah',
+        hint: 'Berkaitan dengan perjalanan'
+      },
+      {
+        type: 'multiple-choice',
+        text: 'Apa yang selalu naik tetapi tidak pernah turun?',
+        options: ['Umur', 'Tangga', 'Harga', 'Balon'],
+        answer: 'Umur',
+        explanation: 'Umur selalu bertambah seiring waktu'
+      },
+      {
+        type: 'riddle',
+        text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
+        answer: 'Gema',
+        hint: 'Berkaitan dengan suara'
+      },
+      {
+        type: 'multiple-choice',
+        text: 'Apa yang memiliki tangan tetapi tidak bisa bertepuk tangan?',
+        options: ['Jam', 'Pohon', 'Boneka', 'Robot'],
+        answer: 'Jam',
+        explanation: 'Mengacu pada jarum jam'
+      },
+      {
+        type: 'riddle',
+        text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
+        answer: 'Napas',
+        hint: 'Berkaitan dengan tubuh manusia'
+      },
+      {
+        type: 'multiple-choice',
+        text: 'Jika sebuah pesawat jatuh di perbatasan antara Amerika Serikat dan Kanada, di mana korban akan dikuburkan?',
+        options: ['Amerika Serikat', 'Kanada', 'Keduanya', 'Tidak dikuburkan'],
+        answer: 'Tidak dikuburkan',
+        explanation: 'Korban kecelakaan pesawat tidak dikuburkan'
+      },
+      {
+        type: 'riddle',
+        text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
+        answer: 'Api',
+        hint: 'Unsur alam'
+      },
+      {
+        type: 'multiple-choice',
+        text: 'Apa yang bisa menembus kaca tanpa memecahkannya?',
+        options: ['Sinar matahari', 'Air', 'Suara', 'Cahaya'],
+        answer: 'Cahaya',
+        explanation: 'Cahaya bisa menembus kaca'
+      }
     ];
-    
-    // State
-    let currentState = 'home'; // 'home', 'game', 'results'
+
+    // Game State
+    let currentPage = 'home'; // 'home', 'game', 'results'
     let score = 0;
     let timeLeft = 60;
     let timerInterval;
     let currentQuestion = {};
-    
+    let answered = false;
+    let isCorrect = false;
+    let pointsEarned = 0;
+    let questionCount = 0;
+
     // DOM Elements
     const app = document.getElementById('app');
-    
+
     // Render Functions
     function renderHome() {
       app.innerHTML = `
@@ -159,7 +561,26 @@
                 <span class="feature-icon">🔀</span>
                 <p>Pertanyaan acak setiap kali main</p>
               </div>
-              <!-- Add other feature cards -->
+              <div class="feature-card">
+                <span class="feature-icon">🕒</span>
+                <p>Timer 60 detik per sesi</p>
+              </div>
+              <div class="feature-card">
+                <span class="feature-icon">🧠</span>
+                <p>Skor langsung dihitung</p>
+              </div>
+              <div class="feature-card">
+                <span class="feature-icon">🎉</span>
+                <p>Halaman hasil akhir</p>
+              </div>
+              <div class="feature-card">
+                <span class="feature-icon">🔄</span>
+                <p>Tombol untuk mulai ulang</p>
+              </div>
+              <div class="feature-card">
+                <span class="feature-icon">🚀</span>
+                <p>Navigasi antar halaman (SPA)</p>
+              </div>
             </div>
             
             <button id="startButton" class="start-button">
@@ -169,12 +590,17 @@
           </div>
         </div>
       `;
-      
+
       document.getElementById('startButton').addEventListener('click', startGame);
     }
-    
+
     function renderGame() {
       currentQuestion = getRandomQuestion();
+      questionCount++;
+      answered = false;
+      isCorrect = false;
+      pointsEarned = 0;
+
       app.innerHTML = `
         <div class="game-container">
           <div class="game-header">
@@ -182,7 +608,7 @@
               <div class="timer-circle">
                 <svg width="60" height="60" viewBox="0 0 44 44">
                   <circle cx="22" cy="22" r="20" fill="none" stroke="#e0e0e0" stroke-width="3"></circle>
-                  <circle cx="22" cy="22" r="20" fill="none" stroke="#4CAF50" stroke-width="3"
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="#4CAF50" stroke-width="3" 
                     stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
                   </circle>
                 </svg>
@@ -197,8 +623,8 @@
             
             ${currentQuestion.type === 'multiple-choice' ? `
               <div class="options">
-                ${currentQuestion.options.map(option => `
-                  <button class="option-button">${option}</button>
+                ${currentQuestion.options.map((option, index) => `
+                  <button class="option-button" data-answer="${option}">${option}</button>
                 `).join('')}
               </div>
             ` : `
@@ -207,14 +633,21 @@
                 <button id="submitAnswer" class="submit-button">Submit</button>
               </div>
             `}
+            
+            <div class="feedback ${answered ? '' : 'hidden'}">
+              <p class="${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
+                ${isCorrect ? `🎉 Benar! +${pointsEarned} poin` : `❌ Salah! Jawaban benar: ${currentQuestion.answer}`}
+              </p>
+              <button id="nextButton" class="next-button">Pertanyaan Berikutnya</button>
+            </div>
           </div>
         </div>
       `;
-      
+
       startTimer();
       setupGameEventListeners();
     }
-    
+
     function renderResults() {
       app.innerHTML = `
         <div class="results-container">
@@ -240,48 +673,158 @@
           </div>
         </div>
       `;
-      
+
       document.getElementById('playAgain').addEventListener('click', startGame);
       document.getElementById('goHome').addEventListener('click', () => {
-        currentState = 'home';
+        currentPage = 'home';
         renderHome();
       });
     }
-    
+
     // Game Logic
     function startGame() {
-      currentState = 'game';
+      currentPage = 'game';
       score = 0;
       timeLeft = 60;
+      questionCount = 0;
       renderGame();
     }
-    
+
     function getRandomQuestion() {
       const randomIndex = Math.floor(Math.random() * questions.length);
       return JSON.parse(JSON.stringify(questions[randomIndex]));
     }
-    
+
     function startTimer() {
       clearInterval(timerInterval);
+      updateTimerDisplay();
+      
       timerInterval = setInterval(() => {
         timeLeft--;
         updateTimerDisplay();
         
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
-          currentState = 'results';
+          currentPage = 'results';
           renderResults();
         }
       }, 1000);
     }
-    
+
     function updateTimerDisplay() {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
-      document.querySelector('.timer-text').textContent = 
-        `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      const timerText = document.querySelector('.timer-text');
+      if (timerText) {
+        timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        
+        // Update timer color based on remaining time
+        const timerCircle = document.querySelector('.timer-circle circle:nth-child(2)');
+        if (timerCircle) {
+          const circumference = 2 * Math.PI * 20;
+          const offset = circumference - (timeLeft / 60) * circumference;
+          timerCircle.style.strokeDashoffset = offset;
+          
+          // Change color based on time left
+          if (timeLeft > 36) {
+            timerCircle.style.stroke = '#4CAF50'; // Green
+          } else if (timeLeft > 18) {
+            timerCircle.style.stroke = '#FFC107'; // Yellow
+          } else {
+            timerCircle.style.stroke = '#F44336'; // Red
+          }
+        }
+      }
     }
-    
+
+    function checkAnswer(answer) {
+      if (answered) return;
+      
+      answered = true;
+      isCorrect = currentQuestion.type === 'riddle' 
+        ? answer.toLowerCase() === currentQuestion.answer.toLowerCase()
+        : answer === currentQuestion.answer;
+      
+      pointsEarned = calculateScore(isCorrect, questionCount);
+      if (isCorrect) {
+        score += pointsEarned;
+        document.querySelector('.score').textContent = `Skor: ${score}`;
+      }
+      
+      // Show feedback
+      document.querySelector('.feedback').classList.remove('hidden');
+      
+      // Highlight correct/incorrect answers for multiple choice
+      if (currentQuestion.type === 'multiple-choice') {
+        document.querySelectorAll('.option-button').forEach(button => {
+          if (button.textContent === currentQuestion.answer) {
+            button.classList.add('correct');
+          } else if (button.textContent === answer) {
+            button.classList.add('incorrect');
+          }
+        });
+      }
+    }
+
+    function calculateScore(isCorrect, questionCount) {
+      if (!isCorrect) return 0;
+      
+      const basePoints = 10;
+      const speedBonus = Math.max(0, 15 - questionCount);
+      
+      return basePoints + speedBonus;
+    }
+
+    function getFeedbackTitle() {
+      if (score >= 100) return "Luar Biasa! 🎉";
+      if (score >= 50) return "Bagus! 👍";
+      return "Terus Berlatih! 💪";
+    }
+
+    function getFeedbackText() {
+      if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Pertahankan prestasi ini!";
+      if (score >= 50) return "Hasil yang bagus! Dengan sedikit latihan, Anda bisa menjadi lebih baik!";
+      return "Setiap permainan adalah kesempatan untuk belajar. Coba lagi untuk meningkatkan skor Anda!";
+    }
+
+    function setupGameEventListeners() {
+      // Multiple choice answers
+      document.querySelectorAll('.option-button').forEach(button => {
+        button.addEventListener('click', () => {
+          checkAnswer(button.textContent);
+        });
+      });
+      
+      // Riddle answer submission
+      const submitButton = document.getElementById('submitAnswer');
+      if (submitButton) {
+        submitButton.addEventListener('click', () => {
+          const userAnswer = document.getElementById('userAnswer').value;
+          if (userAnswer.trim()) {
+            checkAnswer(userAnswer);
+          }
+        });
+        
+        // Also allow Enter key to submit
+        document.getElementById('userAnswer').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            const userAnswer = document.getElementById('userAnswer').value;
+            if (userAnswer.trim()) {
+              checkAnswer(userAnswer);
+            }
+          }
+        });
+      }
+      
+      // Next question button
+      const nextButton = document.getElementById('nextButton');
+      if (nextButton) {
+        nextButton.addEventListener('click', () => {
+          renderGame();
+        });
+      }
+    }
+
     // Initialize
     renderHome();
   </script>
