@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🎮 Ultimate Brain Challenge</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Press+Start+2P&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       --primary: #6a11cb;
@@ -18,6 +20,8 @@
       --puzzle: #3f51b5;
       --logic: #009688;
       --math: #f44336;
+      --maze: #795548;
+      --chess: #212121;
     }
 
     * {
@@ -37,9 +41,17 @@
     }
 
     @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
     }
 
     #app {
@@ -53,9 +65,17 @@
 
     /* Floating Animation */
     @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-15px); }
-      100% { transform: translateY(0px); }
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-15px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
     }
 
     /* Particle Effects */
@@ -116,6 +136,14 @@
 
     .game-mode.math {
       border-top: 5px solid var(--math);
+    }
+
+    .game-mode.maze {
+      border-top: 5px solid var(--maze);
+    }
+
+    .game-mode.chess {
+      border-top: 5px solid var(--chess);
     }
 
     .mode-icon {
@@ -223,8 +251,13 @@
     }
 
     @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .game-header {
@@ -334,9 +367,17 @@
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     .answer-input {
@@ -434,6 +475,177 @@
     .next-button:hover {
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Maze Game */
+    .maze-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .maze-level {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .maze-board {
+      display: grid;
+      grid-template-columns: repeat(var(--cols), 1fr);
+      grid-template-rows: repeat(var(--rows), 1fr);
+      gap: 2px;
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+
+    .maze-cell {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .maze-wall {
+      background: #333;
+    }
+
+    .maze-path {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .maze-start {
+      background: #4CAF50;
+    }
+
+    .maze-end {
+      background: #F44336;
+    }
+
+    .maze-player {
+      background: #2196F3;
+      border-radius: 50%;
+      width: 80%;
+      height: 80%;
+      z-index: 2;
+    }
+
+    .maze-visited {
+      background: rgba(33, 150, 243, 0.2);
+    }
+
+    .maze-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .maze-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .maze-button {
+      padding: 0.8rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .maze-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .maze-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Chess Game */
+    .chess-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .chess-board {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      width: 100%;
+      aspect-ratio: 1/1;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    .chess-square {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .chess-square.light {
+      background: #f0d9b5;
+    }
+
+    .chess-square.dark {
+      background: #b58863;
+    }
+
+    .chess-square.highlight {
+      background: rgba(0, 255, 0, 0.3);
+    }
+
+    .chess-piece {
+      width: 80%;
+      height: 80%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .chess-piece.selected {
+      box-shadow: 0 0 10px 5px rgba(255, 255, 0, 0.5);
+    }
+
+    .chess-controls {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .chess-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .chess-turn {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .chess-status {
+      font-size: 1rem;
+      opacity: 0.8;
     }
 
     /* Results Page */
@@ -570,18 +782,39 @@
 
     /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @keyframes confetti {
-      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
     }
 
     /* Responsive */
@@ -589,42 +822,47 @@
       .title {
         font-size: 2rem;
       }
-      
+
       .subtitle {
         font-size: 1.2rem;
       }
-      
+
       .game-modes {
         grid-template-columns: 1fr;
       }
-      
-      .game-container, .results-card {
+
+      .game-container,
+      .results-card {
         padding: 1.5rem;
       }
-      
+
       .question {
         font-size: 1.5rem;
       }
-      
+
       .options {
         grid-template-columns: 1fr;
       }
-      
+
       .answer-input {
         flex-direction: column;
       }
-      
+
       .submit-button {
         padding: 1.2rem;
         width: 100%;
       }
-      
+
       .actions {
         flex-direction: column;
       }
-      
+
       .action-button {
         width: 100%;
+      }
+
+      .maze-buttons {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -633,6 +871,7 @@
     }
   </style>
 </head>
+
 <body>
   <div id="app">
     <!-- Content will be dynamically rendered here -->
@@ -745,6 +984,289 @@
       ]
     };
 
+    // Maze Levels (20 extreme levels)
+    const mazeLevels = [
+      // Level 1-5: Basic mazes
+      {
+        rows: 5, cols: 5,
+        start: { row: 0, col: 0 },
+        end: { row: 4, col: 4 },
+        walls: [
+          [0, 1], [1, 1], [1, 3], [2, 1], [2, 3], [3, 1], [3, 3]
+        ]
+      },
+      {
+        rows: 7, cols: 7,
+        start: { row: 0, col: 0 },
+        end: { row: 6, col: 6 },
+        walls: [
+          [0, 2], [0, 4], [1, 2], [1, 4], [2, 0], [2, 1], [2, 2], [2, 4], [2, 5], [2, 6],
+          [3, 2], [3, 4], [4, 2], [4, 4], [5, 2], [5, 4], [6, 2], [6, 4]
+        ]
+      },
+      {
+        rows: 8, cols: 8,
+        start: { row: 0, col: 0 },
+        end: { row: 7, col: 7 },
+        walls: [
+          [0, 1], [0, 3], [0, 5], [1, 1], [1, 3], [1, 5], [2, 1], [2, 3], [2, 5],
+          [3, 1], [3, 3], [3, 5], [4, 1], [4, 3], [4, 5], [5, 1], [5, 3], [5, 5],
+          [6, 1], [6, 3], [6, 5], [7, 1], [7, 3], [7, 5]
+        ]
+      },
+      {
+        rows: 10, cols: 10,
+        start: { row: 0, col: 0 },
+        end: { row: 9, col: 9 },
+        walls: [
+          [0, 1], [0, 3], [0, 5], [0, 7], [1, 1], [1, 3], [1, 5], [1, 7],
+          [2, 1], [2, 3], [2, 5], [2, 7], [3, 1], [3, 3], [3, 5], [3, 7],
+          [4, 1], [4, 3], [4, 5], [4, 7], [5, 1], [5, 3], [5, 5], [5, 7],
+          [6, 1], [6, 3], [6, 5], [6, 7], [7, 1], [7, 3], [7, 5], [7, 7],
+          [8, 1], [8, 3], [8, 5], [8, 7], [9, 1], [9, 3], [9, 5], [9, 7]
+        ]
+      },
+      {
+        rows: 12, cols: 12,
+        start: { row: 0, col: 0 },
+        end: { row: 11, col: 11 },
+        walls: [
+          [0, 1], [0, 3], [0, 5], [0, 7], [0, 9], [1, 1], [1, 3], [1, 5], [1, 7], [1, 9],
+          [2, 1], [2, 3], [2, 5], [2, 7], [2, 9], [3, 1], [3, 3], [3, 5], [3, 7], [3, 9],
+          [4, 1], [4, 3], [4, 5], [4, 7], [4, 9], [5, 1], [5, 3], [5, 5], [5, 7], [5, 9],
+          [6, 1], [6, 3], [6, 5], [6, 7], [6, 9], [7, 1], [7, 3], [7, 5], [7, 7], [7, 9],
+          [8, 1], [8, 3], [8, 5], [8, 7], [8, 9], [9, 1], [9, 3], [9, 5], [9, 7], [9, 9],
+          [10, 1], [10, 3], [10, 5], [10, 7], [10, 9], [11, 1], [11, 3], [11, 5], [11, 7], [11, 9]
+        ]
+      },
+      // Level 6-10: More complex patterns
+      {
+        rows: 15, cols: 15,
+        start: { row: 0, col: 0 },
+        end: { row: 14, col: 14 },
+        walls: [
+          [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13],
+          [1, 13], [2, 13], [3, 13], [4, 13], [5, 13], [6, 13], [7, 13], [8, 13], [9, 13], [10, 13], [11, 13], [12, 13], [13, 13],
+          [13, 0], [13, 1], [13, 2], [13, 3], [13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12],
+          [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0], [12, 0],
+          // Inner walls
+          [2, 2], [2, 4], [2, 6], [2, 8], [2, 10], [2, 12],
+          [4, 2], [4, 4], [4, 6], [4, 8], [4, 10], [4, 12],
+          [6, 2], [6, 4], [6, 6], [6, 8], [6, 10], [6, 12],
+          [8, 2], [8, 4], [8, 6], [8, 8], [8, 10], [8, 12],
+          [10, 2], [10, 4], [10, 6], [10, 8], [10, 10], [10, 12],
+          [12, 2], [12, 4], [12, 6], [12, 8], [12, 10], [12, 12]
+        ]
+      },
+      {
+        rows: 15, cols: 15,
+        start: { row: 0, col: 0 },
+        end: { row: 14, col: 14 },
+        walls: [
+          // Spiral pattern
+          [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13],
+          [1, 13], [2, 13], [3, 13], [4, 13], [5, 13], [6, 13], [7, 13], [8, 13], [9, 13], [10, 13], [11, 13], [12, 13],
+          [13, 13], [13, 12], [13, 11], [13, 10], [13, 9], [13, 8], [13, 7], [13, 6], [13, 5], [13, 4], [13, 3], [13, 2], [13, 1], [13, 0],
+          [12, 0], [11, 0], [10, 0], [9, 0], [8, 0], [7, 0], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0],
+          [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12],
+          [2, 12], [3, 12], [4, 12], [5, 12], [6, 12], [7, 12], [8, 12], [9, 12], [10, 12], [11, 12],
+          [11, 11], [11, 10], [11, 9], [11, 8], [11, 7], [11, 6], [11, 5], [11, 4], [11, 3], [11, 2], [11, 1],
+          [10, 1], [9, 1], [8, 1], [7, 1], [6, 1], [5, 1], [4, 1], [3, 1], [2, 1],
+          [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8], [2, 9], [2, 10], [2, 11],
+          [3, 11], [4, 11], [5, 11], [6, 11], [7, 11], [8, 11], [9, 11], [10, 11],
+          [10, 10], [10, 9], [10, 8], [10, 7], [10, 6], [10, 5], [10, 4], [10, 3], [10, 2],
+          [9, 2], [8, 2], [7, 2], [6, 2], [5, 2], [4, 2], [3, 2],
+          [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8], [3, 9], [3, 10],
+          [4, 10], [5, 10], [6, 10], [7, 10], [8, 10], [9, 10],
+          [9, 9], [9, 8], [9, 7], [9, 6], [9, 5], [9, 4], [9, 3],
+          [8, 3], [7, 3], [6, 3], [5, 3], [4, 3],
+          [4, 4], [4, 5], [4, 6], [4, 7], [4, 8], [4, 9],
+          [5, 9], [6, 9], [7, 9], [8, 9],
+          [8, 8], [8, 7], [8, 6], [8, 5], [8, 4],
+          [7, 4], [6, 4], [5, 4],
+          [5, 5], [5, 6], [5, 7], [5, 8],
+          [6, 8], [7, 8],
+          [7, 7], [7, 6], [7, 5],
+          [6, 5],
+          [6, 6]
+        ]
+      },
+      {
+        rows: 15, cols: 15,
+        start: { row: 0, col: 0 },
+        end: { row: 14, col: 14 },
+        walls: [
+          // Checkerboard pattern with openings
+          [0, 1], [0, 3], [0, 5], [0, 7], [0, 9], [0, 11], [0, 13],
+          [1, 0], [1, 2], [1, 4], [1, 6], [1, 8], [1, 10], [1, 12], [1, 14],
+          [2, 1], [2, 3], [2, 5], [2, 7], [2, 9], [2, 11], [2, 13],
+          [3, 0], [3, 2], [3, 4], [3, 6], [3, 8], [3, 10], [3, 12], [3, 14],
+          [4, 1], [4, 3], [4, 5], [4, 7], [4, 9], [4, 11], [4, 13],
+          [5, 0], [5, 2], [5, 4], [5, 6], [5, 8], [5, 10], [5, 12], [5, 14],
+          [6, 1], [6, 3], [6, 5], [6, 7], [6, 9], [6, 11], [6, 13],
+          [7, 0], [7, 2], [7, 4], [7, 6], [7, 8], [7, 10], [7, 12], [7, 14],
+          [8, 1], [8, 3], [8, 5], [8, 7], [8, 9], [8, 11], [8, 13],
+          [9, 0], [9, 2], [9, 4], [9, 6], [9, 8], [9, 10], [9, 12], [9, 14],
+          [10, 1], [10, 3], [10, 5], [10, 7], [10, 9], [10, 11], [10, 13],
+          [11, 0], [11, 2], [11, 4], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14],
+          [12, 1], [12, 3], [12, 5], [12, 7], [12, 9], [12, 11], [12, 13],
+          [13, 0], [13, 2], [13, 4], [13, 6], [13, 8], [13, 10], [13, 12], [13, 14],
+          [14, 1], [14, 3], [14, 5], [14, 7], [14, 9], [14, 11], [14, 13],
+          // Openings to create a path
+          [0, 0], [0, 14], [14, 0], [14, 14]
+        ]
+      },
+      {
+        rows: 15, cols: 15,
+        start: { row: 0, col: 0 },
+        end: { row: 14, col: 14 },
+        walls: [
+          // Maze with multiple paths but only one correct
+          [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13],
+          [1, 0], [1, 2], [1, 4], [1, 6], [1, 8], [1, 10], [1, 12], [1, 14],
+          [2, 1], [2, 3], [2, 5], [2, 7], [2, 9], [2, 11], [2, 13],
+          [3, 0], [3, 2], [3, 4], [3, 6], [3, 8], [3, 10], [3, 12], [3, 14],
+          [4, 1], [4, 3], [4, 5], [4, 7], [4, 9], [4, 11], [4, 13],
+          [5, 0], [5, 2], [5, 4], [5, 6], [5, 8], [5, 10], [5, 12], [5, 14],
+          [6, 1], [6, 3], [6, 5], [6, 7], [6, 9], [6, 11], [6, 13],
+          [7, 0], [7, 2], [7, 4], [7, 6], [7, 8], [7, 10], [7, 12], [7, 14],
+          [8, 1], [8, 3], [8, 5], [8, 7], [8, 9], [8, 11], [8, 13],
+          [9, 0], [9, 2], [9, 4], [9, 6], [9, 8], [9, 10], [9, 12], [9, 14],
+          [10, 1], [10, 3], [10, 5], [10, 7], [10, 9], [10, 11], [10, 13],
+          [11, 0], [11, 2], [11, 4], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14],
+          [12, 1], [12, 3], [12, 5], [12, 7], [12, 9], [12, 11], [12, 13],
+          [13, 0], [13, 2], [13, 4], [13, 6], [13, 8], [13, 10], [13, 12], [13, 14],
+          [14, 1], [14, 3], [14, 5], [14, 7], [14, 9], [14, 11], [14, 13],
+          // Correct path openings
+          [0, 0], [1, 1], [2, 0], [3, 1], [4, 0], [5, 1], [6, 0], [7, 1], [8, 0], [9, 1], [10, 0], [11, 1], [12, 0], [13, 1], [14, 0]
+        ]
+      },
+      {
+        rows: 15, cols: 15,
+        start: { row: 0, col: 0 },
+        end: { row: 14, col: 14 },
+        walls: [
+          // Complex maze with dead ends
+          [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13],
+          [1, 0], [1, 2], [1, 4], [1, 6], [1, 8], [1, 10], [1, 12], [1, 14],
+          [2, 1], [2, 3], [2, 5], [2, 7], [2, 9], [2, 11], [2, 13],
+          [3, 0], [3, 2], [3, 4], [3, 6], [3, 8], [3, 10], [3, 12], [3, 14],
+          [4, 1], [4, 3], [4, 5], [4, 7], [4, 9], [4, 11], [4, 13],
+          [5, 0], [5, 2], [5, 4], [5, 6], [5, 8], [5, 10], [5, 12], [5, 14],
+          [6, 1], [6, 3], [6, 5], [6, 7], [6, 9], [6, 11], [6, 13],
+          [7, 0], [7, 2], [7, 4], [7, 6], [7, 8], [7, 10], [7, 12], [7, 14],
+          [8, 1], [8, 3], [8, 5], [8, 7], [8, 9], [8, 11], [8, 13],
+          [9, 0], [9, 2], [9, 4], [9, 6], [9, 8], [9, 10], [9, 12], [9, 14],
+          [10, 1], [10, 3], [10, 5], [10, 7], [10, 9], [10, 11], [10, 13],
+          [11, 0], [11, 2], [11, 4], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14],
+          [12, 1], [12, 3], [12, 5], [12, 7], [12, 9], [12, 11], [12, 13],
+          [13, 0], [13, 2], [13, 4], [13, 6], [13, 8], [13, 10], [13, 12], [13, 14],
+          [14, 1], [14, 3], [14, 5], [14, 7], [14, 9], [14, 11], [14, 13],
+          // Correct path openings with some dead ends
+          [0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9], [10, 10], [11, 11], [12, 12], [13, 13], [14, 14],
+          // Dead ends
+          [1, 3], [1, 5], [1, 7], [1, 9], [1, 11], [1, 13],
+          [3, 1], [3, 5], [3, 7], [3, 9], [3, 11], [3, 13],
+          [5, 1], [5, 3], [5, 7], [5, 9], [5, 11], [5, 13],
+          [7, 1], [7, 3], [7, 5], [7, 9], [7, 11], [7, 13],
+          [9, 1], [9, 3], [9, 5], [9, 7], [9, 11], [9, 13],
+          [11, 1], [11, 3], [11, 5], [11, 7], [11, 9], [11, 13],
+          [13, 1], [13, 3], [13, 5], [13, 7], [13, 9], [13, 11]
+        ]
+      },
+      // Level 11-15: Even more complex mazes
+      {
+        rows: 20, cols: 20,
+        start: { row: 0, col: 0 },
+        end: { row: 19, col: 19 },
+        walls: [
+          // Complex pattern with multiple paths
+          [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18],
+          [1, 0], [1, 2], [1, 4], [1, 6], [1, 8], [1, 10], [1, 12], [1, 14], [1, 16], [1, 18],
+          [2, 1], [2, 3], [2, 5], [2, 7], [2, 9], [2, 11], [2, 13], [2, 15], [2, 17], [2, 19],
+          [3, 0], [3, 2], [3, 4], [3, 6], [3, 8], [3, 10], [3, 12], [3, 14], [3, 16], [3, 18],
+          [4, 1], [4, 3], [4, 5], [4, 7], [4, 9], [4, 11], [4, 13], [4, 15], [4, 17], [4, 19],
+          [5, 0], [5, 2], [5, 4], [5, 6], [5, 8], [5, 10], [5, 12], [5, 14], [5, 16], [5, 18],
+          [6, 1], [6, 3], [6, 5], [6, 7], [6, 9], [6, 11], [6, 13], [6, 15], [6, 17], [6, 19],
+          [7, 0], [7, 2], [7, 4], [7, 6], [7, 8], [7, 10], [7, 12], [7, 14], [7, 16], [7, 18],
+          [8, 1], [8, 3], [8, 5], [8, 7], [8, 9], [8, 11], [8, 13], [8, 15], [8, 17], [8, 19],
+          [9, 0], [9, 2], [9, 4], [9, 6], [9, 8], [9, 10], [9, 12], [9, 14], [9, 16], [9, 18],
+          [10, 1], [10, 3], [10, 5], [10, 7], [10, 9], [10, 11], [10, 13], [10, 15], [10, 17], [10, 19],
+          [11, 0], [11, 2], [11, 4], [11, 6], [11, 8], [11, 10], [11, 12], [11, 14], [11, 16], [11, 18],
+          [12, 1], [12, 3], [12, 5], [12, 7], [12, 9], [12, 11], [12, 13], [12, 15], [12, 17], [12, 19],
+          [13, 0], [13, 2], [13, 4], [13, 6], [13, 8], [13, 10], [13, 12], [13, 14], [13, 16], [13, 18],
+          [14, 1], [14, 3], [14, 5], [14, 7], [14, 9], [14, 11], [14, 13], [14, 15], [14, 17], [14, 19],
+          [15, 0], [15, 2], [15, 4], [15, 6], [15, 8], [15, 10], [15, 12], [15, 14], [15, 16], [15, 18],
+          [16, 1], [16, 3], [16, 5], [16, 7], [16, 9], [16, 11], [16, 13], [16, 15], [16, 17], [16, 19],
+          [17, 0], [17, 2], [17, 4], [17, 6], [17, 8], [17, 10], [17, 12], [17, 14], [17, 16], [17, 18],
+          [18, 1], [18, 3], [18, 5], [18, 7], [18, 9], [18, 11], [18, 13], [18, 15], [18, 17], [18, 19],
+          [19, 0], [19, 2], [19, 4], [19, 6], [19, 8], [19, 10], [19, 12], [19, 14], [19, 16], [19, 18],
+          // Correct path
+          [0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9], [10, 10], [11, 11], [12, 12], [13, 13], [14, 14], [15, 15], [16, 16], [17, 17], [18, 18], [19, 19],
+          // Some openings to create alternative paths
+          [1, 3], [1, 5], [1, 7], [1, 9], [1, 11], [1, 13], [1, 15], [1, 17],
+          [3, 1], [3, 5], [3, 7], [3, 9], [3, 11], [3, 13], [3, 15], [3, 17],
+          [5, 1], [5, 3], [5, 7], [5, 9], [5, 11], [5, 13], [5, 15], [5, 17],
+          [7, 1], [7, 3], [7, 5], [7, 9], [7, 11], [7, 13], [7, 15], [7, 17],
+          [9, 1], [9, 3], [9, 5], [9, 7], [9, 11], [9, 13], [9, 15], [9, 17],
+          [11, 1], [11, 3], [11, 5], [11, 7], [11, 9], [11, 13], [11, 15], [11, 17],
+          [13, 1], [13, 3], [13, 5], [13, 7], [13, 9], [13, 11], [13, 15], [13, 17],
+          [15, 1], [15, 3], [15, 5], [15, 7], [15, 9], [15, 11], [15, 13], [15, 17],
+          [17, 1], [17, 3], [17, 5], [17, 7], [17, 9], [17, 11], [17, 13], [17, 15]
+        ]
+      },
+      // Level 16-20: Extreme mazes
+      {
+        rows: 20, cols: 20,
+        start: { row: 0, col: 0 },
+        end: { row: 19, col: 19 },
+        walls: [
+          // Almost completely filled with walls
+          [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7], [0, 8], [0, 9], [0, 10], [0, 11], [0, 12], [0, 13], [0, 14], [0, 15], [0, 16], [0, 17], [0, 18], [0, 19],
+          [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12], [1, 13], [1, 14], [1, 15], [1, 16], [1, 17], [1, 18], [1, 19],
+          [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8], [2, 9], [2, 10], [2, 11], [2, 12], [2, 13], [2, 14], [2, 15], [2, 16], [2, 17], [2, 18], [2, 19],
+          [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [3, 7], [3, 8], [3, 9], [3, 10], [3, 11], [3, 12], [3, 13], [3, 14], [3, 15], [3, 16], [3, 17], [3, 18], [3, 19],
+          [4, 0], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [4, 7], [4, 8], [4, 9], [4, 10], [4, 11], [4, 12], [4, 13], [4, 14], [4, 15], [4, 16], [4, 17], [4, 18], [4, 19],
+          [5, 0], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6], [5, 7], [5, 8], [5, 9], [5, 10], [5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 16], [5, 17], [5, 18], [5, 19],
+          [6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6], [6, 7], [6, 8], [6, 9], [6, 10], [6, 11], [6, 12], [6, 13], [6, 14], [6, 15], [6, 16], [6, 17], [6, 18], [6, 19],
+          [7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [7, 8], [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17], [7, 18], [7, 19],
+          [8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 6], [8, 7], [8, 8], [8, 9], [8, 10], [8, 11], [8, 12], [8, 13], [8, 14], [8, 15], [8, 16], [8, 17], [8, 18], [8, 19],
+          [9, 0], [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 14], [9, 15], [9, 16], [9, 17], [9, 18], [9, 19],
+          [10, 0], [10, 1], [10, 2], [10, 3], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 9], [10, 10], [10, 11], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16], [10, 17], [10, 18], [10, 19],
+          [11, 0], [11, 1], [11, 2], [11, 3], [11, 4], [11, 5], [11, 6], [11, 7], [11, 8], [11, 9], [11, 10], [11, 11], [11, 12], [11, 13], [11, 14], [11, 15], [11, 16], [11, 17], [11, 18], [11, 19],
+          [12, 0], [12, 1], [12, 2], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 13], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18], [12, 19],
+          [13, 0], [13, 1], [13, 2], [13, 3], [13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12], [13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [13, 18], [13, 19],
+          [14, 0], [14, 1], [14, 2], [14, 3], [14, 4], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11], [14, 12], [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [14, 18], [14, 19],
+          [15, 0], [15, 1], [15, 2], [15, 3], [15, 4], [15, 5], [15, 6], [15, 7], [15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13], [15, 14], [15, 15], [15, 16], [15, 17], [15, 18], [15, 19],
+          [16, 0], [16, 1], [16, 2], [16, 3], [16, 4], [16, 5], [16, 6], [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14], [16, 15], [16, 16], [16, 17], [16, 18], [16, 19],
+          [17, 0], [17, 1], [17, 2], [17, 3], [17, 4], [17, 5], [17, 6], [17, 7], [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15], [17, 16], [17, 17], [17, 18], [17, 19],
+          [18, 0], [18, 1], [18, 2], [18, 3], [18, 4], [18, 5], [18, 6], [18, 7], [18, 8], [18, 9], [18, 10], [18, 11], [18, 12], [18, 13], [18, 14], [18, 15], [18, 16], [18, 17], [18, 18], [18, 19],
+          [19, 0], [19, 1], [19, 2], [19, 3], [19, 4], [19, 5], [19, 6], [19, 7], [19, 8], [19, 9], [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17], [19, 18],
+          // Very narrow path
+          [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0], [11, 0], [12, 0], [13, 0], [14, 0], [15, 0], [16, 0], [17, 0], [18, 0], [19, 0],
+          [19, 1], [19, 2], [19, 3], [19, 4], [19, 5], [19, 6], [19, 7], [19, 8], [19, 9], [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17], [19, 18], [19, 19]
+        ]
+      }
+    ];
+
+    // Chess Pieces
+    const chessPieces = {
+      'wK': '♔', 'wQ': '♕', 'wR': '♖', 'wB': '♗', 'wN': '♘', 'wP': '♙',
+      'bK': '♚', 'bQ': '♛', 'bR': '♜', 'bB': '♝', 'bN': '♞', 'bP': '♟'
+    };
+
+    // Initial Chess Board Setup
+    const initialChessBoard = [
+      ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+      ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['', '', '', '', '', '', '', ''],
+      ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+      ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+    ];
+
     // Game State
     let currentPage = 'home';
     let score = 0;
@@ -757,6 +1279,18 @@
     let questionCount = 0;
     let usedQuestions = { riddle: [], puzzle: [], logic: [], math: [] };
     let currentGameMode = '';
+
+    // Maze Game State
+    let mazeLevel = 0;
+    let mazePlayerPos = { row: 0, col: 0 };
+    let mazeVisited = [];
+    let mazeCompleted = false;
+
+    // Chess Game State
+    let chessBoard = JSON.parse(JSON.stringify(initialChessBoard));
+    let chessTurn = 'w'; // 'w' for white, 'b' for black
+    let selectedChessPiece = null;
+    let possibleMoves = [];
 
     // DOM Elements
     const app = document.getElementById('app');
@@ -787,373 +1321,788 @@
             <div class="game-mode math" data-mode="math">
               <span class="mode-icon">🧮</span>
               <h3>Matematika</h3>
-              <p>Uji kecepatan berhitung Anda</p>
-            </div>
-          </div>
-        </div>
-      `;
+             <div>
+  <p>Uji kemampuan matematika Anda dengan soal-soal menantang</p>
 
-      // Add event listeners to game modes
+  <div class="game-mode maze" data-mode="maze">
+    <span class="mode-icon">🧱</span>
+    <h3>Labirin</h3>
+    <p>Temukan jalan keluar dari labirin yang rumit</p>
+  </div>
+
+  <div class="game-mode chess" data-mode="chess">
+    <span class="mode-icon">♟️</span>
+    <h3>Catur</h3>
+    <p>Mainkan catur melawan komputer</p>
+  </div>
+</div>
+      <button class="start-button" id="random-mode">Mode Acak</button>
+    </div>
+  `;
+
+      // Add event listeners for game mode selection
       document.querySelectorAll('.game-mode').forEach(mode => {
-        mode.addEventListener('click', function() {
-          currentGameMode = this.dataset.mode;
+        mode.addEventListener('click', () => {
+          currentGameMode = mode.dataset.mode;
           startGame();
         });
       });
 
-      createParticles();
+      document.getElementById('random-mode').addEventListener('click', () => {
+        const modes = ['riddle', 'puzzle', 'logic', 'math', 'maze', 'chess'];
+        currentGameMode = modes[Math.floor(Math.random() * modes.length)];
+        startGame();
+      });
     }
 
-    function renderGame() {
-      currentQuestion = getRandomQuestion(currentGameMode);
-      questionCount++;
+    function startGame() {
+      // Reset game state
+      score = 0;
+      timeLeft = 60;
+      questionCount = 0;
+      answered = false;
+
+      // Clear any existing timer
+      if (timerInterval) clearInterval(timerInterval);
+
+      // Start timer
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          endGame();
+        }
+      }, 1000);
+
+      // Start specific game mode
+      if (currentGameMode === 'maze') {
+        startMazeGame();
+      } else if (currentGameMode === 'chess') {
+        startChessGame();
+      } else {
+        loadQuestion();
+      }
+    }
+
+    function updateTimer() {
+      const timerText = document.querySelector('.timer-text');
+      if (timerText) {
+        timerText.textContent = timeLeft;
+
+        // Change color when time is running low
+        if (timeLeft <= 10) {
+          timerText.style.color = 'var(--incorrect)';
+        }
+      }
+    }
+
+    function loadQuestion() {
+      // Reset answer state
       answered = false;
       isCorrect = false;
       pointsEarned = 0;
 
-      // Determine question type display
-      let typeDisplay = '';
-      let typeClass = '';
-      switch(currentGameMode) {
-        case 'riddle':
-          typeDisplay = 'TEKA-TEKI';
-          typeClass = 'riddle';
-          break;
-        case 'puzzle':
-          typeDisplay = 'PUZZLE';
-          typeClass = 'puzzle';
-          break;
-        case 'logic':
-          typeDisplay = 'LOGIKA';
-          typeClass = 'logic';
-          break;
-        case 'math':
-          typeDisplay = 'MATEMATIKA';
-          typeClass = 'math';
-          break;
+      // Get available questions (filter out used ones)
+      const availableQuestions = questions[currentGameMode].filter(
+        (_, index) => !usedQuestions[currentGameMode].includes(index)
+      );
+
+      // If no questions left, use all questions again
+      if (availableQuestions.length === 0) {
+        usedQuestions[currentGameMode] = [];
+        currentQuestion = questions[currentGameMode][0];
+        usedQuestions[currentGameMode].push(0);
+      } else {
+        // Select random question
+        const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+        currentQuestion = availableQuestions[randomIndex];
+
+        // Find original index to mark as used
+        const originalIndex = questions[currentGameMode].indexOf(currentQuestion);
+        usedQuestions[currentGameMode].push(originalIndex);
       }
 
-      app.innerHTML = `
-        <div class="game-container">
-          <div class="game-header">
-            <div class="timer-container">
-              <div class="timer-circle">
-                <svg width="60" height="60" viewBox="0 0 44 44">
-                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
-                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
-                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
-                  </circle>
-                </svg>
-              </div>
-              <span class="timer-text">1:00</span>
-            </div>
-            <div class="score">Skor: ${score}</div>
-          </div>
-          
-          <div class="question-container">
-            <div class="question-type ${typeClass}">${typeDisplay}</div>
-            <div class="question">${currentQuestion.text}</div>
-            
-            ${currentQuestion.type === 'multiple-choice' ? `
-              <div class="options">
-                ${currentQuestion.options.map((option, index) => `
-                  <button class="option-button" data-answer="${option}">${option}</button>
-                `).join('')}
-              </div>
-            ` : `
-              <div class="answer-input">
-                <input id="userAnswer" class="answer-field" placeholder="Ketik jawaban Anda..." autocomplete="off">
-                <button id="submitAnswer" class="submit-button">Submit</button>
-              </div>
-            `}
-            
-            <div class="feedback hidden">
-              <div class="feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
-                ${isCorrect ? '🎉' : '❌'}
-                ${isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`}
-                ${currentQuestion.explanation ? `<div class="explanation">${currentQuestion.explanation}</div>` : ''}
-              </div>
-              <button id="nextButton" class="next-button">Pertanyaan Berikutnya</button>
-            </div>
-          </div>
-        </div>
-      `;
+      questionCount++;
+      renderQuestion();
+    }
 
-      startTimer();
-      setupGameEventListeners();
+    function renderQuestion() {
+      let questionHTML = '';
+
+      // Common question header
+      questionHTML += `
+    <div class="game-header">
+      <div class="timer-container">
+        <div class="timer-circle">
+          <svg viewBox="0 0 36 36" class="timer-svg">
+            <path
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="var(--accent)"
+              stroke-width="2"
+              stroke-dasharray="${(timeLeft / 60) * 100}, 100"
+            />
+          </svg>
+        </div>
+        <span class="timer-text">${timeLeft}</span>
+      </div>
+      <div class="score">Skor: ${score}</div>
+    </div>
+    
+    <div class="question-container">
+      <span class="question-type">${getQuestionTypeName(currentQuestion.type)}</span>
+      <h2 class="question">${currentQuestion.text}</h2>
+  `;
+
+      // Different question types
+      if (currentQuestion.type === 'multiple-choice') {
+        questionHTML += `
+      <div class="options">
+        ${currentQuestion.options.map(option => `
+          <button class="option-button" data-answer="${option}">${option}</button>
+        `).join('')}
+      </div>
+    `;
+      } else {
+        questionHTML += `
+      <div class="answer-input">
+        <input type="text" class="answer-field" placeholder="Ketik jawaban Anda...">
+        <button class="submit-button">Submit</button>
+      </div>
+    `;
+
+        if (currentQuestion.hint) {
+          questionHTML += `<p class="hint">Petunjuk: ${currentQuestion.hint}</p>`;
+        }
+      }
+
+      questionHTML += `</div>`;
+
+      app.innerHTML = `
+    <div class="game-container">
+      ${questionHTML}
+    </div>
+  `;
+
+      // Add event listeners
+      if (currentQuestion.type === 'multiple-choice') {
+        document.querySelectorAll('.option-button').forEach(button => {
+          button.addEventListener('click', () => checkAnswer(button.dataset.answer));
+        });
+      } else {
+        document.querySelector('.submit-button').addEventListener('click', () => {
+          const answer = document.querySelector('.answer-field').value.trim().toLowerCase();
+          checkAnswer(answer);
+        });
+
+        // Allow pressing Enter to submit
+        document.querySelector('.answer-field').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            const answer = document.querySelector('.answer-field').value.trim().toLowerCase();
+            checkAnswer(answer);
+          }
+        });
+      }
+    }
+
+    function checkAnswer(userAnswer) {
+      if (answered) return;
+      answered = true;
+
+      const correctAnswer = typeof currentQuestion.answer === 'string'
+        ? currentQuestion.answer.toLowerCase()
+        : currentQuestion.answer;
+
+      isCorrect = userAnswer === correctAnswer;
+
+      // Calculate points earned (based on time left)
+      pointsEarned = isCorrect ? Math.ceil(timeLeft / 10) + 1 : 0;
+      score += pointsEarned;
+
+      // Show feedback
+      showFeedback();
+    }
+
+    function showFeedback() {
+      const feedbackHTML = `
+    <div class="feedback">
+      <div class="feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
+        ${isCorrect ? '✅ Benar!' : '❌ Salah!'}
+        <span class="explanation">${currentQuestion.explanation || ''}</span>
+        ${isCorrect ? `<div class="points-earned">+${pointsEarned} poin</div>` : ''}
+      </div>
+      <button class="next-button">Lanjutkan</button>
+    </div>
+  `;
+
+      document.querySelector('.question-container').insertAdjacentHTML('beforeend', feedbackHTML);
+
+      // Highlight correct answer for multiple choice
+      if (currentQuestion.type === 'multiple-choice') {
+        document.querySelectorAll('.option-button').forEach(button => {
+          if (button.dataset.answer === currentQuestion.answer) {
+            button.classList.add('correct');
+          } else if (button.classList.contains('incorrect')) {
+            button.classList.remove('incorrect');
+          }
+        });
+      }
+
+      // Add event listener for next button
+      document.querySelector('.next-button').addEventListener('click', () => {
+        if (questionCount >= 10) {
+          endGame();
+        } else {
+          loadQuestion();
+        }
+      });
+    }
+
+    function endGame() {
+      clearInterval(timerInterval);
+      renderResults();
     }
 
     function renderResults() {
+      // Calculate performance
+      let feedbackText = '';
+      let feedbackTitle = '';
+
+      if (score >= 45) {
+        feedbackTitle = 'Luar Biasa!';
+        feedbackText = 'Anda benar-benar jenius! Skor Anda menunjukkan kemampuan berpikir yang luar biasa.';
+      } else if (score >= 30) {
+        feedbackTitle = 'Bagus Sekali!';
+        feedbackText = 'Anda memiliki kemampuan berpikir yang sangat baik. Pertahankan!';
+      } else if (score >= 15) {
+        feedbackTitle = 'Cukup Baik';
+        feedbackText = 'Anda memiliki potensi yang bagus. Teruslah berlatih untuk meningkatkan skor Anda!';
+      } else {
+        feedbackTitle = 'Perlu Latihan';
+        feedbackText = 'Jangan menyerah! Teruslah berlatih untuk meningkatkan kemampuan berpikir Anda.';
+      }
+
       app.innerHTML = `
-        <div class="results-container">
-          <div class="results-card">
-            <h1 class="results-title">HASIL PERMAINAN</h1>
-            
-            <div class="score-display">
-              <div class="score-circle">
-                <div class="score-value">${score}</div>
-                <div class="score-label">Poin</div>
-              </div>
-            </div>
-            
-            <div class="feedback">
-              <h2 class="feedback-title">${getFeedbackTitle()}</h2>
-              <p class="feedback-text">${getFeedbackText()}</p>
-            </div>
-            
-            <div class="actions">
-              <button id="playAgain" class="action-button play-again">Main Lagi</button>
-              <button id="goHome" class="action-button go-home">Kembali ke Beranda</button>
-            </div>
+    <div class="results-container">
+      <div class="results-card">
+        <h1 class="results-title">Hasil Permainan</h1>
+        
+        <div class="score-display">
+          <div class="score-circle">
+            <div class="score-value">${score}</div>
+            <div class="score-label">Poin</div>
           </div>
         </div>
-      `;
+        
+        <h2 class="feedback-title">${feedbackTitle}</h2>
+        <p class="feedback-text">${feedbackText}</p>
+        
+        <div class="actions">
+          <button class="action-button play-again">Main Lagi</button>
+          <button class="action-button go-home">Menu Utama</button>
+        </div>
+      </div>
+    </div>
+  `;
 
-      if (score >= 100) {
+      // Add confetti if score is high
+      if (score >= 30) {
         createConfetti();
       }
 
-      document.getElementById('playAgain').addEventListener('click', startGame);
-      document.getElementById('goHome').addEventListener('click', () => {
+      // Add event listeners
+      document.querySelector('.play-again').addEventListener('click', startGame);
+      document.querySelector('.go-home').addEventListener('click', () => {
         currentPage = 'home';
         renderHome();
       });
     }
 
-    // Game Logic
-    function startGame() {
-      currentPage = 'game';
-      score = 0;
-      timeLeft = 60;
-      questionCount = 0;
-      usedQuestions = { riddle: [], puzzle: [], logic: [], math: [] };
-      renderGame();
-    }
-
-    function getRandomQuestion(mode) {
-      const availableQuestions = questions[mode].filter(q => !usedQuestions[mode].includes(q.text));
-      
-      if (availableQuestions.length === 0) {
-        usedQuestions[mode] = [];
-        return questions[mode][Math.floor(Math.random() * questions[mode].length)];
-      }
-
-      const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-      const question = availableQuestions[randomIndex];
-      usedQuestions[mode].push(question.text);
-      
-      return JSON.parse(JSON.stringify(question));
-    }
-
-    function startTimer() {
-      clearInterval(timerInterval);
-      updateTimerDisplay();
-      
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        updateTimerDisplay();
-        
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          currentPage = 'results';
-          renderResults();
-        }
-      }, 1000);
-    }
-
-    function updateTimerDisplay() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      const timerText = document.querySelector('.timer-text');
-      if (timerText) {
-        timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        
-        const timerPath = document.getElementById('timerPath');
-        if (timerPath) {
-          const circumference = 2 * Math.PI * 20;
-          const offset = circumference - (timeLeft / 60) * circumference;
-          timerPath.style.strokeDashoffset = offset;
-          
-          // Change color based on time left
-          if (timeLeft > 36) {
-            timerPath.style.stroke = '#00e676'; // Green
-          } else if (timeLeft > 18) {
-            timerPath.style.stroke = '#ffc107'; // Yellow
-          } else {
-            timerPath.style.stroke = '#ff5252'; // Red
-          }
-        }
-      }
-    }
-
-    function checkAnswer(answer) {
-      if (answered) return;
-      
-      answered = true;
-      
-      // Case-insensitive comparison for riddles and similar question types
-      if (currentQuestion.type === 'riddle' || currentQuestion.type === 'sequence' || 
-          currentQuestion.type === 'word-problem' || currentQuestion.type === 'tricky-math' ||
-          currentQuestion.type === 'logic-puzzle') {
-        isCorrect = answer.trim().toLowerCase() === currentQuestion.answer.toLowerCase();
-      } else {
-        isCorrect = answer === currentQuestion.answer;
-      }
-      
-      pointsEarned = calculateScore(isCorrect, questionCount);
-      if (isCorrect) {
-        score += pointsEarned;
-        document.querySelector('.score').textContent = `Skor: ${score}`;
-      }
-      
-      // Show feedback
-      const feedbackElement = document.querySelector('.feedback');
-      feedbackElement.classList.remove('hidden');
-      
-      // Highlight correct/incorrect answers for multiple choice
-      if (currentQuestion.type === 'multiple-choice') {
-        document.querySelectorAll('.option-button').forEach(button => {
-          if (button.textContent === currentQuestion.answer) {
-            button.classList.add('correct');
-          } else if (button.textContent === answer && !isCorrect) {
-            button.classList.add('incorrect');
-          }
-          button.disabled = true;
-        });
-      }
-      
-      // Disable input/submit button for other question types
-      if (currentQuestion.type !== 'multiple-choice') {
-        const answerInput = document.getElementById('userAnswer');
-        const submitButton = document.getElementById('submitAnswer');
-        if (answerInput) answerInput.disabled = true;
-        if (submitButton) submitButton.disabled = true;
-      }
-    }
-
-    function calculateScore(isCorrect, questionCount) {
-      if (!isCorrect) return 0;
-      
-      const basePoints = 10;
-      const speedBonus = Math.max(0, 15 - questionCount);
-      
-      return basePoints + speedBonus;
-    }
-
-    function getFeedbackTitle() {
-      if (score >= 100) return "LUAR BIASA! 🎉";
-      if (score >= 50) return "HEBAT! 👍";
-      return "TERUS BERLATIH! 💪";
-    }
-
-    function getFeedbackText() {
-      if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Skor fantastis!";
-      if (score >= 50) return "Hasil yang sangat bagus! Sedikit lagi bisa mencapai skor sempurna!";
-      return "Setiap permainan adalah kesempatan untuk belajar. Coba lagi untuk meningkatkan skor Anda!";
-    }
-
-    function setupGameEventListeners() {
-      // Multiple choice answers
-      document.querySelectorAll('.option-button').forEach(button => {
-        button.addEventListener('click', () => {
-          checkAnswer(button.textContent);
-        });
-      });
-      
-      // Riddle answer submission
-      const submitButton = document.getElementById('submitAnswer');
-      if (submitButton) {
-        submitButton.addEventListener('click', () => {
-          const userAnswer = document.getElementById('userAnswer').value;
-          if (userAnswer.trim()) {
-            checkAnswer(userAnswer);
-          }
-        });
-        
-        // Also allow Enter key to submit
-        document.getElementById('userAnswer').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            const userAnswer = document.getElementById('userAnswer').value;
-            if (userAnswer.trim()) {
-              checkAnswer(userAnswer);
-            }
-          }
-        });
-      }
-      
-      // Next question button
-      const nextButton = document.getElementById('nextButton');
-      if (nextButton) {
-        nextButton.addEventListener('click', () => {
-          renderGame();
-        });
-      }
-    }
-
-    // Effects
-    function createParticles() {
-      const particlesContainer = document.createElement('div');
-      particlesContainer.style.position = 'fixed';
-      particlesContainer.style.top = '0';
-      particlesContainer.style.left = '0';
-      particlesContainer.style.width = '100%';
-      particlesContainer.style.height = '100%';
-      particlesContainer.style.pointerEvents = 'none';
-      particlesContainer.style.zIndex = '-1';
-      document.body.appendChild(particlesContainer);
-
-      for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        
-        const size = Math.random() * 5 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-        
-        const animationDuration = Math.random() * 20 + 10;
-        particle.style.animation = `float ${animationDuration}s infinite ease-in-out`;
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        particle.style.opacity = Math.random() * 0.5 + 0.1;
-        
-        particlesContainer.appendChild(particle);
-      }
-    }
-
     function createConfetti() {
       const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-      
+
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
-        confetti.classList.add('particle');
-        
+        confetti.className = 'particle';
+
+        // Random properties
         const size = Math.random() * 10 + 5;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const duration = Math.random() * 3 + 2;
+        const delay = Math.random() * 2;
+
+        // Set styles
         confetti.style.width = `${size}px`;
         confetti.style.height = `${size}px`;
-        
-        confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `-${size}px`;
-        
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.borderRadius = '50%';
-        
-        const animationDuration = Math.random() * 3 + 2;
-        confetti.style.animation = `confetti ${animationDuration}s linear forwards`;
-        confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-        
-        document.body.appendChild(confetti);
-        
+        confetti.style.backgroundColor = color;
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.top = `-10px`;
+        confetti.style.animation = `confetti ${duration}s ease-out ${delay}s forwards`;
+
+        // Add to app
+        app.appendChild(confetti);
+
         // Remove after animation
         setTimeout(() => {
           confetti.remove();
-        }, animationDuration * 1000);
+        }, (duration + delay) * 1000);
       }
     }
 
-    // Initialize
-    renderHome();
-  </script>
-</body>
-</html>
+    // Maze Game Functions
+    function startMazeGame() {
+      mazeLevel = 0;
+      loadMazeLevel();
+    }
+
+    function loadMazeLevel() {
+      mazeCompleted = false;
+      const level = mazeLevels[mazeLevel];
+      mazePlayerPos = { ...level.start };
+      mazeVisited = Array(level.rows).fill().map(() => Array(level.cols).fill(false));
+      mazeVisited[level.start.row][level.start.col] = true;
+
+      // Set CSS variables for grid size
+      document.documentElement.style.setProperty('--rows', level.rows);
+      document.documentElement.style.setProperty('--cols', level.cols);
+
+      renderMaze(level);
+    }
+
+    function renderMaze(level) {
+      app.innerHTML = `
+    <div class="game-container">
+      <div class="maze-container">
+        <div class="maze-level">Labirin Level ${mazeLevel + 1}/${mazeLevels.length}</div>
+        
+        <div class="maze-board" id="maze-board">
+          ${Array.from({ length: level.rows }, (_, row) =>
+        Array.from({ length: level.cols }, (_, col) => {
+          const isWall = level.walls.some(w => w[0] === row && w[1] === col);
+          const isStart = level.start.row === row && level.start.col === col;
+          const isEnd = level.end.row === row && level.end.col === col;
+          const isPlayer = mazePlayerPos.row === row && mazePlayerPos.col === col;
+          const isVisited = mazeVisited[row][col];
+
+          let cellClass = 'maze-cell';
+          if (isWall) cellClass += ' maze-wall';
+          else if (isStart) cellClass += ' maze-start';
+          else if (isEnd) cellClass += ' maze-end';
+          else if (isVisited) cellClass += ' maze-visited';
+          else cellClass += ' maze-path';
+
+          return `
+                <div class="${cellClass}" data-row="${row}" data-col="${col}">
+                  ${isPlayer ? '<div class="maze-player"></div>' : ''}
+                </div>
+              `;
+        }).join('')
+      ).join('')}
+        </div>
+        
+        <div class="maze-controls">
+          <div class="maze-buttons">
+            <button class="maze-button" id="maze-up">↑</button>
+            <button class="maze-button" id="maze-left">←</button>
+            <button class="maze-button" id="maze-down">↓</button>
+            <button class="maze-button" id="maze-right">→</button>
+          </div>
+          <div class="maze-info">
+            <p>Temukan jalan ke tujuan (kotak merah)!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+      // Add event listeners for buttons
+      document.getElementById('maze-up').addEventListener('click', () => movePlayer(-1, 0));
+      document.getElementById('maze-down').addEventListener('click', () => movePlayer(1, 0));
+      document.getElementById('maze-left').addEventListener('click', () => movePlayer(0, -1));
+      document.getElementById('maze-right').addEventListener('click', () => movePlayer(0, 1));
+
+      // Add keyboard controls
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    function handleKeyDown(e) {
+      if (mazeCompleted) return;
+
+      switch (e.key) {
+        case 'ArrowUp': movePlayer(-1, 0); break;
+        case 'ArrowDown': movePlayer(1, 0); break;
+        case 'ArrowLeft': movePlayer(0, -1); break;
+        case 'ArrowRight': movePlayer(0, 1); break;
+      }
+    }
+
+    function movePlayer(dRow, dCol) {
+      if (mazeCompleted) return;
+
+      const level = mazeLevels[mazeLevel];
+      const newRow = mazePlayerPos.row + dRow;
+      const newCol = mazePlayerPos.col + dCol;
+
+      // Check boundaries
+      if (newRow < 0 || newRow >= level.rows || newCol < 0 || newCol >= level.cols) {
+        return;
+      }
+
+      // Check if wall
+      const isWall = level.walls.some(w => w[0] === newRow && w[1] === newCol);
+      if (isWall) {
+        return;
+      }
+
+      // Move player
+      mazePlayerPos.row = newRow;
+      mazePlayerPos.col = newCol;
+      mazeVisited[newRow][newCol] = true;
+
+      // Check if reached end
+      if (newRow === level.end.row && newCol === level.end.col) {
+        mazeCompleted = true;
+        score += (mazeLevel + 1) * 5; // More points for higher levels
+
+        // Show completion message
+        setTimeout(() => {
+          if (mazeLevel < mazeLevels.length - 1) {
+            if (confirm(`Selamat! Anda menyelesaikan level ${mazeLevel + 1}. Lanjut ke level berikutnya?`)) {
+              mazeLevel++;
+              loadMazeLevel();
+            } else {
+              endGame();
+            }
+          } else {
+            alert('Selamat! Anda menyelesaikan semua level labirin!');
+            endGame();
+          }
+        }, 300);
+      }
+
+      renderMaze(level);
+    }
+
+    // Chess Game Functions
+    function startChessGame() {
+      chessBoard = JSON.parse(JSON.stringify(initialChessBoard));
+      chessTurn = 'w';
+      selectedChessPiece = null;
+      possibleMoves = [];
+      renderChessBoard();
+    }
+
+    function renderChessBoard() {
+      app.innerHTML = `
+    <div class="game-container">
+      <div class="chess-container">
+        <h2>Permainan Catur</h2>
+        <p>Giliran: ${chessTurn === 'w' ? 'Putih' : 'Hitam'}</p>
+        
+        <div class="chess-board" id="chess-board">
+          ${chessBoard.map((row, rowIndex) =>
+        row.map((piece, colIndex) => {
+          const isLight = (rowIndex + colIndex) % 2 === 0;
+          const isHighlighted = possibleMoves.some(m => m.row === rowIndex && m.col === colIndex);
+          const isSelected = selectedChessPiece &&
+            selectedChessPiece.row === rowIndex &&
+            selectedChessPiece.col === colIndex;
+
+          let squareClass = 'chess-square';
+          squareClass += isLight ? ' light' : ' dark';
+          if (isHighlighted) squareClass += ' highlight';
+
+          return `
+                <div class="${squareClass}" data-row="${rowIndex}" data-col="${colIndex}">
+                  ${piece ? `
+                    <div class="chess-piece ${isSelected ? 'selected' : ''}" 
+                      data-piece="${piece}" data-row="${rowIndex}" data-col="${colIndex}">
+                      ${chessPieces[piece]}
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+        }).join('')
+      ).join('')}
+        </div>
+        
+        <div class="chess-controls">
+          <div class="chess-info">
+            <div class="chess-turn">Giliran: ${chessTurn === 'w' ? 'Putih' : 'Hitam'}</div>
+            <div class="chess-status">Pilih bidak Anda</div>
+          </div>
+          <button class="action-button go-home">Keluar</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+      // Add event listeners
+      document.querySelectorAll('.chess-piece').forEach(piece => {
+        piece.addEventListener('click', handleChessPieceClick);
+      });
+
+      document.querySelectorAll('.chess-square').forEach(square => {
+        square.addEventListener('click', handleChessSquareClick);
+      });
+
+      document.querySelector('.go-home').addEventListener('click', () => {
+        currentPage = 'home';
+        renderHome();
+      });
+    }
+
+    function handleChessPieceClick(e) {
+      const piece = e.target.dataset.piece;
+      const row = parseInt(e.target.dataset.row);
+      const col = parseInt(e.target.dataset.col);
+
+      // Check if it's the player's turn
+      if ((chessTurn === 'w' && piece[0] !== 'w') || (chessTurn === 'b' && piece[0] !== 'b')) {
+        return;
+      }
+
+      // Select the piece
+      selectedChessPiece = { row, col, piece };
+      possibleMoves = calculatePossibleMoves(row, col, piece);
+      renderChessBoard();
+    }
+
+    function handleChessSquareClick(e) {
+      if (!selectedChessPiece) return;
+
+      const row = parseInt(e.target.dataset.row);
+      const col = parseInt(e.target.dataset.col);
+
+      // Check if the move is valid
+      const isValidMove = possibleMoves.some(m => m.row === row && m.col === col);
+      if (!isValidMove) return;
+
+      // Move the piece
+      chessBoard[row][col] = selectedChessPiece.piece;
+      chessBoard[selectedChessPiece.row][selectedChessPiece.col] = '';
+
+      // Switch turns
+      chessTurn = chessTurn === 'w' ? 'b' : 'h';
+      selectedChessPiece = null;
+      possibleMoves = [];
+
+      // Check for simple win condition (capture king)
+      if (isKingCaptured()) {
+        setTimeout(() => {
+          alert(`Permainan selesai! ${chessTurn === 'w' ? 'Hitam' : 'Putih'} menang!`);
+          endGame();
+        }, 100);
+        return;
+      }
+
+      renderChessBoard();
+    }
+
+    function calculatePossibleMoves(row, col, piece) {
+      const moves = [];
+      const color = piece[0]; // 'w' or 'b'
+      const type = piece[1]; // 'K', 'Q', 'R', 'B', 'N', 'P'
+
+      // Simple movement rules (not full chess rules)
+      switch (type) {
+        case 'P': // Pawn
+          const direction = color === 'w' ? -1 : 1;
+          // Move forward
+          if (chessBoard[row + direction][col] === '') {
+            moves.push({ row: row + direction, col });
+            // Initial double move
+            if ((color === 'w' && row === 6) || (color === 'b' && row === 1)) {
+              if (chessBoard[row + 2 * direction][col] === '') {
+                moves.push({ row: row + 2 * direction, col });
+              }
+            }
+          }
+          // Capture diagonally
+          if (col > 0 && chessBoard[row + direction][col - 1] !== '' &&
+            chessBoard[row + direction][col - 1][0] !== color) {
+            moves.push({ row: row + direction, col: col - 1 });
+          }
+          if (col < 7 && chessBoard[row + direction][col + 1] !== '' &&
+            chessBoard[row + direction][col + 1][0] !== color) {
+            moves.push({ row: row + direction, col: col + 1 });
+          }
+          break;
+
+        case 'R': // Rook
+          // Horizontal and vertical moves
+          for (let i = row - 1; i >= 0; i--) { // Up
+            if (chessBoard[i][col] === '') {
+              moves.push({ row: i, col });
+            } else {
+              if (chessBoard[i][col][0] !== color) moves.push({ row: i, col });
+              break;
+            }
+          }
+          for (let i = row + 1; i < 8; i++) { // Down
+            if (chessBoard[i][col] === '') {
+              moves.push({ row: i, col });
+            } else {
+              if (chessBoard[i][col][0] !== color) moves.push({ row: i, col });
+              break;
+            }
+          }
+          for (let j = col - 1; j >= 0; j--) { // Left
+            if (chessBoard[row][j] === '') {
+              moves.push({ row, col: j });
+            } else {
+              if (chessBoard[row][j][0] !== color) moves.push({ row, col: j });
+              break;
+            }
+          }
+          for (let j = col + 1; j < 8; j++) { // Right
+            if (chessBoard[row][j] === '') {
+              moves.push({ row, col: j });
+            } else {
+              if (chessBoard[row][j][0] !== color) moves.push({ row, col: j });
+              break;
+            }
+          }
+          break;
+
+        case 'N': // Knight
+          // All L-shaped moves
+          const knightMoves = [
+            { r: -2, c: -1 }, { r: -2, c: 1 },
+            { r: -1, c: -2 }, { r: -1, c: 2 },
+            { r: 1, c: -2 }, { r: 1, c: 2 },
+            { r: 2, c: -1 }, { r: 2, c: 1 }
+          ];
+          knightMoves.forEach(m => {
+            const newRow = row + m.r;
+            const newCol = col + m.c;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+              if (chessBoard[newRow][newCol] === '' || chessBoard[newRow][newCol][0] !== color) {
+                moves.push({ row: newRow, col: newCol });
+              }
+            }
+          });
+          break;
+
+        case 'B': // Bishop
+          // Diagonal moves
+          for (let i = 1; row - i >= 0 && col - i >= 0; i++) { // Up-left
+            if (chessBoard[row - i][col - i] === '') {
+              moves.push({ row: row - i, col: col - i });
+            } else {
+              if (chessBoard[row - i][col - i][0] !== color) moves.push({ row: row - i, col: col - i });
+              break;
+            }
+          }
+          for (let i = 1; row - i >= 0 && col + i < 8; i++) { // Up-right
+            if (chessBoard[row - i][col + i] === '') {
+              moves.push({ row: row - i, col: col + i });
+            } else {
+              if (chessBoard[row - i][col + i][0] !== color) moves.push({ row: row - i, col: col + i });
+              break;
+            }
+          }
+          for (let i = 1; row + i < 8 && col - i >= 0; i++) { // Down-left
+            if (chessBoard[row + i][col - i] === '') {
+              moves.push({ row: row + i, col: col - i });
+            } else {
+              if (chessBoard[row + i][col - i][0] !== color) moves.push({ row: row + i, col: col - i });
+              break;
+            }
+          }
+          for (let i = 1; row + i < 8 && col + i < 8; i++) { // Down-right
+            if (chessBoard[row + i][col + i] === '') {
+              moves.push({ row: row + i, col: col + i });
+            } else {
+              if (chessBoard[row + i][col + i][0] !== color) moves.push({ row: row + i, col: col + i });
+              break;
+            }
+          }
+          break;
+
+        case 'Q': // Queen (combination of Rook and Bishop)
+          // Combine Rook and Bishop moves
+          const queenMoves = [
+            // Rook moves
+            { r: -1, c: 0 }, { r: 1, c: 0 }, { r: 0, c: -1 }, { r: 0, c: 1 },
+            // Bishop moves
+            { r: -1, c: -1 }, { r: -1, c: 1 }, { r: 1, c: -1 }, { r: 1, c: 1 }
+          ];
+          queenMoves.forEach(m => {
+            for (let i = 1; i < 8; i++) {
+              const newRow = row + m.r * i;
+              const newCol = col + m.c * i;
+              if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+                if (chessBoard[newRow][newCol] === '') {
+                  moves.push({ row: newRow, col: newCol });
+                } else {
+                  if (chessBoard[newRow][newCol][0] !== color) moves.push({ row: newRow, col: newCol });
+                  break;
+                }
+              } else {
+                break;
+              }
+            }
+          });
+          break;
+
+        case 'K': // King
+          // All adjacent squares
+          const kingMoves = [
+            { r: -1, c: -1 }, { r: -1, c: 0 }, { r: -1, c: 1 },
+            { r: 0, c: -1 }, { r: 0, c: 1 },
+            { r: 1, c: -1 }, { r: 1, c: 0 }, { r: 1, c: 1 }
+          ];
+          kingMoves.forEach(m => {
+            const newRow = row + m.r;
+            const newCol = col + m.c;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+              if (chessBoard[newRow][newCol] === '' || chessBoard[newRow][newCol][0] !== color) {
+                moves.push({ row: newRow, col: newCol });
+              }
+            }
+          });
+          break;
+      }
+
+      return moves;
+    }
+
+    function isKingCaptured() {
+      let whiteKing = false;
+      let blackKing = false;
+
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          if (chessBoard[row][col] === 'wK') whiteKing = true;
+          if (chessBoard[row][col] === 'bK') blackKing = true;
+        }
+      }
+
+      return !whiteKing || !blackKing;
+    }
+
+    // Helper Functions
+    function getQuestionTypeName(type) {
+      switch (type) {
+        case 'riddle': return 'Teka-Teki';
+        case 'multiple-choice': return 'Pilihan Ganda';
+        case 'sequence': return 'Urutan';
+        case 'logic-puzzle': return 'Puzzle Logika';
+        case 'calculation': return 'Perhitungan';
+        case 'word-problem': return 'Soal Cerita';
+        case 'tricky-math': return 'Matematika Menjebak';
+        default: return 'Pertanyaan';
+      }
+    }
+
+    // Initialize the app
+    function init() {
+      renderHome();
+    }
+
+    // Start the app
+    init();
