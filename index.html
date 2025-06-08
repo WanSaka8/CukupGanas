@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔥 Ultimate Teka-Teki Challenge</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <title>🎮 Ultimate Brain Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #6a11cb;
@@ -14,6 +14,10 @@
       --incorrect: #ff5252;
       --dark: #1a1a2e;
       --light: #f8f9fa;
+      --riddle: #9c27b0;
+      --puzzle: #3f51b5;
+      --logic: #009688;
+      --math: #f44336;
     }
 
     * {
@@ -24,7 +28,7 @@
 
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      background: linear-gradient(45deg, var(--dark), #16213e);
       background-size: 400% 400%;
       animation: gradientBG 12s ease infinite;
       color: var(--light);
@@ -63,6 +67,64 @@
       z-index: -1;
     }
 
+    /* Game Modes */
+    .game-mode {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 2rem;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-mode::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .game-mode:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .game-mode:hover::before {
+      transform: scaleX(1);
+    }
+
+    .game-mode.riddle {
+      border-top: 5px solid var(--riddle);
+    }
+
+    .game-mode.puzzle {
+      border-top: 5px solid var(--puzzle);
+    }
+
+    .game-mode.logic {
+      border-top: 5px solid var(--logic);
+    }
+
+    .game-mode.math {
+      border-top: 5px solid var(--math);
+    }
+
+    .mode-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      animation: float 4s ease-in-out infinite;
+    }
+
     /* Home Page */
     .home-container {
       max-width: 900px;
@@ -72,14 +134,16 @@
     }
 
     .title {
-      font-size: 4rem;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 3rem;
       font-weight: 700;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       background: linear-gradient(to right, var(--light), var(--accent));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      line-height: 1.3;
     }
 
     .subtitle {
@@ -88,34 +152,11 @@
       margin-bottom: 3rem;
     }
 
-    .features {
+    .game-modes {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1.5rem;
       margin: 3rem 0;
-    }
-
-    .feature-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 2rem;
-      border-radius: 15px;
-      transition: all 0.3s ease;
-      transform-style: preserve-3d;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-5px) scale(1.03) rotateX(5deg);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .feature-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      display: inline-block;
-      animation: float 4s ease-in-out infinite;
     }
 
     .start-button {
@@ -166,6 +207,7 @@
       animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
       overflow: hidden;
+      border-top: 5px solid var(--accent);
     }
 
     .game-container::before {
@@ -222,6 +264,17 @@
 
     .question-container {
       margin: 2rem 0;
+    }
+
+    .question-type {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      background: var(--accent);
+      color: white;
     }
 
     .question {
@@ -390,6 +443,7 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      border-top: 5px solid var(--accent);
     }
 
     .results-card::before {
@@ -524,14 +578,14 @@
     /* Responsive */
     @media (max-width: 768px) {
       .title {
-        font-size: 2.8rem;
+        font-size: 2rem;
       }
       
       .subtitle {
         font-size: 1.2rem;
       }
       
-      .features {
+      .game-modes {
         grid-template-columns: 1fr;
       }
       
@@ -572,106 +626,106 @@
   </div>
 
   <script>
-    // Enhanced Game Data
-    const questions = [
-      {
-        type: 'riddle',
-        text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
-        answer: 'peta',
-        hint: 'Berkaitan dengan geografi'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Jika 2 orang ayah dan 2 orang anak pergi memancing, berapa minimal orang yang ada di situ?',
-        options: ['3', '4', '2', '5'],
-        answer: '3',
-        explanation: 'Mereka adalah kakek, ayah, dan anak (total 3 orang)'
-      },
-      {
-        type: 'riddle',
-        text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
-        answer: 'langkah',
-        hint: 'Berkaitan dengan perjalanan'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Apa yang selalu naik tetapi tidak pernah turun?',
-        options: ['Umur', 'Tangga', 'Harga', 'Balon'],
-        answer: 'Umur',
-        explanation: 'Umur selalu bertambah seiring waktu'
-      },
-      {
-        type: 'riddle',
-        text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
-        answer: 'gema',
-        hint: 'Berkaitan dengan suara'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Apa yang memiliki tangan tetapi tidak bisa bertepuk tangan?',
-        options: ['Jam', 'Pohon', 'Boneka', 'Robot'],
-        answer: 'Jam',
-        explanation: 'Mengacu pada jarum jam'
-      },
-      {
-        type: 'riddle',
-        text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
-        answer: 'napas',
-        hint: 'Berkaitan dengan tubuh manusia'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Jika sebuah pesawat jatuh di perbatasan antara Amerika Serikat dan Kanada, di mana korban akan dikuburkan?',
-        options: ['Amerika Serikat', 'Kanada', 'Keduanya', 'Tidak dikuburkan'],
-        answer: 'Tidak dikuburkan',
-        explanation: 'Korban kecelakaan pesawat tidak dikuburkan'
-      },
-      {
-        type: 'riddle',
-        text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
-        answer: 'api',
-        hint: 'Unsur alam'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Apa yang bisa menembus kaca tanpa memecahkannya?',
-        options: ['Sinar matahari', 'Air', 'Suara', 'Cahaya'],
-        answer: 'Cahaya',
-        explanation: 'Cahaya bisa menembus kaca'
-      },
-      {
-        type: 'riddle',
-        text: 'Dibutuhkan oleh yang hidup, diberikan oleh yang mati. Apakah aku?',
-        answer: 'nasihat',
-        hint: 'Berkaitan dengan pengetahuan'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Apa yang bisa kamu pegang tanpa menyentuhnya?',
-        options: ['Napas', 'Pikiran', 'Pembicaraan', 'Bayangan'],
-        answer: 'Napas',
-        explanation: 'Kamu bisa menahan napas'
-      },
-      {
-        type: 'riddle',
-        text: 'Bisa mengisi ruangan tetapi tidak memakan tempat. Apakah aku?',
-        answer: 'cahaya',
-        hint: 'Fenomena fisika'
-      },
-      {
-        type: 'multiple-choice',
-        text: 'Apa yang memiliki 13 hati tetapi tidak memiliki organ tubuh lainnya?',
-        options: ['Deck kartu', 'Manusia robot', 'Alien', 'Tas'],
-        answer: 'Deck kartu',
-        explanation: 'Mengacu pada 13 hati dalam satu set kartu remi'
-      },
-      {
-        type: 'riddle',
-        text: 'Dibawa ke tempat gelap agar bisa bersinar. Apakah aku?',
-        answer: 'korek api',
-        hint: 'Benda kecil yang menghasilkan api'
-      }
-    ];
+    // Enhanced Game Data with Multiple Types
+    const questions = {
+      riddle: [
+        {
+          text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
+          answer: 'peta',
+          hint: 'Berkaitan dengan geografi'
+        },
+        {
+          text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
+          answer: 'langkah',
+          hint: 'Berkaitan dengan perjalanan'
+        },
+        {
+          text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
+          answer: 'gema',
+          hint: 'Berkaitan dengan suara'
+        },
+        {
+          text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
+          answer: 'napas',
+          hint: 'Berkaitan dengan tubuh manusia'
+        },
+        {
+          text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
+          answer: 'api',
+          hint: 'Unsur alam'
+        }
+      ],
+      puzzle: [
+        {
+          type: 'multiple-choice',
+          text: 'Jika 2 orang ayah dan 2 orang anak pergi memancing, berapa minimal orang yang ada di situ?',
+          options: ['3', '4', '2', '5'],
+          answer: '3',
+          explanation: 'Mereka adalah kakek, ayah, dan anak (total 3 orang)'
+        },
+        {
+          type: 'multiple-choice',
+          text: 'Apa yang memiliki tangan tetapi tidak bisa bertepuk tangan?',
+          options: ['Jam', 'Pohon', 'Boneka', 'Robot'],
+          answer: 'Jam',
+          explanation: 'Mengacu pada jarum jam'
+        },
+        {
+          type: 'multiple-choice',
+          text: 'Apa yang memiliki 13 hati tetapi tidak memiliki organ tubuh lainnya?',
+          options: ['Deck kartu', 'Manusia robot', 'Alien', 'Tas'],
+          answer: 'Deck kartu',
+          explanation: 'Mengacu pada 13 hati dalam satu set kartu remi'
+        },
+        {
+          type: 'multiple-choice',
+          text: 'Jika sebuah pesawat jatuh di perbatasan antara Amerika Serikat dan Kanada, di mana korban akan dikuburkan?',
+          options: ['Amerika Serikat', 'Kanada', 'Keduanya', 'Tidak dikuburkan'],
+          answer: 'Tidak dikuburkan',
+          explanation: 'Korban kecelakaan pesawat tidak dikuburkan'
+        }
+      ],
+      logic: [
+        {
+          type: 'sequence',
+          text: 'Lanjutkan urutan berikut: O, T, T, F, F, S, S, ...',
+          answer: 'E',
+          explanation: 'Huruf pertama angka dalam bahasa Inggris: One, Two, Three, Four, Five, Six, Seven, Eight'
+        },
+        {
+          type: 'sequence',
+          text: '2, 10, 12, 16, 17, 18, 19, ...',
+          answer: '200',
+          explanation: 'Angka-angka yang dimulai dengan huruf D dalam bahasa Inggris'
+        },
+        {
+          type: 'logic-puzzle',
+          text: 'Ada 3 lampu di ruang bawah tanah dan 3 saklar di lantai atas. Bagaimana kamu menentukan saklar mana yang mengendalikan lampu mana jika kamu hanya bisa turun ke ruang bawah tanah sekali?',
+          answer: 'Nyalakan saklar pertama selama 5 menit, matikan, nyalakan saklar kedua, lalu periksa. Lampu yang panas tapi mati adalah saklar pertama, yang menyala adalah saklar kedua, dan yang dingin adalah saklar ketiga.',
+          hint: 'Gunakan panas lampu sebagai petunjuk'
+        }
+      ],
+      math: [
+        {
+          type: 'calculation',
+          text: 'Jika 1+1=2, 2+2=4, 4+4=8, maka berapa 8+8?',
+          answer: '16',
+          explanation: 'Ini adalah deret penggandaan'
+        },
+        {
+          type: 'word-problem',
+          text: 'Seorang ayah dan anak memiliki total usia 66 tahun. Usia ayah adalah kebalikan dari usia anak (misal anak 24 tahun, ayah 42 tahun). Berapa usia mereka sebenarnya?',
+          answer: '51 dan 15',
+          explanation: '51 + 15 = 66 dan 51 adalah kebalikan dari 15'
+        },
+        {
+          type: 'tricky-math',
+          text: 'Berapa kali kamu bisa mengurangi 5 dari 25?',
+          answer: '1',
+          explanation: 'Setelah dikurangi sekali, angka menjadi 20, jadi kamu tidak lagi mengurangi dari 25'
+        }
+      ]
+    };
 
     // Game State
     let currentPage = 'home';
@@ -683,7 +737,8 @@
     let isCorrect = false;
     let pointsEarned = 0;
     let questionCount = 0;
-    let usedQuestions = [];
+    let usedQuestions = { riddle: [], puzzle: [], logic: [], math: [] };
+    let currentGameMode = '';
 
     // DOM Elements
     const app = document.getElementById('app');
@@ -692,49 +747,73 @@
     function renderHome() {
       app.innerHTML = `
         <div class="home-container">
-          <h1 class="title">🔥 Ultimate Teka-Teki Challenge</h1>
-          <p class="subtitle">Uji kecerdasan dan kecepatan berpikir Anda dengan teka-teki menantang!</p>
+          <h1 class="title">🎮 ULTIMATE BRAIN CHALLENGE</h1>
+          <p class="subtitle">Uji kecerdasan Anda dengan berbagai jenis permainan pikiran!</p>
           
-          <div class="features">
-            <div class="feature-card">
-              <span class="feature-icon">🔀</span>
-              <h3>Pertanyaan Acak</h3>
-              <p>15+ teka-teki unik dengan tingkat kesulitan berbeda</p>
+          <div class="game-modes">
+            <div class="game-mode riddle" data-mode="riddle">
+              <span class="mode-icon">🔍</span>
+              <h3>Teka-Teki</h3>
+              <p>Tebak jawaban dari pertanyaan misterius</p>
             </div>
-            <div class="feature-card">
-              <span class="feature-icon">⏱️</span>
-              <h3>Timer Menantang</h3>
-              <p>60 detik untuk menjawab sebanyak mungkin</p>
+            <div class="game-mode puzzle" data-mode="puzzle">
+              <span class="mode-icon">🧩</span>
+              <h3>Puzzle</h3>
+              <p>Pecahkan teka-teki logika yang menantang</p>
             </div>
-            <div class="feature-card">
-              <span class="feature-icon">📊</span>
-              <h3>Skor Cerdas</h3>
-              <p>Bonus poin untuk jawaban cepat</p>
+            <div class="game-mode logic" data-mode="logic">
+              <span class="mode-icon">🤔</span>
+              <h3>Logika</h3>
+              <p>Latih kemampuan berpikir logis Anda</p>
             </div>
-            <div class="feature-card">
-              <span class="feature-icon">🎯</span>
-              <h3>Tantangan Nyata</h3>
-              <p>Teka-teki logika dan kreativitas</p>
+            <div class="game-mode math" data-mode="math">
+              <span class="mode-icon">🧮</span>
+              <h3>Matematika</h3>
+              <p>Uji kecepatan berhitung Anda</p>
             </div>
           </div>
-          
-          <button id="startButton" class="start-button">
-            MULAI CHALLENGE
-            <span class="button-icon">🚀</span>
-          </button>
         </div>
       `;
 
-      document.getElementById('startButton').addEventListener('click', startGame);
+      // Add event listeners to game modes
+      document.querySelectorAll('.game-mode').forEach(mode => {
+        mode.addEventListener('click', function() {
+          currentGameMode = this.dataset.mode;
+          startGame();
+        });
+      });
+
       createParticles();
     }
 
     function renderGame() {
-      currentQuestion = getRandomQuestion();
+      currentQuestion = getRandomQuestion(currentGameMode);
       questionCount++;
       answered = false;
       isCorrect = false;
       pointsEarned = 0;
+
+      // Determine question type display
+      let typeDisplay = '';
+      let typeClass = '';
+      switch(currentGameMode) {
+        case 'riddle':
+          typeDisplay = 'TEKA-TEKI';
+          typeClass = 'riddle';
+          break;
+        case 'puzzle':
+          typeDisplay = 'PUZZLE';
+          typeClass = 'puzzle';
+          break;
+        case 'logic':
+          typeDisplay = 'LOGIKA';
+          typeClass = 'logic';
+          break;
+        case 'math':
+          typeDisplay = 'MATEMATIKA';
+          typeClass = 'math';
+          break;
+      }
 
       app.innerHTML = `
         <div class="game-container">
@@ -754,6 +833,7 @@
           </div>
           
           <div class="question-container">
+            <div class="question-type ${typeClass}">${typeDisplay}</div>
             <div class="question">${currentQuestion.text}</div>
             
             ${currentQuestion.type === 'multiple-choice' ? `
@@ -773,6 +853,7 @@
               <div class="feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
                 ${isCorrect ? '🎉' : '❌'}
                 ${isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`}
+                ${currentQuestion.explanation ? `<div class="explanation">${currentQuestion.explanation}</div>` : ''}
               </div>
               <button id="nextButton" class="next-button">Pertanyaan Berikutnya</button>
             </div>
@@ -827,24 +908,21 @@
       score = 0;
       timeLeft = 60;
       questionCount = 0;
-      usedQuestions = [];
+      usedQuestions = { riddle: [], puzzle: [], logic: [], math: [] };
       renderGame();
     }
 
-    function getRandomQuestion() {
-      if (usedQuestions.length === questions.length) {
-        usedQuestions = [];
-      }
-
-      let availableQuestions = questions.filter(q => !usedQuestions.includes(q.text));
+    function getRandomQuestion(mode) {
+      const availableQuestions = questions[mode].filter(q => !usedQuestions[mode].includes(q.text));
+      
       if (availableQuestions.length === 0) {
-        availableQuestions = [...questions];
-        usedQuestions = [];
+        usedQuestions[mode] = [];
+        return questions[mode][Math.floor(Math.random() * questions[mode].length)];
       }
 
       const randomIndex = Math.floor(Math.random() * availableQuestions.length);
       const question = availableQuestions[randomIndex];
-      usedQuestions.push(question.text);
+      usedQuestions[mode].push(question.text);
       
       return JSON.parse(JSON.stringify(question));
     }
@@ -896,7 +974,7 @@
       answered = true;
       
       // Case-insensitive comparison for riddles
-      if (currentQuestion.type === 'riddle') {
+      if (currentQuestion.type === 'riddle' || currentQuestion.type === 'sequence' || currentQuestion.type === 'word-problem' || currentQuestion.type === 'tricky-math') {
         isCorrect = answer.trim().toLowerCase() === currentQuestion.answer.toLowerCase();
       } else {
         isCorrect = answer === currentQuestion.answer;
@@ -923,10 +1001,12 @@
         });
       }
       
-      // Disable input/submit button for riddles
-      if (currentQuestion.type === 'riddle') {
-        document.getElementById('userAnswer').disabled = true;
-        document.getElementById('submitAnswer').disabled = true;
+      // Disable input/submit button for other question types
+      if (currentQuestion.type !== 'multiple-choice') {
+        const answerInput = document.getElementById('userAnswer');
+        const submitButton = document.getElementById('submitAnswer');
+        if (answerInput) answerInput.disabled = true;
+        if (submitButton) submitButton.disabled = true;
       }
     }
 
