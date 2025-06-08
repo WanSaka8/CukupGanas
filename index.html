@@ -3,433 +3,544 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teka-Teki Challenge</title>
+  <title>🔥 Ultimate Teka-Teki Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Global Styles */
     :root {
-      --primary: #1a2a6c;
-      --secondary: #b21f1f;
-      --accent: #fdbb2d;
-      --correct: #4CAF50;
-      --incorrect: #F44336;
+      --primary: #6a11cb;
+      --secondary: #2575fc;
+      --accent: #ff8a00;
+      --correct: #00e676;
+      --incorrect: #ff5252;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      text-align: center;
-      color: #2c3e50;
-      min-height: 100vh;
-      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
       background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      line-height: 1.6;
+      animation: gradientBG 12s ease infinite;
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    
+
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    
-    button {
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-    }
-    
-    /* Utility Classes */
-    .hidden {
-      display: none !important;
-    }
-    
-    /* Layout */
+
     #app {
-      padding: 20px;
+      padding: 2rem;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
-    
+
+    /* Floating Animation */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* Particle Effects */
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
     /* Home Page */
     .home-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      padding: 2rem;
-    }
-    
-    .hero-section {
-      max-width: 800px;
+      max-width: 900px;
       width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 3rem;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.8s ease-out;
+      text-align: center;
+      animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    
+
     .title {
-      font-size: 3.5rem;
+      font-size: 4rem;
+      font-weight: 700;
       margin-bottom: 1rem;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+      background: linear-gradient(to right, var(--light), var(--accent));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
-    
+
     .subtitle {
       font-size: 1.5rem;
-      margin-bottom: 2rem;
-      color: #555;
+      opacity: 0.9;
+      margin-bottom: 3rem;
     }
-    
+
     .features {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
-      margin: 2rem 0;
+      margin: 3rem 0;
     }
-    
+
     .feature-card {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 2rem;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
     }
-    
+
     .feature-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) scale(1.03) rotateX(5deg);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.15);
     }
-    
+
     .feature-icon {
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: inline-block;
+      animation: float 4s ease-in-out infinite;
     }
-    
+
     .start-button {
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+      background: linear-gradient(45deg, var(--accent), #ff416c);
       color: white;
-      padding: 1rem 2rem;
+      padding: 1.2rem 2.5rem;
       font-size: 1.2rem;
+      font-weight: 600;
       border-radius: 50px;
+      border: none;
+      cursor: pointer;
       margin-top: 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
-    
+
+    .start-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
     .start-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
     }
-    
-    .button-icon {
-      font-size: 1.5rem;
+
+    .start-button:hover::before {
+      left: 100%;
     }
-    
+
     /* Game Page */
     .game-container {
       max-width: 800px;
       width: 100%;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(26, 26, 46, 0.8);
+      backdrop-filter: blur(10px);
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      padding: 2rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .game-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid #eee;
-    }
-    
-    .score {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary);
-    }
-    
-    .question {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-      color: #333;
-      line-height: 1.4;
-    }
-    
-    .options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    
-    .option-button {
-      padding: 1rem;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      background: white;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-    }
-    
-    .option-button:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-    
-    .option-button.correct {
-      background: var(--correct);
-      color: white;
-      border-color: var(--correct);
-    }
-    
-    .option-button.incorrect {
-      background: var(--incorrect);
-      color: white;
-      border-color: var(--incorrect);
-    }
-    
-    .answer-input {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    
-    .answer-field {
-      flex-grow: 1;
-      padding: 1rem;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 1.1rem;
-    }
-    
-    .answer-field:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-    
-    .submit-button {
-      padding: 0 1.5rem;
-      background: var(--primary);
-      color: white;
-      border-radius: 10px;
-      font-size: 1.1rem;
-    }
-    
-    .submit-button:hover {
-      background: var(--secondary);
-    }
-    
-    .feedback {
-      margin-top: auto;
-    }
-    
-    .correct-feedback {
-      color: var(--correct);
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin-bottom: 1rem;
-    }
-    
-    .incorrect-feedback {
-      color: var(--incorrect);
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-    }
-    
-    .next-button {
-      padding: 0.8rem 2rem;
-      background: var(--primary);
-      color: white;
-      border-radius: 50px;
-      font-size: 1.1rem;
-    }
-    
-    .next-button:hover {
-      background: var(--secondary);
-      transform: scale(1.05);
-    }
-    
-    /* Results Page */
-    .results-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex: 1;
-      padding: 2rem;
-    }
-    
-    .results-card {
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 20px;
-      padding: 3rem;
-      max-width: 600px;
-      width: 100%;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      animation: slideUp 0.8s ease-out;
-    }
-    
-    .results-title {
-      font-size: 2.5rem;
-      color: var(--primary);
-      margin-bottom: 2rem;
-    }
-    
-    .score-display {
-      display: flex;
-      justify-content: center;
-      margin: 2rem 0;
-    }
-    
-    .score-circle {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      padding: 2.5rem;
+      animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
       overflow: hidden;
     }
-    
-    .score-circle::before {
+
+    .game-container::before {
       content: '';
       position: absolute;
       top: -50%;
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-      animation: pulse 3s infinite;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      z-index: -1;
     }
-    
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .timer-container {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .timer-circle {
+      position: relative;
+      width: 60px;
+      height: 60px;
+    }
+
+    .timer-text {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .score {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--accent), var(--correct));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .question-container {
+      margin: 2rem 0;
+    }
+
+    .question {
+      font-size: 1.8rem;
+      line-height: 1.5;
+      margin-bottom: 2.5rem;
+      position: relative;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .question::before {
+      content: '?';
+      position: absolute;
+      right: 1rem;
+      top: -1rem;
+      font-size: 5rem;
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .option-button {
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: var(--light);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(5px);
+    }
+
+    .option-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+    }
+
+    .option-button.correct {
+      background: var(--correct);
+      color: white;
+      animation: pulse 0.5s ease;
+    }
+
+    .option-button.incorrect {
+      background: var(--incorrect);
+      color: white;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .answer-input {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .answer-field {
+      flex: 1;
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      color: white;
+      font-size: 1.1rem;
+      backdrop-filter: blur(5px);
+    }
+
+    .answer-field:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(255, 138, 0, 0.3);
+    }
+
+    .submit-button {
+      padding: 0 2rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+      background: #ff6b00;
+      transform: translateY(-2px);
+    }
+
+    .feedback {
+      margin-top: 2rem;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .feedback-message {
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .correct-feedback {
+      background: rgba(0, 230, 118, 0.2);
+      border: 1px solid var(--correct);
+      color: var(--correct);
+    }
+
+    .incorrect-feedback {
+      background: rgba(255, 82, 82, 0.2);
+      border: 1px solid var(--incorrect);
+      color: var(--incorrect);
+    }
+
+    .next-button {
+      width: 100%;
+      padding: 1.2rem;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .next-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Results Page */
+    .results-container {
+      max-width: 800px;
+      width: 100%;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .results-card {
+      background: rgba(26, 26, 46, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .results-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+      z-index: -1;
+    }
+
+    .results-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      background: linear-gradient(to right, var(--light), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .score-display {
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .score-circle {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      z-index: -1;
+      filter: blur(20px);
+      opacity: 0.6;
+    }
+
     .score-value {
-      font-size: 4rem;
-      font-weight: bold;
+      font-size: 4.5rem;
+      font-weight: 700;
       line-height: 1;
+      background: linear-gradient(to bottom, var(--light), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    
+
     .score-label {
       font-size: 1.2rem;
-      opacity: 0.9;
+      opacity: 0.8;
     }
-    
+
     .feedback-title {
       font-size: 2rem;
       margin-bottom: 1rem;
-      color: #333;
     }
-    
+
     .feedback-text {
       font-size: 1.2rem;
-      color: #555;
+      opacity: 0.9;
+      margin-bottom: 3rem;
       line-height: 1.6;
     }
-    
+
     .actions {
       display: flex;
       justify-content: center;
       gap: 1.5rem;
       margin-top: 2rem;
     }
-    
+
     .action-button {
-      padding: 1rem 2rem;
+      padding: 1.2rem 2.5rem;
       border-radius: 50px;
       font-size: 1.1rem;
-      font-weight: bold;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
       min-width: 180px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border: none;
     }
-    
+
     .play-again {
-      background: linear-gradient(to right, var(--primary), #3a56b4);
+      background: linear-gradient(45deg, var(--accent), #ff416c);
       color: white;
     }
-    
+
     .go-home {
-      background: linear-gradient(to right, var(--secondary), #d45f5f);
+      background: rgba(255, 255, 255, 0.1);
       color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
-    
+
     .action-button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     }
-    
-    /* Timer */
-    .timer-container {
-      display: flex;
-      align-items: center;
-    }
-    
-    .timer-circle {
-      position: relative;
-      width: 60px;
-      height: 60px;
-    }
-    
-    .timer-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #333;
-    }
-    
+
     /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(50px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
-    @keyframes pulse {
-      0% { transform: scale(0.8); opacity: 0.8; }
-      50% { transform: scale(1.2); opacity: 0.4; }
-      100% { transform: scale(0.8); opacity: 0.8; }
+
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
     }
-    
+
     /* Responsive */
     @media (max-width: 768px) {
-      .features {
-        grid-template-columns: 1fr;
-      }
-      
       .title {
-        font-size: 2.5rem;
+        font-size: 2.8rem;
       }
       
       .subtitle {
         font-size: 1.2rem;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+      }
+      
+      .game-container, .results-card {
+        padding: 1.5rem;
+      }
+      
+      .question {
+        font-size: 1.5rem;
       }
       
       .options {
@@ -441,16 +552,12 @@
       }
       
       .submit-button {
-        padding: 1rem;
-      }
-      
-      .results-card {
-        padding: 2rem 1.5rem;
+        padding: 1.2rem;
+        width: 100%;
       }
       
       .actions {
         flex-direction: column;
-        gap: 1rem;
       }
       
       .action-button {
@@ -465,12 +572,12 @@
   </div>
 
   <script>
-    // Game Data
+    // Enhanced Game Data
     const questions = [
       {
         type: 'riddle',
         text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
-        answer: 'Peta',
+        answer: 'peta',
         hint: 'Berkaitan dengan geografi'
       },
       {
@@ -483,7 +590,7 @@
       {
         type: 'riddle',
         text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
-        answer: 'Langkah',
+        answer: 'langkah',
         hint: 'Berkaitan dengan perjalanan'
       },
       {
@@ -496,7 +603,7 @@
       {
         type: 'riddle',
         text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
-        answer: 'Gema',
+        answer: 'gema',
         hint: 'Berkaitan dengan suara'
       },
       {
@@ -509,7 +616,7 @@
       {
         type: 'riddle',
         text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
-        answer: 'Napas',
+        answer: 'napas',
         hint: 'Berkaitan dengan tubuh manusia'
       },
       {
@@ -522,7 +629,7 @@
       {
         type: 'riddle',
         text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
-        answer: 'Api',
+        answer: 'api',
         hint: 'Unsur alam'
       },
       {
@@ -531,11 +638,43 @@
         options: ['Sinar matahari', 'Air', 'Suara', 'Cahaya'],
         answer: 'Cahaya',
         explanation: 'Cahaya bisa menembus kaca'
+      },
+      {
+        type: 'riddle',
+        text: 'Dibutuhkan oleh yang hidup, diberikan oleh yang mati. Apakah aku?',
+        answer: 'nasihat',
+        hint: 'Berkaitan dengan pengetahuan'
+      },
+      {
+        type: 'multiple-choice',
+        text: 'Apa yang bisa kamu pegang tanpa menyentuhnya?',
+        options: ['Napas', 'Pikiran', 'Pembicaraan', 'Bayangan'],
+        answer: 'Napas',
+        explanation: 'Kamu bisa menahan napas'
+      },
+      {
+        type: 'riddle',
+        text: 'Bisa mengisi ruangan tetapi tidak memakan tempat. Apakah aku?',
+        answer: 'cahaya',
+        hint: 'Fenomena fisika'
+      },
+      {
+        type: 'multiple-choice',
+        text: 'Apa yang memiliki 13 hati tetapi tidak memiliki organ tubuh lainnya?',
+        options: ['Deck kartu', 'Manusia robot', 'Alien', 'Tas'],
+        answer: 'Deck kartu',
+        explanation: 'Mengacu pada 13 hati dalam satu set kartu remi'
+      },
+      {
+        type: 'riddle',
+        text: 'Dibawa ke tempat gelap agar bisa bersinar. Apakah aku?',
+        answer: 'korek api',
+        hint: 'Benda kecil yang menghasilkan api'
       }
     ];
 
     // Game State
-    let currentPage = 'home'; // 'home', 'game', 'results'
+    let currentPage = 'home';
     let score = 0;
     let timeLeft = 60;
     let timerInterval;
@@ -544,6 +683,7 @@
     let isCorrect = false;
     let pointsEarned = 0;
     let questionCount = 0;
+    let usedQuestions = [];
 
     // DOM Elements
     const app = document.getElementById('app');
@@ -552,46 +692,41 @@
     function renderHome() {
       app.innerHTML = `
         <div class="home-container">
-          <div class="hero-section">
-            <h1 class="title">Teka-Teki Challenge</h1>
-            <p class="subtitle">Uji kecerdasan dan kecepatan berpikir Anda!</p>
-            
-            <div class="features">
-              <div class="feature-card">
-                <span class="feature-icon">🔀</span>
-                <p>Pertanyaan acak setiap kali main</p>
-              </div>
-              <div class="feature-card">
-                <span class="feature-icon">🕒</span>
-                <p>Timer 60 detik per sesi</p>
-              </div>
-              <div class="feature-card">
-                <span class="feature-icon">🧠</span>
-                <p>Skor langsung dihitung</p>
-              </div>
-              <div class="feature-card">
-                <span class="feature-icon">🎉</span>
-                <p>Halaman hasil akhir</p>
-              </div>
-              <div class="feature-card">
-                <span class="feature-icon">🔄</span>
-                <p>Tombol untuk mulai ulang</p>
-              </div>
-              <div class="feature-card">
-                <span class="feature-icon">🚀</span>
-                <p>Navigasi antar halaman (SPA)</p>
-              </div>
+          <h1 class="title">🔥 Ultimate Teka-Teki Challenge</h1>
+          <p class="subtitle">Uji kecerdasan dan kecepatan berpikir Anda dengan teka-teki menantang!</p>
+          
+          <div class="features">
+            <div class="feature-card">
+              <span class="feature-icon">🔀</span>
+              <h3>Pertanyaan Acak</h3>
+              <p>15+ teka-teki unik dengan tingkat kesulitan berbeda</p>
             </div>
-            
-            <button id="startButton" class="start-button">
-              Mulai Bermain
-              <span class="button-icon">🚀</span>
-            </button>
+            <div class="feature-card">
+              <span class="feature-icon">⏱️</span>
+              <h3>Timer Menantang</h3>
+              <p>60 detik untuk menjawab sebanyak mungkin</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">📊</span>
+              <h3>Skor Cerdas</h3>
+              <p>Bonus poin untuk jawaban cepat</p>
+            </div>
+            <div class="feature-card">
+              <span class="feature-icon">🎯</span>
+              <h3>Tantangan Nyata</h3>
+              <p>Teka-teki logika dan kreativitas</p>
+            </div>
           </div>
+          
+          <button id="startButton" class="start-button">
+            MULAI CHALLENGE
+            <span class="button-icon">🚀</span>
+          </button>
         </div>
       `;
 
       document.getElementById('startButton').addEventListener('click', startGame);
+      createParticles();
     }
 
     function renderGame() {
@@ -607,19 +742,19 @@
             <div class="timer-container">
               <div class="timer-circle">
                 <svg width="60" height="60" viewBox="0 0 44 44">
-                  <circle cx="22" cy="22" r="20" fill="none" stroke="#e0e0e0" stroke-width="3"></circle>
-                  <circle cx="22" cy="22" r="20" fill="none" stroke="#4CAF50" stroke-width="3" 
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
                     stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
                   </circle>
                 </svg>
-                <span class="timer-text">1:00</span>
               </div>
+              <span class="timer-text">1:00</span>
             </div>
             <div class="score">Skor: ${score}</div>
           </div>
           
           <div class="question-container">
-            <h2 class="question">${currentQuestion.text}</h2>
+            <div class="question">${currentQuestion.text}</div>
             
             ${currentQuestion.type === 'multiple-choice' ? `
               <div class="options">
@@ -629,15 +764,16 @@
               </div>
             ` : `
               <div class="answer-input">
-                <input id="userAnswer" class="answer-field" placeholder="Ketik jawaban Anda...">
+                <input id="userAnswer" class="answer-field" placeholder="Ketik jawaban Anda..." autocomplete="off">
                 <button id="submitAnswer" class="submit-button">Submit</button>
               </div>
             `}
             
             <div class="feedback ${answered ? '' : 'hidden'}">
-              <p class="${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
-                ${isCorrect ? `🎉 Benar! +${pointsEarned} poin` : `❌ Salah! Jawaban benar: ${currentQuestion.answer}`}
-              </p>
+              <div class="feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
+                ${isCorrect ? '🎉' : '❌'}
+                ${isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`}
+              </div>
               <button id="nextButton" class="next-button">Pertanyaan Berikutnya</button>
             </div>
           </div>
@@ -652,12 +788,12 @@
       app.innerHTML = `
         <div class="results-container">
           <div class="results-card">
-            <h1 class="results-title">Hasil Permainan</h1>
+            <h1 class="results-title">HASIL PERMAINAN</h1>
             
             <div class="score-display">
               <div class="score-circle">
-                <span class="score-value">${score}</span>
-                <span class="score-label">Poin</span>
+                <div class="score-value">${score}</div>
+                <div class="score-label">Poin</div>
               </div>
             </div>
             
@@ -674,6 +810,10 @@
         </div>
       `;
 
+      if (score >= 100) {
+        createConfetti();
+      }
+
       document.getElementById('playAgain').addEventListener('click', startGame);
       document.getElementById('goHome').addEventListener('click', () => {
         currentPage = 'home';
@@ -687,12 +827,26 @@
       score = 0;
       timeLeft = 60;
       questionCount = 0;
+      usedQuestions = [];
       renderGame();
     }
 
     function getRandomQuestion() {
-      const randomIndex = Math.floor(Math.random() * questions.length);
-      return JSON.parse(JSON.stringify(questions[randomIndex]));
+      if (usedQuestions.length === questions.length) {
+        usedQuestions = [];
+      }
+
+      let availableQuestions = questions.filter(q => !usedQuestions.includes(q.text));
+      if (availableQuestions.length === 0) {
+        availableQuestions = [...questions];
+        usedQuestions = [];
+      }
+
+      const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+      const question = availableQuestions[randomIndex];
+      usedQuestions.push(question.text);
+      
+      return JSON.parse(JSON.stringify(question));
     }
 
     function startTimer() {
@@ -718,20 +872,19 @@
       if (timerText) {
         timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         
-        // Update timer color based on remaining time
-        const timerCircle = document.querySelector('.timer-circle circle:nth-child(2)');
-        if (timerCircle) {
+        const timerPath = document.getElementById('timerPath');
+        if (timerPath) {
           const circumference = 2 * Math.PI * 20;
           const offset = circumference - (timeLeft / 60) * circumference;
-          timerCircle.style.strokeDashoffset = offset;
+          timerPath.style.strokeDashoffset = offset;
           
           // Change color based on time left
           if (timeLeft > 36) {
-            timerCircle.style.stroke = '#4CAF50'; // Green
+            timerPath.style.stroke = '#00e676'; // Green
           } else if (timeLeft > 18) {
-            timerCircle.style.stroke = '#FFC107'; // Yellow
+            timerPath.style.stroke = '#ffc107'; // Yellow
           } else {
-            timerCircle.style.stroke = '#F44336'; // Red
+            timerPath.style.stroke = '#ff5252'; // Red
           }
         }
       }
@@ -741,9 +894,13 @@
       if (answered) return;
       
       answered = true;
-      isCorrect = currentQuestion.type === 'riddle' 
-        ? answer.toLowerCase() === currentQuestion.answer.toLowerCase()
-        : answer === currentQuestion.answer;
+      
+      // Case-insensitive comparison for riddles
+      if (currentQuestion.type === 'riddle') {
+        isCorrect = answer.trim().toLowerCase() === currentQuestion.answer.toLowerCase();
+      } else {
+        isCorrect = answer === currentQuestion.answer;
+      }
       
       pointsEarned = calculateScore(isCorrect, questionCount);
       if (isCorrect) {
@@ -762,7 +919,14 @@
           } else if (button.textContent === answer) {
             button.classList.add('incorrect');
           }
+          button.disabled = true;
         });
+      }
+      
+      // Disable input/submit button for riddles
+      if (currentQuestion.type === 'riddle') {
+        document.getElementById('userAnswer').disabled = true;
+        document.getElementById('submitAnswer').disabled = true;
       }
     }
 
@@ -776,14 +940,14 @@
     }
 
     function getFeedbackTitle() {
-      if (score >= 100) return "Luar Biasa! 🎉";
-      if (score >= 50) return "Bagus! 👍";
-      return "Terus Berlatih! 💪";
+      if (score >= 100) return "LUAR BIASA! 🎉";
+      if (score >= 50) return "HEBAT! 👍";
+      return "TERUS BERLATIH! 💪";
     }
 
     function getFeedbackText() {
-      if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Pertahankan prestasi ini!";
-      if (score >= 50) return "Hasil yang bagus! Dengan sedikit latihan, Anda bisa menjadi lebih baik!";
+      if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Skor fantastis!";
+      if (score >= 50) return "Hasil yang sangat bagus! Sedikit lagi bisa mencapai skor sempurna!";
       return "Setiap permainan adalah kesempatan untuk belajar. Coba lagi untuk meningkatkan skor Anda!";
     }
 
@@ -822,6 +986,68 @@
         nextButton.addEventListener('click', () => {
           renderGame();
         });
+      }
+    }
+
+    // Effects
+    function createParticles() {
+      const particlesContainer = document.createElement('div');
+      particlesContainer.style.position = 'fixed';
+      particlesContainer.style.top = '0';
+      particlesContainer.style.left = '0';
+      particlesContainer.style.width = '100%';
+      particlesContainer.style.height = '100%';
+      particlesContainer.style.pointerEvents = 'none';
+      particlesContainer.style.zIndex = '-1';
+      document.body.appendChild(particlesContainer);
+
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 5 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        
+        const animationDuration = Math.random() * 20 + 10;
+        particle.style.animation = `float ${animationDuration}s infinite ease-in-out`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particle.style.opacity = Math.random() * 0.5 + 0.1;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    function createConfetti() {
+      const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+      
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('particle');
+        
+        const size = Math.random() * 10 + 5;
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.top = `-${size}px`;
+        
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.borderRadius = '50%';
+        
+        const animationDuration = Math.random() * 3 + 2;
+        confetti.style.animation = `confetti ${animationDuration}s linear forwards`;
+        confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+        
+        document.body.appendChild(confetti);
+        
+        // Remove after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, animationDuration * 1000);
       }
     }
 
