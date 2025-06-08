@@ -394,6 +394,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.8rem;
+      flex-direction: column;
     }
 
     .correct-feedback {
@@ -406,6 +407,14 @@
       background: rgba(255, 82, 82, 0.2);
       border: 1px solid var(--incorrect);
       color: var(--incorrect);
+    }
+
+    .explanation {
+      font-size: 0.9rem;
+      font-weight: normal;
+      margin-top: 0.5rem;
+      text-align: center;
+      opacity: 0.8;
     }
 
     .next-button {
@@ -618,6 +627,10 @@
         width: 100%;
       }
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -630,26 +643,31 @@
     const questions = {
       riddle: [
         {
+          type: 'riddle',
           text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
           answer: 'peta',
           hint: 'Berkaitan dengan geografi'
         },
         {
+          type: 'riddle',
           text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
           answer: 'langkah',
           hint: 'Berkaitan dengan perjalanan'
         },
         {
+          type: 'riddle',
           text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
           answer: 'gema',
           hint: 'Berkaitan dengan suara'
         },
         {
+          type: 'riddle',
           text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
           answer: 'napas',
           hint: 'Berkaitan dengan tubuh manusia'
         },
         {
+          type: 'riddle',
           text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
           answer: 'api',
           hint: 'Unsur alam'
@@ -849,7 +867,7 @@
               </div>
             `}
             
-            <div class="feedback ${answered ? '' : 'hidden'}">
+            <div class="feedback hidden">
               <div class="feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
                 ${isCorrect ? '🎉' : '❌'}
                 ${isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`}
@@ -973,8 +991,10 @@
       
       answered = true;
       
-      // Case-insensitive comparison for riddles
-      if (currentQuestion.type === 'riddle' || currentQuestion.type === 'sequence' || currentQuestion.type === 'word-problem' || currentQuestion.type === 'tricky-math') {
+      // Case-insensitive comparison for riddles and similar question types
+      if (currentQuestion.type === 'riddle' || currentQuestion.type === 'sequence' || 
+          currentQuestion.type === 'word-problem' || currentQuestion.type === 'tricky-math' ||
+          currentQuestion.type === 'logic-puzzle') {
         isCorrect = answer.trim().toLowerCase() === currentQuestion.answer.toLowerCase();
       } else {
         isCorrect = answer === currentQuestion.answer;
@@ -987,14 +1007,15 @@
       }
       
       // Show feedback
-      document.querySelector('.feedback').classList.remove('hidden');
+      const feedbackElement = document.querySelector('.feedback');
+      feedbackElement.classList.remove('hidden');
       
       // Highlight correct/incorrect answers for multiple choice
       if (currentQuestion.type === 'multiple-choice') {
         document.querySelectorAll('.option-button').forEach(button => {
           if (button.textContent === currentQuestion.answer) {
             button.classList.add('correct');
-          } else if (button.textContent === answer) {
+          } else if (button.textContent === answer && !isCorrect) {
             button.classList.add('incorrect');
           }
           button.disabled = true;
