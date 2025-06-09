@@ -589,6 +589,11 @@
       background-position: center;
       cursor: pointer;
       z-index: 2;
+      font-size: 2.5rem; /* Adjusted for better visibility of text pieces */
+      line-height: 1; /* Ensure text is centered */
+      display: flex; /* For centering text */
+      align-items: center; /* For centering text */
+      justify-content: center; /* For centering text */
     }
 
     .chess-piece.selected {
@@ -809,7 +814,10 @@
       }
 
       .maze-buttons {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Changed for better mobile layout */
+      }
+      .chess-piece {
+        font-size: 1.8rem; /* Adjust chess piece size for mobile */
       }
     }
 
@@ -930,7 +938,7 @@
       ]
     };
 
-    // Maze Levels (20 extreme levels)
+    // Maze Levels (20 extreme levels) - Data kept as is
     const mazeLevels = [
       // Level 1-5: Basic mazes
       {
@@ -1059,7 +1067,7 @@
           [13,0], [13,2], [13,4], [13,6], [13,8], [13,10], [13,12], [13,14],
           [14,1], [14,3], [14,5], [14,7], [14,9], [14,11], [14,13],
           // Openings to create a path
-          [0,0], [0,14], [14,0], [14,14]
+          [0,0], [0,14], [14,0], [14,14] // These were likely intended to be removed from walls, not added as walls
         ]
       },
       {
@@ -1083,9 +1091,11 @@
           [12,1], [12,3], [12,5], [12,7], [12,9], [12,11], [12,13],
           [13,0], [13,2], [13,4], [13,6], [13,8], [13,10], [13,12], [13,14],
           [14,1], [14,3], [14,5], [14,7], [14,9], [14,11], [14,13],
-          // Correct path openings
+          // Correct path openings (These should NOT be walls)
+          // [0,0], [1,1], [2,0], [3,1], [4,0], [5,1], [6,0], [7,1], [8,0], [9,1], [10,0], [11,1], [12,0], [13,1], [14,0]
+        ].filter(w => !([
           [0,0], [1,1], [2,0], [3,1], [4,0], [5,1], [6,0], [7,1], [8,0], [9,1], [10,0], [11,1], [12,0], [13,1], [14,0]
-        ]
+        ].some(p => p[0] === w[0] && p[1] === w[1]))) // Filter out path openings from walls
       },
       {
         rows: 15, cols: 15,
@@ -1108,9 +1118,9 @@
           [12,1], [12,3], [12,5], [12,7], [12,9], [12,11], [12,13],
           [13,0], [13,2], [13,4], [13,6], [13,8], [13,10], [13,12], [13,14],
           [14,1], [14,3], [14,5], [14,7], [14,9], [14,11], [14,13],
-          // Correct path openings with some dead ends
-          [0,0], [1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7], [8,8], [9,9], [10,10], [11,11], [12,12], [13,13], [14,14],
-          // Dead ends
+          // Correct path openings with some dead ends (These should NOT be walls)
+          // [0,0], [1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7], [8,8], [9,9], [10,10], [11,11], [12,12], [13,13], [14,14],
+          // Dead ends (These ARE walls)
           [1,3], [1,5], [1,7], [1,9], [1,11], [1,13],
           [3,1], [3,5], [3,7], [3,9], [3,11], [3,13],
           [5,1], [5,3], [5,7], [5,9], [5,11], [5,13],
@@ -1118,7 +1128,9 @@
           [9,1], [9,3], [9,5], [9,7], [9,11], [9,13],
           [11,1], [11,3], [11,5], [11,7], [11,9], [11,13],
           [13,1], [13,3], [13,5], [13,7], [13,9], [13,11]
-        ]
+        ].filter(w => !([
+          [0,0], [1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7], [8,8], [9,9], [10,10], [11,11], [12,12], [13,13], [14,14]
+        ].some(p => p[0] === w[0] && p[1] === w[1]))) // Filter out path openings
       },
       // Level 11-15: Even more complex mazes
       {
@@ -1147,9 +1159,14 @@
           [17,0], [17,2], [17,4], [17,6], [17,8], [17,10], [17,12], [17,14], [17,16], [17,18],
           [18,1], [18,3], [18,5], [18,7], [18,9], [18,11], [18,13], [18,15], [18,17], [18,19],
           [19,0], [19,2], [19,4], [19,6], [19,8], [19,10], [19,12], [19,14], [19,16], [19,18],
-          // Correct path
+          // Correct path (These should NOT be walls)
+          // [0,0], [1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7], [8,8], [9,9], [10,10], [11,11], [12,12], [13,13], [14,14], [15,15], [16,16], [17,17], [18,18], [19,19],
+          // Some openings to create alternative paths (These should NOT be walls)
+          // [1,3], [1,5], [1,7], [1,9], [1,11], [1,13], [1,15], [1,17],
+          // [3,1], [3,5], [3,7], [3,9], [3,11], [3,13], [3,15], [3,17],
+          // ... (and so on for other openings)
+        ].filter(w => !([
           [0,0], [1,1], [2,2], [3,3], [4,4], [5,5], [6,6], [7,7], [8,8], [9,9], [10,10], [11,11], [12,12], [13,13], [14,14], [15,15], [16,16], [17,17], [18,18], [19,19],
-          // Some openings to create alternative paths
           [1,3], [1,5], [1,7], [1,9], [1,11], [1,13], [1,15], [1,17],
           [3,1], [3,5], [3,7], [3,9], [3,11], [3,13], [3,15], [3,17],
           [5,1], [5,3], [5,7], [5,9], [5,11], [5,13], [5,15], [5,17],
@@ -1159,7 +1176,7 @@
           [13,1], [13,3], [13,5], [13,7], [13,9], [13,11], [13,15], [13,17],
           [15,1], [15,3], [15,5], [15,7], [15,9], [15,11], [15,13], [15,17],
           [17,1], [17,3], [17,5], [17,7], [17,9], [17,11], [17,13], [17,15]
-        ]
+        ].some(p => p[0] === w[0] && p[1] === w[1])))
       },
       // Level 16-20: Extreme mazes
       {
@@ -1188,13 +1205,16 @@
           [17,0], [17,1], [17,2], [17,3], [17,4], [17,5], [17,6], [17,7], [17,8], [17,9], [17,10], [17,11], [17,12], [17,13], [17,14], [17,15], [17,16], [17,17], [17,18], [17,19],
           [18,0], [18,1], [18,2], [18,3], [18,4], [18,5], [18,6], [18,7], [18,8], [18,9], [18,10], [18,11], [18,12], [18,13], [18,14], [18,15], [18,16], [18,17], [18,18], [18,19],
           [19,0], [19,1], [19,2], [19,3], [19,4], [19,5], [19,6], [19,7], [19,8], [19,9], [19,10], [19,11], [19,12], [19,13], [19,14], [19,15], [19,16], [19,17], [19,18],
-          // Very narrow path
+          // Very narrow path (These should NOT be walls)
+          // [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [7,0], [8,0], [9,0], [10,0], [11,0], [12,0], [13,0], [14,0], [15,0], [16,0], [17,0], [18,0], [19,0],
+          // [19,1], [19,2], [19,3], [19,4], [19,5], [19,6], [19,7], [19,8], [19,9], [19,10], [19,11], [19,12], [19,13], [19,14], [19,15], [19,16], [19,17], [19,18], [19,19]
+        ].filter(w => !([
           [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [7,0], [8,0], [9,0], [10,0], [11,0], [12,0], [13,0], [14,0], [15,0], [16,0], [17,0], [18,0], [19,0],
           [19,1], [19,2], [19,3], [19,4], [19,5], [19,6], [19,7], [19,8], [19,9], [19,10], [19,11], [19,12], [19,13], [19,14], [19,15], [19,16], [19,17], [19,18], [19,19]
-        ]
+        ].some(p => p[0] === w[0] && p[1] === w[1])))
       }
     ];
-
+    
     // Chess Pieces
     const chessPieces = {
       'wK': '♔', 'wQ': '♕', 'wR': '♖', 'wB': '♗', 'wN': '♘', 'wP': '♙',
@@ -1233,7 +1253,7 @@
     let mazeCompleted = false;
 
     // Chess Game State
-    let chessBoard = JSON.parse(JSON.stringify(initialChessBoard));
+    let chessBoard = JSON.parse(JSON.stringify(initialChessBoard)); // Game state
     let chessTurn = 'w'; // 'w' for white, 'b' for black
     let selectedChessPiece = null;
     let possibleMoves = [];
@@ -1382,7 +1402,7 @@
     function renderMazeGame() {
       const level = mazeLevels[mazeLevel];
       mazePlayerPos = {...level.start};
-      mazeVisited = Array(level.rows).fill().map(() => Array(level.cols).fill(false));
+      mazeVisited = Array(level.rows).fill(null).map(() => Array(level.cols).fill(false)); // Ensure fresh array
       mazeVisited[level.start.row][level.start.col] = true;
       mazeCompleted = false;
 
@@ -1404,12 +1424,12 @@
               </div>
               <span class="timer-text">1:00</span>
             </div>
-            <div class="score">Level: ${mazeLevel + 1}/20</div>
+            <div class="score">Level: ${mazeLevel + 1}/${mazeLevels.length}</div>
           </div>
           
           <div class="maze-container">
             <div class="maze-level">Labirin Level ${mazeLevel + 1}</div>
-            <div class="maze-board" id="mazeBoard"></div>
+            <div class="maze-board" id="mazeBoardElement"></div> {/* Changed ID to avoid conflict */}
             
             <div class="maze-controls">
               <div class="maze-buttons">
@@ -1431,46 +1451,37 @@
 
     function renderMazeBoard() {
       const level = mazeLevels[mazeLevel];
-      const mazeBoard = document.getElementById('mazeBoard');
-      mazeBoard.innerHTML = '';
+      const mazeBoardElement = document.getElementById('mazeBoardElement'); // Use new ID
+      if (!mazeBoardElement) return; // Guard clause
+      mazeBoardElement.innerHTML = '';
 
       for (let row = 0; row < level.rows; row++) {
         for (let col = 0; col < level.cols; col++) {
           const cell = document.createElement('div');
           cell.className = 'maze-cell';
           
-          // Check if current cell is a wall
           const isWall = level.walls.some(wall => wall[0] === row && wall[1] === col);
           
           if (isWall) {
             cell.classList.add('maze-wall');
           } else {
             cell.classList.add('maze-path');
-            
-            // Check if start position
             if (row === level.start.row && col === level.start.col) {
               cell.classList.add('maze-start');
             }
-            
-            // Check if end position
             if (row === level.end.row && col === level.end.col) {
               cell.classList.add('maze-end');
             }
-            
-            // Check if player position
             if (row === mazePlayerPos.row && col === mazePlayerPos.col) {
               const player = document.createElement('div');
               player.className = 'maze-player';
               cell.appendChild(player);
             }
-            
-            // Check if visited
-            if (mazeVisited[row][col]) {
+            if (mazeVisited[row] && mazeVisited[row][col]) { // Check if row exists
               cell.classList.add('maze-visited');
             }
           }
-          
-          mazeBoard.appendChild(cell);
+          mazeBoardElement.appendChild(cell);
         }
       }
     }
@@ -1494,7 +1505,7 @@
           </div>
           
           <div class="chess-container">
-            <div class="chess-board" id="chessBoard"></div>
+            <div class="chess-board" id="chessBoardElement"></div> {/* Changed ID */}
             
             <div class="chess-controls">
               <div class="chess-info">
@@ -1513,21 +1524,22 @@
     }
 
     function renderChessBoard() {
-      const chessBoard = document.getElementById('chessBoard');
-      chessBoard.innerHTML = '';
+      const chessBoardElement = document.getElementById('chessBoardElement'); // Use new ID
+      if (!chessBoardElement) return; // Guard clause
+      chessBoardElement.innerHTML = '';
 
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
           const square = document.createElement('div');
           square.className = `chess-square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+          square.dataset.row = row; // Add data attributes for easier access
+          square.dataset.col = col;
           
-          // Highlight possible moves
           if (selectedChessPiece && possibleMoves.some(move => move.row === row && move.col === col)) {
             square.classList.add('highlight');
           }
           
-          // Add chess piece if exists
-          const piece = chessBoard[row][col];
+          const piece = chessBoard[row][col]; // Access global state chessBoard
           if (piece) {
             const pieceElement = document.createElement('div');
             pieceElement.className = 'chess-piece';
@@ -1535,15 +1547,12 @@
             pieceElement.dataset.row = row;
             pieceElement.dataset.col = col;
             
-            // Highlight selected piece
             if (selectedChessPiece && selectedChessPiece.row === row && selectedChessPiece.col === col) {
               pieceElement.classList.add('selected');
             }
-            
             square.appendChild(pieceElement);
           }
-          
-          chessBoard.appendChild(square);
+          chessBoardElement.appendChild(square);
         }
       }
     }
@@ -1574,7 +1583,7 @@
         </div>
       `;
 
-      if (score >= 100) {
+      if (score >= 100 && currentGameMode !== 'maze' && currentGameMode !== 'chess') { // Confetti for non-maze/chess high scores
         createConfetti();
       }
 
@@ -1605,31 +1614,36 @@
 
     function startMazeGame() {
       currentPage = 'maze';
-      currentGameMode = 'maze';
+      // currentGameMode = 'maze'; // Already set when clicking game mode
       mazeLevel = 0;
-      score = 0;
+      score = 0; // Reset score for maze game
       timeLeft = 60;
       renderMazeGame();
     }
 
     function startChessGame() {
       currentPage = 'chess';
-      currentGameMode = 'chess';
+      // currentGameMode = 'chess'; // Already set
       chessBoard = JSON.parse(JSON.stringify(initialChessBoard));
       chessTurn = 'w';
       selectedChessPiece = null;
       possibleMoves = [];
-      score = 0;
-      timeLeft = 60;
+      score = 0; // Chess doesn't use this score system in this version
+      timeLeft = 300; // Longer timer for chess
       renderChessGame();
     }
 
     function getRandomQuestion(mode) {
+      if (!questions[mode] || questions[mode].length === 0) {
+        return { text: "Tidak ada pertanyaan untuk mode ini.", answer: "", type: "info" };
+      }
       const availableQuestions = questions[mode].filter(q => !usedQuestions[mode].includes(q.text));
       
       if (availableQuestions.length === 0) {
-        usedQuestions[mode] = [];
-        return questions[mode][Math.floor(Math.random() * questions[mode].length)];
+        usedQuestions[mode] = []; // Reset if all used
+        // Fallback to selecting any question if all were used in a short session
+        const allModeQuestions = questions[mode];
+        return JSON.parse(JSON.stringify(allModeQuestions[Math.floor(Math.random() * allModeQuestions.length)]));
       }
 
       const randomIndex = Math.floor(Math.random() * availableQuestions.length);
@@ -1641,6 +1655,8 @@
 
     function startTimer() {
       clearInterval(timerInterval);
+      const gameDuration = (currentGameMode === 'chess') ? 300 : 60; // 5 mins for chess, 1 min for others
+      timeLeft = gameDuration;
       updateTimerDisplay();
       
       timerInterval = setInterval(() => {
@@ -1649,29 +1665,48 @@
         
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
+          // For chess, time out might mean a draw or loss depending on rules, here just ends.
+          if (currentGameMode === 'chess' && !isKingCaptured()) {
+             alert('Waktu habis! Permainan berakhir.');
+          } else if (currentGameMode === 'maze' && !mazeCompleted) {
+             alert('Waktu habis! Anda gagal menyelesaikan labirin.');
+          }
           currentPage = 'results';
           renderResults();
         }
       }, 1000);
     }
+    
+    function isKingCaptured() {
+        let whiteKing = false, blackKing = false;
+        for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+                if (chessBoard[r][c] === 'wK') whiteKing = true;
+                if (chessBoard[r][c] === 'bK') blackKing = true;
+            }
+        }
+        return !whiteKing || !blackKing;
+    }
+
 
     function updateTimerDisplay() {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
       const timerText = document.querySelector('.timer-text');
+      const gameDuration = (currentGameMode === 'chess') ? 300 : 60;
+
       if (timerText) {
         timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
         
         const timerPath = document.getElementById('timerPath');
         if (timerPath) {
-          const circumference = 2 * Math.PI * 20;
-          const offset = circumference - (timeLeft / 60) * circumference;
+          const circumference = 2 * Math.PI * 20; // Assuming r=20 from SVG
+          const offset = circumference - (timeLeft / gameDuration) * circumference;
           timerPath.style.strokeDashoffset = offset;
           
-          // Change color based on time left
-          if (timeLeft > 36) {
+          if (timeLeft > gameDuration * 0.6) { // >60%
             timerPath.style.stroke = '#00e676'; // Green
-          } else if (timeLeft > 18) {
+          } else if (timeLeft > gameDuration * 0.3) { // >30%
             timerPath.style.stroke = '#ffc107'; // Yellow
           } else {
             timerPath.style.stroke = '#ff5252'; // Red
@@ -1682,10 +1717,8 @@
 
     function checkAnswer(answer) {
       if (answered) return;
-      
       answered = true;
       
-      // Case-insensitive comparison for riddles and similar question types
       if (currentQuestion.type === 'riddle' || currentQuestion.type === 'sequence' || 
           currentQuestion.type === 'word-problem' || currentQuestion.type === 'tricky-math' ||
           currentQuestion.type === 'logic-puzzle') {
@@ -1697,36 +1730,43 @@
       pointsEarned = calculateScore(isCorrect, questionCount);
       if (isCorrect) {
         score += pointsEarned;
-        document.querySelector('.score').textContent = `Skor: ${score}`;
       }
       
-      // Show feedback
       const feedbackElement = document.querySelector('.feedback');
+      if (!feedbackElement) return;
       feedbackElement.classList.remove('hidden');
+
+      const feedbackMessageEl = feedbackElement.querySelector('.feedback-message');
+      if (feedbackMessageEl) {
+          feedbackMessageEl.className = `feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}`;
+          let messageContent = `${isCorrect ? '🎉' : '❌'} `;
+          messageContent += isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`;
+          if (currentQuestion.explanation) {
+              messageContent += `<div class="explanation">${currentQuestion.explanation}</div>`;
+          }
+          feedbackMessageEl.innerHTML = messageContent;
+      }
       
-      // Highlight correct/incorrect answers for multiple choice
       if (currentQuestion.type === 'multiple-choice') {
         document.querySelectorAll('.option-button').forEach(button => {
-          if (button.textContent === currentQuestion.answer) {
+          if (button.dataset.answer === currentQuestion.answer) { // Use data-answer for consistency
             button.classList.add('correct');
-          } else if (button.textContent === answer && !isCorrect) {
+          } else if (button.dataset.answer === answer && !isCorrect) {
             button.classList.add('incorrect');
           }
           button.disabled = true;
         });
-      }
-      
-      // Disable input/submit button for other question types
-      if (currentQuestion.type !== 'multiple-choice') {
+      } else {
         const answerInput = document.getElementById('userAnswer');
         const submitButton = document.getElementById('submitAnswer');
         if (answerInput) answerInput.disabled = true;
         if (submitButton) submitButton.disabled = true;
       }
+      document.querySelector('.score').textContent = `Skor: ${score}`;
     }
 
     function moveMazePlayer(direction) {
-      if (mazeCompleted) return;
+      if (mazeCompleted || timeLeft <= 0) return;
       
       const level = mazeLevels[mazeLevel];
       let newRow = mazePlayerPos.row;
@@ -1739,34 +1779,28 @@
         case 'right': newCol++; break;
       }
       
-      // Check boundaries
-      if (newRow < 0 || newRow >= level.rows || newCol < 0 || newCol >= level.cols) {
-        return;
-      }
+      if (newRow < 0 || newRow >= level.rows || newCol < 0 || newCol >= level.cols) return;
+      if (level.walls.some(wall => wall[0] === newRow && wall[1] === newCol)) return;
       
-      // Check if wall
-      const isWall = level.walls.some(wall => wall[0] === newRow && wall[1] === newCol);
-      if (isWall) {
-        return;
-      }
-      
-      // Move player
       mazePlayerPos.row = newRow;
       mazePlayerPos.col = newCol;
-      mazeVisited[newRow][newCol] = true;
+      if (mazeVisited[newRow]) mazeVisited[newRow][newCol] = true; // Check row exists
       
-      // Check if reached end
       if (newRow === level.end.row && newCol === level.end.col) {
         mazeCompleted = true;
-        score += 50 * (mazeLevel + 1);
-        document.querySelector('.score').textContent = `Skor: ${score}`;
+        score += 50 * (mazeLevel + 1); // Maze score system
+        const scoreDisplay = document.querySelector('.score');
+        if (scoreDisplay) scoreDisplay.textContent = `Skor: ${score}`; // Update score display
         
-        // Show completion message
         setTimeout(() => {
           if (mazeLevel < mazeLevels.length - 1) {
             if (confirm(`Selamat! Anda menyelesaikan Level ${mazeLevel + 1}. Lanjut ke level berikutnya?`)) {
               mazeLevel++;
+              timeLeft = 60; // Reset timer for next level
               renderMazeGame();
+            } else {
+              currentPage = 'results'; // Go to results if they don't want to continue
+              renderResults();
             }
           } else {
             alert('Selamat! Anda telah menyelesaikan semua level labirin!');
@@ -1775,26 +1809,34 @@
           }
         }, 100);
       }
-      
       renderMazeBoard();
     }
 
-    function calculateScore(isCorrect, questionCount) {
+    function calculateScore(isCorrect, qCount) { // qCount is not used here, could be for speed bonus
       if (!isCorrect) return 0;
-      
       const basePoints = 10;
-      const speedBonus = Math.max(0, 15 - questionCount);
-      
-      return basePoints + speedBonus;
+      // Example: const speedBonus = Math.max(0, 15 - (60 - timeLeft)); // Bonus for faster answers
+      return basePoints; // Simplified
     }
 
     function getFeedbackTitle() {
+      if (currentGameMode === 'maze' || currentGameMode === 'chess') {
+          if (score > 0 || mazeCompleted || (currentGameMode === 'chess' && isKingCaptured())) return "PERMAINAN SELESAI!";
+          return "COBA LAGI!";
+      }
       if (score >= 100) return "LUAR BIASA! 🎉";
       if (score >= 50) return "HEBAT! 👍";
       return "TERUS BERLATIH! 💪";
     }
 
     function getFeedbackText() {
+      if (currentGameMode === 'maze') {
+          return mazeCompleted ? `Anda menyelesaikan labirin dengan skor ${score}!` : "Anda tidak berhasil menyelesaikan labirin tepat waktu.";
+      }
+      if (currentGameMode === 'chess') {
+          // More specific chess feedback can be added
+          return isKingCaptured() ? `${chessTurn === 'w' ? 'Hitam' : 'Putih'} menang!` : "Permainan berakhir.";
+      }
       if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Skor fantastis!";
       if (score >= 50) return "Hasil yang sangat bagus! Sedikit lagi bisa mencapai skor sempurna!";
       return "Setiap permainan adalah kesempatan untuk belajar. Coba lagi untuk meningkatkan skor Anda!";
@@ -1807,29 +1849,40 @@
       switch(piece[1]) { // Piece type
         case 'P': // Pawn
           const direction = color === 'w' ? -1 : 1;
-          // Move forward
-          if (chessBoard[row + direction] && !chessBoard[row + direction][col]) {
-            moves.push({row: row + direction, col});
-            // Double move from starting position
-            if ((color === 'w' && row === 6) || (color === 'b' && row === 1)) {
-              if (!chessBoard[row + 2 * direction][col]) {
-                moves.push({row: row + 2 * direction, col});
-              }
+          const oneStepRow = row + direction;
+          const twoStepsRow = row + 2 * direction;
+
+          // Move one step forward
+          if (oneStepRow >= 0 && oneStepRow < 8 && !chessBoard[oneStepRow][col]) {
+            moves.push({row: oneStepRow, col: col});
+            // Move two steps forward (from starting position, and if one-step was possible)
+            if (((color === 'w' && row === 6) || (color === 'b' && row === 1))) {
+                if (twoStepsRow >= 0 && twoStepsRow < 8 && !chessBoard[twoStepsRow][col]) {
+                    moves.push({row: twoStepsRow, col: col});
+                }
             }
           }
+
           // Capture diagonally
           for (const dc of [-1, 1]) {
-            if (chessBoard[row + direction] && chessBoard[row + direction][col + dc]) {
-              const targetPiece = chessBoard[row + direction][col + dc];
-              if (targetPiece[0] !== color) {
-                moves.push({row: row + direction, col: col + dc});
-              }
+            const captureCol = col + dc;
+            if (oneStepRow >= 0 && oneStepRow < 8 && captureCol >= 0 && captureCol < 8 &&
+                chessBoard[oneStepRow][captureCol] && chessBoard[oneStepRow][captureCol][0] !== color) {
+              moves.push({row: oneStepRow, col: captureCol});
             }
           }
           break;
           
         case 'R': // Rook
-          for (const [dr, dc] of [[1,0], [-1,0], [0,1], [0,-1]]) {
+        case 'B': // Bishop
+        case 'Q': // Queen
+          const directions = {
+            'R': [[1,0], [-1,0], [0,1], [0,-1]],
+            'B': [[1,1], [1,-1], [-1,1], [-1,-1]],
+            'Q': [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]]
+          }[piece[1]];
+
+          for (const [dr, dc] of directions) {
             for (let i = 1; i < 8; i++) {
               const newRow = row + dr * i;
               const newCol = col + dc * i;
@@ -1858,42 +1911,6 @@
           }
           break;
           
-        case 'B': // Bishop
-          for (const [dr, dc] of [[1,1], [1,-1], [-1,1], [-1,-1]]) {
-            for (let i = 1; i < 8; i++) {
-              const newRow = row + dr * i;
-              const newCol = col + dc * i;
-              if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) break;
-              if (!chessBoard[newRow][newCol]) {
-                moves.push({row: newRow, col: newCol});
-              } else {
-                if (chessBoard[newRow][newCol][0] !== color) {
-                  moves.push({row: newRow, col: newCol});
-                }
-                break;
-              }
-            }
-          }
-          break;
-          
-        case 'Q': // Queen (Rook + Bishop)
-          for (const [dr, dc] of [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]]) {
-            for (let i = 1; i < 8; i++) {
-              const newRow = row + dr * i;
-              const newCol = col + dc * i;
-              if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) break;
-              if (!chessBoard[newRow][newCol]) {
-                moves.push({row: newRow, col: newCol});
-              } else {
-                if (chessBoard[newRow][newCol][0] !== color) {
-                  moves.push({row: newRow, col: newCol});
-                }
-                break;
-              }
-            }
-          }
-          break;
-          
         case 'K': // King
           for (const [dr, dc] of [[1,0], [-1,0], [0,1], [0,-1], [1,1], [1,-1], [-1,1], [-1,-1]]) {
             const newRow = row + dr;
@@ -1904,147 +1921,158 @@
               }
             }
           }
+          // Basic castling can be added here if desired
           break;
       }
-      
       return moves;
     }
 
     function makeChessMove(toRow, toCol) {
-      if (!selectedChessPiece) return;
+      if (!selectedChessPiece || timeLeft <= 0) return;
       
       const fromRow = selectedChessPiece.row;
       const fromCol = selectedChessPiece.col;
       const piece = chessBoard[fromRow][fromCol];
       
-      // Check if move is valid
       const isValidMove = possibleMoves.some(move => move.row === toRow && move.col === toCol);
       if (!isValidMove) return;
       
-      // Move the piece
       chessBoard[toRow][toCol] = piece;
       chessBoard[fromRow][fromCol] = '';
       
-      // Switch turns
+      // Pawn promotion (simple: to Queen)
+      if (piece[1] === 'P' && ((piece[0] === 'w' && toRow === 0) || (piece[0] === 'b' && toRow === 7))) {
+        chessBoard[toRow][toCol] = piece[0] + 'Q';
+      }
+      
       chessTurn = chessTurn === 'w' ? 'b' : 'w';
       selectedChessPiece = null;
       possibleMoves = [];
       
-      // Check for win condition (simplified - just capturing the king)
-      let whiteKing = false, blackKing = false;
-      for (let row = 0; row < 8; row++) {
-        for (let col = 0; col < 8; col++) {
-          if (chessBoard[row][col] === 'wK') whiteKing = true;
-          if (chessBoard[row][col] === 'bK') blackKing = true;
-        }
-      }
+      renderChessBoard(); // Update board display first
       
-      if (!whiteKing || !blackKing) {
+      const chessTurnEl = document.querySelector('.chess-turn');
+      const chessStatusEl = document.querySelector('.chess-status');
+      if(chessTurnEl) chessTurnEl.textContent = `Giliran: ${chessTurn === 'w' ? 'Putih' : 'Hitam'}`;
+      if(chessStatusEl) chessStatusEl.textContent = 'Pilih bidak untuk memulai';
+
+      if (isKingCaptured()) {
+        clearInterval(timerInterval); // Stop timer
         setTimeout(() => {
-          alert(`Permainan berakhir! ${!whiteKing ? 'Hitam' : 'Putih'} menang!`);
+          // Winner is the one whose turn it ISN'T (because the other king was captured on previous turn)
+          const winner = chessTurn === 'w' ? 'Hitam' : 'Putih'; 
+          alert(`Permainan berakhir! ${winner} menang!`);
           currentPage = 'results';
           renderResults();
         }, 100);
       }
-      
-      renderChessBoard();
-      document.querySelector('.chess-turn').textContent = `Giliran: ${chessTurn === 'w' ? 'Putih' : 'Hitam'}`;
-      document.querySelector('.chess-status').textContent = 'Pilih bidak untuk memulai';
     }
 
     // Event Listeners Setup
     function setupGameEventListeners() {
-      // Multiple choice answers
       document.querySelectorAll('.option-button').forEach(button => {
         button.addEventListener('click', () => {
-          checkAnswer(button.textContent);
+          checkAnswer(button.dataset.answer); // Use data-answer
         });
       });
       
-      // Riddle answer submission
       const submitButton = document.getElementById('submitAnswer');
-      if (submitButton) {
+      const userAnswerInput = document.getElementById('userAnswer');
+
+      if (submitButton && userAnswerInput) {
         submitButton.addEventListener('click', () => {
-          const userAnswer = document.getElementById('userAnswer').value;
-          if (userAnswer.trim()) {
-            checkAnswer(userAnswer);
+          if (userAnswerInput.value.trim()) {
+            checkAnswer(userAnswerInput.value);
           }
         });
-        
-        // Also allow Enter key to submit
-        document.getElementById('userAnswer').addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') {
-            const userAnswer = document.getElementById('userAnswer').value;
-            if (userAnswer.trim()) {
-              checkAnswer(userAnswer);
-            }
+        userAnswerInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && userAnswerInput.value.trim()) {
+            checkAnswer(userAnswerInput.value);
           }
         });
       }
       
-      // Next question button
       const nextButton = document.getElementById('nextButton');
       if (nextButton) {
         nextButton.addEventListener('click', () => {
-          renderGame();
+          if (questionCount < 10) { // Example: Limit to 10 questions
+             renderGame();
+          } else {
+             currentPage = 'results';
+             renderResults();
+          }
         });
       }
     }
+    
+    let keydownHandlerMaze = null; // To remove specific listener
 
     function setupMazeEventListeners() {
-      // Arrow buttons
       document.getElementById('mazeUp').addEventListener('click', () => moveMazePlayer('up'));
       document.getElementById('mazeDown').addEventListener('click', () => moveMazePlayer('down'));
       document.getElementById('mazeLeft').addEventListener('click', () => moveMazePlayer('left'));
       document.getElementById('mazeRight').addEventListener('click', () => moveMazePlayer('right'));
       
-      // Keyboard controls
-      document.addEventListener('keydown', (e) => {
-        if (currentPage !== 'maze') return;
-        
+      if (keydownHandlerMaze) {
+        document.removeEventListener('keydown', keydownHandlerMaze);
+      }
+      keydownHandlerMaze = (e) => {
+        if (currentPage !== 'maze' || mazeCompleted || timeLeft <= 0) return;
+        // Prevent page scroll with arrow keys
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            e.preventDefault();
+        }
         switch(e.key) {
           case 'ArrowUp': moveMazePlayer('up'); break;
           case 'ArrowDown': moveMazePlayer('down'); break;
           case 'ArrowLeft': moveMazePlayer('left'); break;
           case 'ArrowRight': moveMazePlayer('right'); break;
         }
-      });
+      };
+      document.addEventListener('keydown', keydownHandlerMaze);
       
-      // Reset button
       document.getElementById('mazeReset').addEventListener('click', () => {
+        timeLeft = 60; // Reset timer on level reset
         renderMazeGame();
       });
     }
+    
+    let chessBoardClickHandler = null;
 
     function setupChessEventListeners() {
-      const chessBoard = document.getElementById('chessBoard');
+      const chessBoardElement = document.getElementById('chessBoardElement');
+      if (!chessBoardElement) return;
+
+      if (chessBoardClickHandler) {
+          chessBoardElement.removeEventListener('click', chessBoardClickHandler);
+      }
       
-      chessBoard.addEventListener('click', (e) => {
-        const pieceElement = e.target.closest('.chess-piece');
-        const square = e.target.closest('.chess-square');
+      chessBoardClickHandler = (e) => {
+        if (timeLeft <= 0) return;
+        const target = e.target;
+        const square = target.closest('.chess-square');
+        const pieceElement = target.closest('.chess-piece');
         
         if (pieceElement) {
-          // Clicked on a piece
           const row = parseInt(pieceElement.dataset.row);
           const col = parseInt(pieceElement.dataset.col);
-          const piece = chessBoard[row][col];
+          const pieceName = chessBoard[row][col];
           
-          // Check if it's this piece's turn
-          if (piece[0] === chessTurn) {
-            selectedChessPiece = {row, col};
-            possibleMoves = getChessPieceMoves(piece, row, col);
-            document.querySelector('.chess-status').textContent = 'Pilih tujuan atau bidak lain';
-            renderChessBoard();
+          if (pieceName && pieceName[0] === chessTurn) {
+            selectedChessPiece = {row, col, piece: pieceName};
+            possibleMoves = getChessPieceMoves(pieceName, row, col);
+            const chessStatusEl = document.querySelector('.chess-status');
+            if(chessStatusEl) chessStatusEl.textContent = 'Pilih tujuan atau bidak lain';
+            renderChessBoard(); // Re-render to show selection and highlights
           }
         } else if (square && selectedChessPiece) {
-          // Clicked on a square with a piece selected
-          const row = Array.from(square.parentNode.children).indexOf(square) >> 3; // Divide by 8
-          const col = Array.from(square.parentNode.children).indexOf(square) % 8;
-          makeChessMove(row, col);
+          const toRow = parseInt(square.dataset.row);
+          const toCol = parseInt(square.dataset.col);
+          makeChessMove(toRow, toCol);
         }
-      });
+      };
+      chessBoardElement.addEventListener('click', chessBoardClickHandler);
       
-      // Reset button
       document.getElementById('chessReset').addEventListener('click', () => {
         startChessGame();
       });
@@ -2052,7 +2080,11 @@
 
     // Effects
     function createParticles() {
+      const existingParticles = document.querySelector('.particles-container');
+      if (existingParticles) existingParticles.remove();
+
       const particlesContainer = document.createElement('div');
+      particlesContainer.className = 'particles-container'; // Add class for potential removal
       particlesContainer.style.position = 'fixed';
       particlesContainer.style.top = '0';
       particlesContainer.style.left = '0';
@@ -2065,50 +2097,53 @@
       for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
         particle.classList.add('particle');
-        
         const size = Math.random() * 5 + 2;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
-        
         particle.style.left = `${Math.random() * 100}%`;
         particle.style.top = `${Math.random() * 100}%`;
-        
         const animationDuration = Math.random() * 20 + 10;
         particle.style.animation = `float ${animationDuration}s infinite ease-in-out`;
         particle.style.animationDelay = `${Math.random() * 5}s`;
         particle.style.opacity = Math.random() * 0.5 + 0.1;
-        
         particlesContainer.appendChild(particle);
       }
     }
 
     function createConfetti() {
       const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
-      
+      const confettiContainer = document.createElement('div'); // Container for confetti
+      confettiContainer.style.position = 'fixed';
+      confettiContainer.style.top = '0';
+      confettiContainer.style.left = '0';
+      confettiContainer.style.width = '100%';
+      confettiContainer.style.height = '100%';
+      confettiContainer.style.pointerEvents = 'none';
+      confettiContainer.style.zIndex = '1000'; // Ensure confetti is on top
+      document.body.appendChild(confettiContainer);
+
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
-        confetti.classList.add('particle');
-        
+        // Removed particle class to avoid conflict with background particles
         const size = Math.random() * 10 + 5;
         confetti.style.width = `${size}px`;
         confetti.style.height = `${size}px`;
-        
+        confetti.style.position = 'absolute'; // Position within container
         confetti.style.left = `${Math.random() * 100}%`;
-        confetti.style.top = `-${size}px`;
-        
+        confetti.style.top = `-${size}px`; // Start above screen
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         confetti.style.borderRadius = '50%';
-        
         const animationDuration = Math.random() * 3 + 2;
         confetti.style.animation = `confetti ${animationDuration}s linear forwards`;
         confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+        confettiContainer.appendChild(confetti);
         
-        document.body.appendChild(confetti);
-        
-        // Remove after animation
         setTimeout(() => {
           confetti.remove();
-        }, animationDuration * 1000);
+          if (confettiContainer.children.length === 0) { // Remove container when all confetti gone
+            confettiContainer.remove();
+          }
+        }, animationDuration * 1000 + 500); // Add buffer for removal
       }
     }
 
