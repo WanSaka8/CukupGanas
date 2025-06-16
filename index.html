@@ -902,110 +902,685 @@
 
   <script>
     // Enhanced Game Data with Multiple Types
-    const questions = {
-      riddle: [
-        {
-          type: 'riddle',
-          text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
-          answer: 'peta',
-          hint: 'Berkaitan dengan geografi'
-        },
-        {
-          type: 'riddle',
-          text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
-          answer: 'langkah',
-          hint: 'Berkaitan dengan perjalanan'
-        },
-        {
-          type: 'riddle',
-          text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
-          answer: 'gema',
-          hint: 'Berkaitan dengan suara'
-        },
-        {
-          type: 'riddle',
-          text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
-          answer: 'napas',
-          hint: 'Berkaitan dengan tubuh manusia'
-        },
-        {
-          type: 'riddle',
-          text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
-          answer: 'api',
-          hint: 'Unsur alam'
-        }
-      ],
-      puzzle: [
-        {
-          type: 'multiple-choice',
-          text: 'Jika 2 orang ayah dan 2 orang anak pergi memancing, berapa minimal orang yang ada di situ?',
-          options: ['3', '4', '2', '5'],
-          answer: '3',
-          explanation: 'Mereka adalah kakek, ayah, dan anak (total 3 orang)'
-        },
-        {
-          type: 'multiple-choice',
-          text: 'Apa yang memiliki tangan tetapi tidak bisa bertepuk tangan?',
-          options: ['Jam', 'Pohon', 'Boneka', 'Robot'],
-          answer: 'Jam',
-          explanation: 'Mengacu pada jarum jam'
-        },
-        {
-          type: 'multiple-choice',
-          text: 'Apa yang memiliki 13 hati tetapi tidak memiliki organ tubuh lainnya?',
-          options: ['Deck kartu', 'Manusia robot', 'Alien', 'Tas'],
-          answer: 'Deck kartu',
-          explanation: 'Mengacu pada 13 hati dalam satu set kartu remi'
-        },
-        {
-          type: 'multiple-choice',
-          text: 'Jika sebuah pesawat jatuh di perbatasan antara Amerika Serikat dan Kanada, di mana korban akan dikuburkan?',
-          options: ['Amerika Serikat', 'Kanada', 'Keduanya', 'Tidak dikuburkan'],
-          answer: 'Tidak dikuburkan',
-          explanation: 'Korban kecelakaan pesawat tidak dikuburkan'
-        }
-      ],
-      logic: [
-        {
-          type: 'sequence',
-          text: 'Lanjutkan urutan berikut: O, T, T, F, F, S, S, ...',
-          answer: 'E',
-          explanation: 'Huruf pertama angka dalam bahasa Inggris: One, Two, Three, Four, Five, Six, Seven, Eight'
-        },
-        {
-          type: 'sequence',
-          text: '2, 10, 12, 16, 17, 18, 19, ...',
-          answer: '200',
-          explanation: 'Angka-angka yang dimulai dengan huruf D dalam bahasa Inggris'
-        },
-        {
-          type: 'logic-puzzle',
-          text: 'Ada 3 lampu di ruang bawah tanah dan 3 saklar di lantai atas. Bagaimana kamu menentukan saklar mana yang mengendalikan lampu mana jika kamu hanya bisa turun ke ruang bawah tanah sekali?',
-          answer: 'Nyalakan saklar pertama selama 5 menit, matikan, nyalakan saklar kedua, lalu periksa. Lampu yang panas tapi mati adalah saklar pertama, yang menyala adalah saklar kedua, dan yang dingin adalah saklar ketiga.',
-          hint: 'Gunakan panas lampu sebagai petunjuk'
-        }
-      ],
-      math: [
-        {
-          type: 'calculation',
-          text: 'Jika 1+1=2, 2+2=4, 4+4=8, maka berapa 8+8?',
-          answer: '16',
-          explanation: 'Ini adalah deret penggandaan'
-        },
-        {
-          type: 'word-problem',
-          text: 'Seorang ayah dan anak memiliki total usia 66 tahun. Usia ayah adalah kebalikan dari usia anak (misal anak 24 tahun, ayah 42 tahun). Berapa usia mereka sebenarnya?',
-          answer: '51 dan 15',
-          explanation: '51 + 15 = 66 dan 51 adalah kebalikan dari 15'
-        },
-        {
-          type: 'tricky-math',
-          text: 'Berapa kali kamu bisa mengurangi 5 dari 25?',
-          answer: '1',
-          explanation: 'Setelah dikurangi sekali, angka menjadi 20, jadi kamu tidak lagi mengurangi dari 25'
-        }
-      ]
-    };
+   const questions = {
+  riddle: [
+    // 5 existing riddles
+    {
+      type: 'riddle',
+      text: 'Aku memiliki kota tetapi tidak ada rumah, aku memiliki gunung tetapi tidak ada pohon, aku memiliki air tetapi tidak ada ikan. Apakah aku?',
+      answer: 'peta',
+      hint: 'Berkaitan dengan geografi'
+    },
+    {
+      type: 'riddle',
+      text: 'Semakin banyak kamu mengambil, semakin banyak kamu meninggalkan. Apakah aku?',
+      answer: 'langkah',
+      hint: 'Berkaitan dengan perjalanan'
+    },
+    {
+      type: 'riddle',
+      text: 'Aku berbicara tanpa mulut dan mendengar tanpa telinga. Aku tidak memiliki tubuh, tetapi aku hidup dengan angin. Apakah aku?',
+      answer: 'gema',
+      hint: 'Berkaitan dengan suara'
+    },
+    {
+      type: 'riddle',
+      text: 'Aku ringan seperti bulu, tetapi orang terkuat pun tidak bisa menahanku lebih dari 5 menit. Apakah aku?',
+      answer: 'napas',
+      hint: 'Berkaitan dengan tubuh manusia'
+    },
+    {
+      type: 'riddle',
+      text: 'Aku bukan hidup, tapi aku bisa mati. Aku bukan cairan, tapi aku bisa mengalir. Apakah aku?',
+      answer: 'api',
+      hint: 'Unsur alam'
+    },
+    // 25 new hard riddles
+    {
+      type: 'riddle',
+      text: 'Bisa menembus kaca tanpa memecahkannya, dan menghilang dalam sekejap. Apakah aku?',
+      answer: 'cahaya',
+      hint: 'Berkaitan dengan fisika'
+    },
+    {
+      type: 'riddle',
+      text: 'Memiliki sungai tanpa air, hutan tanpa pohon, gunung tanpa batu. Apakah aku?',
+      answer: 'peta',
+      hint: 'Representasi geografis'
+    },
+    {
+      type: 'riddle',
+      text: 'Semakin tinggi aku, semakin sedikit yang kamu lihat. Apakah aku?',
+      answer: 'kabut',
+      hint: 'Fenomena alam'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa berjalan tanpa kaki, menangis tanpa mata. Apakah aku?',
+      answer: 'awan',
+      hint: 'Di langit'
+    },
+    {
+      type: 'riddle',
+      text: 'Dibutuhkan 10 orang untuk memegangku, tetapi 1 orang bisa membuatku pergi. Apakah aku?',
+      answer: 'bau',
+      hint: 'Indra penciuman'
+    },
+    {
+      type: 'riddle',
+      text: 'Aku selalu lapar, aku harus terus diberi makan, jari yang aku sentuh akan segera menjadi merah. Apakah aku?',
+      answer: 'api',
+      hint: 'Berkaitan dengan unsur alam'
+    },
+    {
+      type: 'riddle',
+      text: 'Miliki kepala tanpa wajah, memiliki lengan tanpa tangan. Apakah aku?',
+      answer: 'bantal',
+      hint: 'Ada di kamar tidur'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa berjalan ke segala arah tanpa bergerak. Apakah aku?',
+      answer: 'jam dinding',
+      hint: 'Menunjukkan waktu'
+    },
+    {
+      type: 'riddle',
+      text: 'Semakin banyak kamu ambil, semakin besar aku menjadi. Apakah aku?',
+      answer: 'lubang',
+      hint: 'Berkaitan dengan ruang kosong'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa menembus dinding tanpa merusak, membunuh tanpa sentuhan. Apakah aku?',
+      answer: 'suara',
+      hint: 'Gelombang'
+    },
+    {
+      type: 'riddle',
+      text: 'Memiliki lidah tapi tidak bisa bicara, memiliki leher tapi tidak memiliki kepala. Apakah aku?',
+      answer: 'botol',
+      hint: 'Wadah minuman'
+    },
+    {
+      type: 'riddle',
+      text: 'Dilahirkan dari air, tapi jika kembali ke air akan mati. Apakah aku?',
+      answer: 'es',
+      hint: 'Perubahan wujud'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa membuat segala sesuatu menjadi basah sementara tetap tetap kering. Apakah aku?',
+      answer: 'bayangan',
+      hint: 'Tercipta karena cahaya'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa mengelilingi halaman sementara tetap berada di sudut. Apakah aku?',
+      answer: 'pagar',
+      hint: 'Pembatas ruang'
+    },
+    {
+      type: 'riddle',
+      text: 'Semakin banyak kamu simpan, semakin banyak kamu hilangkan. Apakah aku?',
+      answer: 'waktu',
+      hint: 'Sumber daya tak terbarukan'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa membuat orang kaya tetapi tidak bisa dibeli. Apakah aku?',
+      answer: 'pengetahuan',
+      hint: 'Kekayaan non-material'
+    },
+    {
+      type: 'riddle',
+      text: 'Selalu ada di depanmu tetapi tidak pernah bisa dilihat. Apakah aku?',
+      answer: 'masa depan',
+      hint: 'Konsep waktu'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa dimasuki tetapi tidak bisa keluar. Apakah aku?',
+      answer: 'kuburan',
+      hint: 'Tempat akhir'
+    },
+    {
+      type: 'riddle',
+      text: 'Memiliki mata tetapi tidak bisa melihat. Apakah aku?',
+      answer: 'angin topan',
+      hint: 'Fenomena cuaca'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa mengisi ruangan tetapi tidak mengambil ruang. Apakah aku?',
+      answer: 'cahaya',
+      hint: 'Fenomena fisika'
+    },
+    {
+      type: 'riddle',
+      text: 'Selalu berlari tetapi tidak pernah berjalan. Apakah aku?',
+      answer: 'sungai',
+      hint: 'Aliran air'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa dibawa tetapi tidak bisa dipegang. Apakah aku?',
+      answer: 'nama',
+      hint: 'Identitas'
+    },
+    {
+      type: 'riddle',
+      text: 'Memiliki gigi tetapi tidak bisa makan. Apakah aku?',
+      answer: 'gergaji',
+      hint: 'Alat potong'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa mati tetapi tidak pernah hidup. Apakah aku?',
+      answer: 'baterai',
+      hint: 'Sumber energi'
+    },
+    {
+      type: 'riddle',
+      text: 'Selalu bertambah tetapi tidak pernah berkurang. Apakah aku?',
+      answer: 'usia',
+      hint: 'Konsep waktu'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa pecah tanpa disentuh. Apakah aku?',
+      answer: 'janji',
+      hint: 'Kata-kata'
+    },
+    {
+      type: 'riddle',
+      text: 'Memiliki tangan tetapi tidak bisa menepuk. Apakah aku?',
+      answer: 'jam',
+      hint: 'Penunjuk waktu'
+    },
+    {
+      type: 'riddle',
+      text: 'Bisa membuat orang menangis tetapi tidak pernah sedih. Apakah aku?',
+      answer: 'bawang',
+      hint: 'Bahan masakan'
+    },
+    {
+      type: 'riddle',
+      text: 'Selalu basah saat kering. Apakah aku?',
+      answer: 'handuk',
+      hint: 'Di kamar mandi'
+    }
+  ],
+  puzzle: [
+    // 4 existing puzzles
+    {
+      type: 'multiple-choice',
+      text: 'Jika 2 orang ayah dan 2 orang anak pergi memancing, berapa minimal orang yang ada di situ?',
+      options: ['3', '4', '2', '5'],
+      answer: '3',
+      explanation: 'Mereka adalah kakek, ayah, dan anak (total 3 orang)'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang memiliki tangan tetapi tidak bisa bertepuk tangan?',
+      options: ['Jam', 'Pohon', 'Boneka', 'Robot'],
+      answer: 'Jam',
+      explanation: 'Mengacu pada jarum jam'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang memiliki 13 hati tetapi tidak memiliki organ tubuh lainnya?',
+      options: ['Deck kartu', 'Manusia robot', 'Alien', 'Tas'],
+      answer: 'Deck kartu',
+      explanation: 'Mengacu pada 13 hati dalam satu set kartu remi'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika sebuah pesawat jatuh di perbatasan antara Amerika Serikat dan Kanada, di mana korban akan dikuburkan?',
+      options: ['Amerika Serikat', 'Kanada', 'Keduanya', 'Tidak dikuburkan'],
+      answer: 'Tidak dikuburkan',
+      explanation: 'Korban kecelakaan pesawat tidak dikuburkan'
+    },
+    // 26 new hard puzzles
+    {
+      type: 'multiple-choice',
+      text: 'Sebuah keluarga memiliki 3 anak. Jika anak pertama bernama April, anak kedua bernama Mei, maka anak ketiga bernama?',
+      options: ['Juni', 'Januari', 'April', 'Mei'],
+      answer: 'April',
+      explanation: 'Pertanyaannya menyebutkan "sebuah keluarga memiliki 3 anak", nama anak pertama adalah April'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 5 kucing bisa menangkap 5 tikus dalam 5 menit, berapa waktu yang dibutuhkan 100 kucing untuk menangkap 100 tikus?',
+      options: ['5 menit', '100 menit', '20 menit', '1 menit'],
+      answer: '5 menit',
+      explanation: 'Setiap kucing membutuhkan 5 menit untuk menangkap 1 tikus'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Sebuah jam berdentang setiap 1 detik. Berapa detik jeda antara dentang pertama dan dentang keempat?',
+      options: ['3', '4', '2', '1'],
+      answer: '3',
+      explanation: 'Dentang 1-2 (1 detik), 2-3 (1 detik), 3-4 (1 detik) = total 3 detik'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 1=5, 2=25, 3=325, 4=4325, maka 5=?',
+      options: ['54325', '1', '53245', '54321'],
+      answer: '1',
+      explanation: 'Karena di awal sudah disebutkan 1=5, maka 5=1'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Berapa banyak tanah dalam lubang berukuran 3m x 3m x 3m?',
+      options: ['27 m³', '9 m³', '0 m³', '3 m³'],
+      answer: '0 m³',
+      explanation: 'Lubang adalah ruang kosong, tidak ada tanah di dalamnya'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika kamu melempar batu biru ke laut merah, apa yang akan terjadi?',
+      options: ['Batu basah', 'Batu tenggelam', 'Batu tetap biru', 'Tidak ada yang terjadi'],
+      answer: 'Batu basah',
+      explanation: 'Batu akan menjadi basah karena terkena air'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang selalu naik tetapi tidak pernah turun?',
+      options: ['Umur', 'Harga', 'Suhu', 'Angka'],
+      answer: 'Umur',
+      explanation: 'Umur selalu bertambah seiring waktu'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika kamu berada di ruangan tanpa pintu atau jendela, bagaimana kamu keluar?',
+      options: ['Berhenti bermimpi', 'Mencari kunci', 'Menunggu', 'Memecahkan dinding'],
+      answer: 'Berhenti bermimpi',
+      explanation: 'Kemungkinan kamu sedang bermimpi'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa dipegang tanpa menyentuhnya?',
+      options: ['Napas', 'Pikiran', 'Pembicaraan', 'Perasaan'],
+      answer: 'Napas',
+      explanation: 'Kamu bisa menahan napas tanpa menyentuhnya'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika hari ini adalah hari Kamis, hari apa 100 hari lagi?',
+      options: ['Jumat', 'Sabtu', 'Minggu', 'Senin'],
+      answer: 'Sabtu',
+      explanation: '100 hari = 14 minggu + 2 hari (Kamis + 2 hari = Sabtu)'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa dipatahkan hanya dengan mengucapkannya?',
+      options: ['Janji', 'Keheningan', 'Rahasia', 'Sumpah'],
+      answer: 'Keheningan',
+      explanation: 'Mengucapkan sesuatu mematahkan keheningan'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Sebuah kereta listrik bergerak ke utara dengan kecepatan 100 km/jam, angin bertiup ke barat dengan kecepatan 50 km/jam. Ke arah mana asap bergerak?',
+      options: ['Utara', 'Barat', 'Timur', 'Tidak ada asap'],
+      answer: 'Tidak ada asap',
+      explanation: 'Kereta listrik tidak menghasilkan asap'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 9999 = 4, 8888 = 8, 1816 = 6, maka 1212 = ?',
+      options: ['0', '4', '6', '8'],
+      answer: '0',
+      explanation: 'Menghitung jumlah lingkaran dalam angka: 1212 tidak memiliki lingkaran'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa kamu berikan kepada orang lain tetapi tidak bisa menyimpannya untuk dirimu sendiri?',
+      options: ['Janji', 'Hadiah', 'Nasihat', 'Kata-kata'],
+      answer: 'Janji',
+      explanation: 'Kamu bisa memberikan janji tetapi tidak bisa menyimpannya'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 3 orang bisa mengecat 3 pagar dalam 3 jam, berapa waktu yang dibutuhkan 1 orang untuk mengecat 1 pagar?',
+      options: ['1 jam', '3 jam', '6 jam', '9 jam'],
+      answer: '3 jam',
+      explanation: 'Rasio pekerjaan tetap sama per orang'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa kamu pegang di tangan kananmu tetapi tidak bisa di tangan kiri?',
+      options: ['Tangan kiri', 'Siku kiri', 'Lengan kiri', 'Jari kiri'],
+      answer: 'Tangan kiri',
+      explanation: 'Kamu tidak bisa memegang tangan kiri dengan tangan kiri itu sendiri'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika kamu melempar koin 10 kali dan semua hasilnya kepala, apa peluang hasil berikutnya kepala lagi?',
+      options: ['1/2', '1/10', '1/1024', '0'],
+      answer: '1/2',
+      explanation: 'Setiap lemparan koin adalah independen, peluang tetap 50%'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang memiliki 4 mata tetapi tidak bisa melihat?',
+      options: ['Orang buta', 'Mississippi', 'Tas', 'Kacamata'],
+      answer: 'Mississippi',
+      explanation: 'Kata "Mississippi" memiliki 4 huruf "i" (eye dalam bahasa Inggris)'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 1=3, 2=3, 3=5, 4=4, 5=4, maka 6=?',
+      options: ['3', '5', '6', '4'],
+      answer: '3',
+      explanation: 'Jumlah huruf dalam kata angka Inggris: six (3 huruf)'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa mengisi ruangan tetapi tidak mengambil ruang?',
+      options: ['Cahaya', 'Suara', 'Bau', 'Udara'],
+      answer: 'Cahaya',
+      explanation: 'Cahaya bisa mengisi ruangan tetapi tidak memiliki massa'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika kamu berada di pertandingan lari dan menyalip pelari di posisi kedua, sekarang kamu di posisi berapa?',
+      options: ['Pertama', 'Kedua', 'Ketiga', 'Terakhir'],
+      answer: 'Kedua',
+      explanation: 'Kamu mengambil posisi pelari yang kamu salip'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa kamu dapatkan dengan memberi?',
+      options: ['Uang', 'Tempat tidur', 'Waktu', 'Masalah'],
+      answer: 'Tempat tidur',
+      explanation: 'Memberi (memberi = memberi + ran = ranjang/tempat tidur)'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 7 orang bertemu dan semua berjabat tangan, berapa total jabat tangan yang terjadi?',
+      options: ['21', '42', '14', '49'],
+      answer: '21',
+      explanation: 'Kombinasi 2 dari 7: 7!/(2!5!) = 21'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa berjalan di atas air?',
+      options: ['Manusia', 'Angsa', 'Kadal', 'Kecoa'],
+      answer: 'Kecoa',
+      explanation: 'Beberapa spesies kecoa bisa berjalan di atas air'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 1=5, 2=10, 3=15, 4=20, maka 5=?',
+      options: ['25', '1', '5', '30'],
+      answer: '1',
+      explanation: 'Karena di awal sudah disebutkan 1=5, maka 5=1'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa kamu masukkan ke dalam barel kosong untuk membuatnya lebih ringan?',
+      options: ['Lubang', 'Udara', 'Balon', 'Busa'],
+      answer: 'Lubang',
+      explanation: 'Lubang mengurangi berat dengan mengurangi materi'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika kamu menyalip pelari terakhir dalam perlombaan, sekarang kamu di posisi berapa?',
+      options: ['Terakhir', 'Kedua terakhir', 'Pertama', 'Tidak mungkin'],
+      answer: 'Tidak mungkin',
+      explanation: 'Kamu tidak bisa menyalip pelari terakhir jika kamu berada di belakangnya'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang memiliki leher tetapi tidak memiliki kepala?',
+      options: ['Botol', 'Baju', 'Gitar', 'Pipa'],
+      answer: 'Botol',
+      explanation: 'Botol memiliki leher botol tetapi tidak memiliki kepala'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 1/2 dari 5 adalah 3, maka 1/3 dari 10 adalah?',
+      options: ['4', '3', '5', '6'],
+      answer: '4',
+      explanation: 'Mengambil angka Romawi: 5=V, 1/2 dari V adalah III (3); 10=X, 1/3 dari X adalah IV (4)'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Apa yang bisa kamu pecahkan meskipun tidak pernah menyentuhnya atau melihatnya?',
+      options: ['Janji', 'Rekor', 'Hati', 'Kaca'],
+      answer: 'Janji',
+      explanation: 'Kamu bisa memecahkan janji tanpa menyentuh atau melihatnya'
+    },
+    {
+      type: 'multiple-choice',
+      text: 'Jika 2+3=10, 7+2=63, 6+5=66, maka 8+4=?',
+      options: ['96', '48', '32', '12'],
+      answer: '96',
+      explanation: '(a+b)×a: (2+3)×2=10, (8+4)×8=96'
+    }
+  ],
+  logic: [
+    // 3 existing logic questions
+    {
+      type: 'sequence',
+      text: 'Lanjutkan urutan berikut: O, T, T, F, F, S, S, ...',
+      answer: 'E',
+      explanation: 'Huruf pertama angka dalam bahasa Inggris: One, Two, Three, Four, Five, Six, Seven, Eight'
+    },
+    {
+      type: 'sequence',
+      text: '2, 10, 12, 16, 17, 18, 19, ...',
+      answer: '200',
+      explanation: 'Angka-angka yang dimulai dengan huruf D dalam bahasa Inggris'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Ada 3 lampu di ruang bawah tanah dan 3 saklar di lantai atas. Bagaimana kamu menentukan saklar mana yang mengendalikan lampu mana jika kamu hanya bisa turun ke ruang bawah tanah sekali?',
+      answer: 'Nyalakan saklar pertama selama 5 menit, matikan, nyalakan saklar kedua, lalu periksa. Lampu yang panas tapi mati adalah saklar pertama, yang menyala adalah saklar kedua, dan yang dingin adalah saklar ketiga.',
+      hint: 'Gunakan panas lampu sebagai petunjuk'
+    },
+    // 27 new hard logic questions
+    {
+      type: 'sequence',
+      text: 'Lanjutkan urutan: J, F, M, A, M, J, J, A, ...',
+      answer: 'S',
+      explanation: 'Inisial bulan dalam setahun: Januari, Februari, Maret, April, Mei, Juni, Juli, Agustus, September'
+    },
+    {
+      type: 'sequence',
+      text: '1, 11, 21, 1211, 111221, ...',
+      answer: '312211',
+      explanation: 'Sequence "look-and-say": 1 (satu 1), 11 (dua 1), 21 (satu 2, satu 1), dst.'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Ada 8 koin identik, 1 lebih ringan. Dengan timbangan sederhana, berapa penimbangan minimal untuk menemukan koin palsu?',
+      answer: '2',
+      explanation: 'Bagi 3-3-2, timbang 3 vs 3. Jika seimbang, timbang 2 sisanya. Jika tidak, ambil 3 yang lebih ringan dan timbang 1 vs 1'
+    },
+    {
+      type: 'sequence',
+      text: '2, 4, 8, 16, 32, 64, ...',
+      answer: '128',
+      explanation: 'Deret penggandaan (×2 setiap langkah)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika semua Bloops adalah Razzies dan semua Razzies adalah Lazzies, apakah semua Bloops pasti Lazzies?',
+      answer: 'Ya',
+      explanation: 'Sifat transitif: A⊂B dan B⊂C maka A⊂C'
+    },
+    {
+      type: 'sequence',
+      text: '1, 4, 9, 16, 25, 36, ...',
+      answer: '49',
+      explanation: 'Kuadrat bilangan asli: 1², 2², 3², dst.'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Seorang pria melihat foto seseorang dan berkata: "Saudara laki-laki saya tidak memiliki saudara laki-laki." Siapa orang dalam foto?',
+      answer: 'Adik perempuannya',
+      explanation: 'Satu-satunya saudara laki-laki pria itu adalah orang dalam foto, yang tidak memiliki saudara laki-laki lain'
+    },
+    {
+      type: 'sequence',
+      text: '1, 1, 2, 3, 5, 8, 13, ...',
+      answer: '21',
+      explanation: 'Deret Fibonacci (jumlah dua angka sebelumnya)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Ada 12 bola, 1 berbeda beratnya (tidak diketahui lebih berat/ringan). Berapa penimbangan minimal dengan timbangan untuk menemukan bola berbeda?',
+      answer: '3',
+      explanation: 'Bagi 4-4-4, lalu 1-1-1 dengan strategi eliminasi'
+    },
+    {
+      type: 'sequence',
+      text: '3, 3, 5, 4, 4, 3, 5, 5, 4, 3, ...',
+      answer: '6',
+      explanation: 'Jumlah huruf dalam kata angka Inggris: three(5), five(4), dst. sampai eleven(6)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika hari ini adalah hari Minggu, hari apa 2^10 hari lagi?',
+      answer: 'Rabu',
+      explanation: '2^10=1024, 1024 mod 7 = 2 (Minggu + 2 hari = Rabu)'
+    },
+    {
+      type: 'sequence',
+      text: 'Z, O, T, T, F, F, S, S, E, ...',
+      answer: 'N',
+      explanation: 'Huruf pertama angka nol sampai sembilan dalam bahasa Inggris'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Sebuah keluarga memiliki 2 orang tua dan 5 anak. Setiap anak memiliki 3 saudara perempuan. Berapa total anggota keluarga?',
+      answer: '9',
+      explanation: '2 orang tua + 5 anak (4 perempuan + 1 laki-laki, karena laki-laki memiliki 3 saudara perempuan)'
+    },
+    {
+      type: 'sequence',
+      text: '1, 2, 6, 24, 120, ...',
+      answer: '720',
+      explanation: 'Deret faktorial: 1!, 2!, 3!, dst.'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika A × B = 24, B × C = 30, dan A × C = 20, maka A × B × C = ?',
+      answer: '120',
+      explanation: 'A=4, B=6, C=5 (dari persamaan yang diberikan)'
+    },
+    {
+      type: 'sequence',
+      text: 'A, E, F, H, I, K, L, M, ...',
+      answer: 'N',
+      explanation: 'Huruf dengan semua garis lurus dalam alfabet kapital'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Sebuah jam menunjukkan pukul 15:15. Berapa derajat sudut antara jarum jam dan menit?',
+      answer: '7.5°',
+      explanation: 'Jarum jam bergerak 0.5° per menit (30° per jam), jadi pada 15 menit sudah bergerak 7.5° dari angka 3'
+    },
+    {
+      type: 'sequence',
+      text: '1, 3, 6, 10, 15, 21, ...',
+      answer: '28',
+      explanation: 'Angka triangular (1, 1+2, 1+2+3, dst.)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika 5 mesin membuat 5 widget dalam 5 menit, berapa waktu yang dibutuhkan 100 mesin untuk membuat 100 widget?',
+      answer: '5 menit',
+      explanation: 'Setiap mesin membutuhkan 5 menit untuk membuat 1 widget'
+    },
+    {
+      type: 'sequence',
+      text: '1, 2, 4, 8, 16, 32, ...',
+      answer: '64',
+      explanation: 'Pangkat dua (2^0, 2^1, 2^2, dst.)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Ada 3 kotak: satu hanya berisi apel, satu hanya jeruk, satu campuran. Semua label salah. Berapa banyak buah minimal yang harus diambil untuk melabeli dengan benar?',
+      answer: '1',
+      explanation: 'Ambil dari kotak berlabel "campuran" (karena semua label salah, pasti isinya hanya 1 jenis)'
+    },
+    {
+      type: 'sequence',
+      text: '2, 5, 10, 17, 26, ...',
+      answer: '37',
+      explanation: 'n² + 1 (1²+1=2, 2²+1=5, dst.)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika 3 orang bisa mengecat 3 pagar dalam 3 hari, berapa hari yang dibutuhkan 9 orang untuk mengecat 9 pagar?',
+      answer: '3 hari',
+      explanation: 'Rasio orang:pagar tetap sama, waktu tidak berubah'
+    },
+    {
+      type: 'sequence',
+      text: '1, 4, 27, 256, ...',
+      answer: '3125',
+      explanation: 'n^n (1^1, 2^2, 3^3, dst.)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Sebuah tangga memiliki 10 anak tangga. Kamu bisa naik 1 atau 2 anak tangga sekaligus. Berapa cara berbeda untuk mencapai puncak?',
+      answer: '89',
+      explanation: 'Deret Fibonacci: f(n) = f(n-1) + f(n-2)'
+    },
+    {
+      type: 'sequence',
+      text: '0, 1, 1, 2, 3, 5, 8, 13, ...',
+      answer: '21',
+      explanation: 'Deret Fibonacci dimulai dari 0'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika 7 orang bertemu dan semua berjabat tangan, berapa total jabat tangan?',
+      answer: '21',
+      explanation: 'Kombinasi 2 dari 7: 7×6/2 = 21'
+    },
+    {
+      type: 'sequence',
+      text: '1, 9, 25, 49, 81, ...',
+      answer: '121',
+      explanation: 'Kuadrat bilangan ganjil: 1², 3², 5², dst.'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Sebuah kolam ditutupi oleh teratai. Setiap hari luas tertutup menjadi dua kali lipat. Jika butuh 48 hari untuk menutupi seluruh kolam, berapa hari untuk menutupi setengah kolam?',
+      answer: '47',
+      explanation: 'Karena tiap hari luas menjadi dua kali lipat, maka sehari sebelumnya adalah setengahnya'
+    },
+    {
+      type: 'sequence',
+      text: '1, 2, 3, 5, 7, 11, 13, ...',
+      answer: '17',
+      explanation: 'Deret bilangan prima'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Jika 1=3, 2=3, 3=5, 4=4, 5=4, maka 6=?',
+      answer: '3',
+      explanation: 'Jumlah huruf dalam kata angka Inggris: six (3 huruf)'
+    },
+    {
+      type: 'sequence',
+      text: '1, 3, 7, 15, 31, ...',
+      answer: '63',
+      explanation: '2^n - 1 (2^1-1=1, 2^2-1=3, dst.)'
+    },
+    {
+      type: 'logic-puzzle',
+      text: 'Sebuah jam berdentang setiap jam (1 kali pada jam 1, 2 kali pada jam 2, dst.). Berapa total dentang dalam 24 jam?',
+      answer: '156',
+      explanation: 'Jumlah dari 1 sampai 12, dikali 2 (karena terjadi dua kali dalam 24 jam)'
+    }
+  ]
+};
 
 
 const mazeLevels = [
@@ -1300,57 +1875,40 @@ const mazeLevels = [
     ],
   },
   {
-  // Level 8: Impossible Checkerboard
-  rows: 15,
-  cols: 15,
-  start: { row: 0, col: 0 },
-  end: { row: 14, col: 14 },
-  walls: [
-    // Pola checkerboard yang lebih kompleks dengan banyak jalur buntu
-    [0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],
-    [1,0],[1,2],[1,4],[1,6],[1,8],[1,10],[1,12],[1,14],
-    [2,1],[2,3],[2,5],[2,7],[2,9],[2,11],[2,13],
-    [3,0],[3,2],[3,4],[3,6],[3,8],[3,10],[3,12],[3,14],
-    [4,1],[4,3],[4,5],[4,7],[4,9],[4,11],[4,13],
-    [5,0],[5,2],[5,4],[5,6],[5,8],[5,10],[5,12],[5,14],
-    [6,1],[6,3],[6,5],[6,7],[6,9],[6,11],[6,13],
-    [7,0],[7,2],[7,4],[7,6],[7,8],[7,10],[7,12],[7,14],
-    [8,1],[8,3],[8,5],[8,7],[8,9],[8,11],[8,13],
-    [9,0],[9,2],[9,4],[9,6],[9,8],[9,10],[9,12],[9,14],
-    [10,1],[10,3],[10,5],[10,7],[10,9],[10,11],[10,13],
-    [11,0],[11,2],[11,4],[11,6],[11,8],[11,10],[11,12],[11,14],
-    [12,1],[12,3],[12,5],[12,7],[12,9],[12,11],[12,13],
-    [13,0],[13,2],[13,4],[13,6],[13,8],[13,10],[13,12],[13,14],
-    [14,1],[14,3],[14,5],[14,7],[14,9],[14,11],[14,13],
+   // Level 8: Checkerboard (Modified)
+    rows: 12,
+    cols: 12,
+    start: { row: 0, col: 0 },
+    end: { row: 11, col: 11 },
+    walls: [
+        // Pola checkerboard tetapi jalur diagonal (0,0)->(1,1)->...->(11,11) dibiarkan kosong
+      [0, 1], [0, 3], [0, 5], [0, 7], [0, 9], [0, 11],
+    // Baris 1
+   [1, 4], [1, 6], [1, 8], [1, 10],
+    // Baris 2
+    [2, 1], [2, 5], [2, 7], [2, 9], [2, 11],
+    // Baris 3
+    [3, 0], [3, 2], [3, 6], [3, 8], [3, 10],
+    // Baris 4
+    [4, 1], [4, 3], [4, 7], [4, 9], [4, 11],
+    // Baris 5
+    [5, 0], [5, 2], [5, 4], [5, 8], [5, 10],
+    // Baris 6
+    [6, 1], [6, 3], [6, 5], [6, 9], [6, 11],
+    // Baris 7
+    [7, 0], [7, 2], [7, 4], [7, 6], [7, 10],
+    // Baris 8
+    [8, 1], [8, 3], [8, 5], [8, 7], [8, 11],
+    // Baris 9
+    [9, 0], [9, 2], [9, 4], [9, 6],
+    // Baris 10
+    [10, 1], [10, 3], [10, 5], [10, 7], [10, 9],
+    // Baris 11
+    [11, 0], [11, 2], [11, 4], [11, 6], [11, 8], [11, 10],
     
-    // Blok tambahan untuk membuat lebih sulit
-    [1,1],[1,3],[1,5],[1,7],[1,9],[1,11],[1,13],
-    [2,0],[2,2],[2,4],[2,6],[2,8],[2,10],[2,12],[2,14],
-    [3,1],[3,3],[3,5],[3,7],[3,9],[3,11],[3,13],
-    [4,0],[4,2],[4,4],[4,6],[4,8],[4,10],[4,12],[4,14],
-    [5,1],[5,3],[5,5],[5,7],[5,9],[5,11],[5,13],
-    [6,0],[6,2],[6,4],[6,6],[6,8],[6,10],[6,12],[6,14],
-    [7,1],[7,3],[7,5],[7,7],[7,9],[7,11],[7,13],
-    [8,0],[8,2],[8,4],[8,6],[8,8],[8,10],[8,12],[8,14],
-    [9,1],[9,3],[9,5],[9,7],[9,9],[9,11],[9,13],
-    [10,0],[10,2],[10,4],[10,6],[10,8],[10,10],[10,12],[10,14],
-    [11,1],[11,3],[11,5],[11,7],[11,9],[11,11],[11,13],
-    [12,0],[12,2],[12,4],[12,6],[12,8],[12,10],[12,12],[12,14],
-    [13,1],[13,3],[13,5],[13,7],[13,9],[13,11],[13,13],
-    
-    // Jalur berliku yang membingungkan
-    [1,7],[3,7],[5,7],[7,7],[9,7],[11,7],[13,7],
-    [7,1],[7,3],[7,5],[7,9],[7,11],[7,13],
-    [2,6],[4,6],[6,6],[8,6],[10,6],[12,6],
-    [6,2],[6,4],[6,8],[6,10],[6,12],
-    
-    // Area pusat yang sangat kompleks
-    [5,5],[5,6],[5,7],[5,8],[5,9],
-    [6,5],[6,9],
-    [7,5],[7,6],[7,7],[7,8],[7,9],
-    [8,5],[8,9],
-    [9,5],[9,6],[9,7],[9,8],[9,9]
-  ],
+    // Tambahan dinding acak (tingkatkan kesulitan tanpa ganggu jalur utama)
+    [1, 5], [3, 9], [5, 7], [7, 9], [9, 7], [10, 8]
+    ],
 },
   {
     // Level 9: Long Path, Many Dead Ends
@@ -1402,7 +1960,7 @@ const mazeLevels = [
       [4, 2],
       [4, 4],
       [4, 6],
-      [4, 7],
+      
       [4, 8],
       [4, 10],
       [4, 12],
@@ -1464,7 +2022,7 @@ const mazeLevels = [
       [12, 2],
       [12, 4],
       [12, 6],
-      [12, 7],
+     
       [12, 8],
       [12, 10],
       [12, 12],
@@ -1505,7 +2063,7 @@ const mazeLevels = [
       [1, 4],
       [1, 5],
       [1, 7],
-      [1, 8],
+
       [1, 9],
       [1, 10],
       [1, 11],
@@ -1536,9 +2094,9 @@ const mazeLevels = [
       [5, 10],
       [5, 11],
       [5, 12],
-      [6, 2],
+
       [6, 9],
-      [7, 0],
+  
       [7, 1],
       [7, 2],
       [7, 3],
@@ -1585,7 +2143,7 @@ const mazeLevels = [
     rows: 17,
     cols: 17,
     start: { row: 0, col: 8 },
-    end: { row: 16, col: 8 },
+    end: { row: 8, col: 8 },
     walls: [
       [1, 1],
       [1, 2],
@@ -1665,7 +2223,7 @@ const mazeLevels = [
       [9, 15],
       [10, 1],
       [10, 3],
-      [10, 5],
+     
       [10, 7],
       [10, 9],
       [10, 11],
@@ -1697,7 +2255,7 @@ const mazeLevels = [
       [13, 13],
       [13, 15],
       [14, 1],
-      [14, 3],
+    
       [14, 13],
       [14, 15],
       [15, 1],
@@ -1885,15 +2443,6 @@ const mazeLevels = [
       [17, 13],
       [17, 15],
       [17, 17],
-      [18, 1],
-      [18, 3],
-      [18, 5],
-      [18, 7],
-      [18, 9],
-      [18, 11],
-      [18, 13],
-      [18, 15],
-      [18, 17],
     ],
   },
   {
