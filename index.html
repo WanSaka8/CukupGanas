@@ -22,6 +22,8 @@
       --math: #f44336;
       --maze: #795548;
       --chess: #212121;
+      --polaris: #673ab7;
+      --wordbuilding: #e91e63;
     }
 
     * {
@@ -144,6 +146,14 @@
 
     .game-mode.chess {
       border-top: 5px solid var(--chess);
+    }
+
+    .game-mode.polaris {
+      border-top: 5px solid var(--polaris);
+    }
+
+    .game-mode.wordbuilding {
+      border-top: 5px solid var(--wordbuilding);
     }
 
     .mode-icon {
@@ -511,6 +521,7 @@
       align-items: center;
       justify-content: center;
       position: relative;
+      font-size: 1.2rem;
     }
 
     .maze-wall {
@@ -613,11 +624,8 @@
     }
 
     .chess-square.capture-highlight {
-      /* New style for capture moves */
       background: rgba(255, 0, 0, 0.3);
-      /* Reddish highlight for captures */
     }
-
 
     .chess-piece {
       width: 80%;
@@ -628,15 +636,10 @@
       cursor: pointer;
       z-index: 2;
       font-size: 2.5rem;
-      /* Adjusted for better visibility of text pieces */
       line-height: 1;
-      /* Ensure text is centered */
       display: flex;
-      /* For centering text */
       align-items: center;
-      /* For centering text */
       justify-content: center;
-      /* For centering text */
     }
 
     .chess-piece.selected {
@@ -663,6 +666,147 @@
     .chess-status {
       font-size: 1rem;
       opacity: 0.8;
+    }
+
+    /* Polaris Game */
+    .polaris-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .polaris-board {
+      display: grid;
+      grid-template-columns: repeat(var(--size), 1fr);
+      grid-template-rows: repeat(var(--size), 1fr);
+      gap: 2px;
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+
+    .polaris-cell {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 1.2rem;
+    }
+
+    .polaris-obstacle {
+      background: #333;
+    }
+
+    .polaris-magnetic {
+      background: rgba(103, 58, 183, 0.3);
+    }
+
+    .polaris-repulsion {
+      background: rgba(244, 67, 54, 0.3);
+    }
+
+    /* Word Building Game */
+    .word-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .word-current {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .word-letters {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .word-found {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .letter-tile {
+      background: rgba(59, 130, 246, 0.2);
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .letter-tile:hover {
+      background: rgba(59, 130, 246, 0.4);
+      transform: scale(1.1);
+    }
+
+    .found-word-tile {
+      background: rgba(34, 197, 94, 0.2);
+      border: 1px solid rgba(34, 197, 94, 0.5);
+      color: #86efac;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+    }
+
+    .word-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      justify-content: center;
+    }
+
+    .word-button {
+      padding: 0.8rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .word-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .word-button.submit {
+      background: var(--correct);
+    }
+
+    .word-button.clear {
+      background: var(--incorrect);
     }
 
     /* Results Page */
@@ -880,12 +1024,10 @@
 
       .maze-buttons {
         grid-template-columns: 1fr;
-        /* Changed for better mobile layout */
       }
 
       .chess-piece {
         font-size: 1.8rem;
-        /* Adjust chess piece size for mobile */
       }
     }
 
@@ -1582,8 +1724,7 @@
   ]
 };
 
-
-const mazeLevels = [
+   const mazeLevels = [
   {
     // Level 1: Simple Path
     rows: 5,
@@ -3182,6 +3323,423 @@ const mazeLevels = [
   },
 ];
 
+   const polarisLevels = [
+  {
+    size: 8,
+    start: { x: 0, y: 0 },
+    target: { x: 7, y: 7 },
+    obstacles: [{ x: 2, y: 2 }, { x: 3, y: 2 }, { x: 4, y: 2 }, { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 }],
+    stars: [{ x: 1, y: 3, collected: false }, { x: 5, y: 1, collected: false }, { x: 6, y: 4, collected: false }],
+    magneticFields: [{ x: 3, y: 3, strength: 1 }, { x: 5, y: 5, strength: -1 }]
+  },
+  {
+    size: 10,
+    start: { x: 0, y: 0 },
+    target: { x: 9, y: 9 },
+    obstacles: [{ x: 2, y: 1 }, { x: 2, y: 2 }, { x: 2, y: 3 }, { x: 2, y: 4 }, { x: 6, y: 5 }, { x: 6, y: 6 }, { x: 6, y: 7 }, { x: 6, y: 8 }],
+    stars: [{ x: 1, y: 5, collected: false }, { x: 3, y: 1, collected: false }, { x: 7, y: 3, collected: false }, { x: 8, y: 6, collected: false }],
+    magneticFields: [{ x: 4, y: 4, strength: 1 }, { x: 7, y: 7, strength: -1 }, { x: 1, y: 8, strength: 1 }]
+  },
+  {
+    size: 12,
+    start: { x: 0, y: 0 },
+    target: { x: 11, y: 11 },
+    obstacles: [
+      { x: 3, y: 1 }, { x: 3, y: 2 }, { x: 3, y: 3 }, { x: 3, y: 4 },
+      { x: 8, y: 6 }, { x: 8, y: 7 }, { x: 8, y: 8 }, { x: 8, y: 9 },
+      { x: 1, y: 8 }, { x: 2, y: 8 }, { x: 4, y: 8 }, { x: 5, y: 8 }
+    ],
+    stars: [{ x: 1, y: 4, collected: false }, { x: 5, y: 1, collected: false }, { x: 9, y: 5, collected: false }, { x: 6, y: 9, collected: false }, { x: 10, y: 7, collected: false }],
+    magneticFields: [{ x: 5, y: 5, strength: 1 }, { x: 9, y: 9, strength: -1 }, { x: 2, y: 10, strength: 1 }]
+  },
+  {
+    size: 14,
+    start: { x: 0, y: 0 },
+    target: { x: 13, y: 13 },
+    obstacles: [
+      { x: 4, y: 2 }, { x: 4, y: 3 }, { x: 4, y: 4 }, { x: 4, y: 5 }, { x: 4, y: 6 },
+      { x: 9, y: 7 }, { x: 9, y: 8 }, { x: 9, y: 9 }, { x: 9, y: 10 }, { x: 9, y: 11 },
+      { x: 2, y: 9 }, { x: 3, y: 9 }, { x: 5, y: 9 }, { x: 6, y: 9 }, { x: 7, y: 9 }
+    ],
+    stars: [
+      { x: 2, y: 5, collected: false }, { x: 6, y: 2, collected: false }, { x: 11, y: 6, collected: false }, 
+      { x: 7, y: 11, collected: false }, { x: 12, y: 8, collected: false }, { x: 1, y: 12, collected: false }
+    ],
+    magneticFields: [{ x: 6, y: 6, strength: 1 }, { x: 11, y: 11, strength: -1 }, { x: 3, y: 12, strength: 1 }, { x: 12, y: 3, strength: -1 }]
+  },
+  {
+    size: 16,
+    start: { x: 0, y: 0 },
+    target: { x: 15, y: 15 },
+    obstacles: [
+      { x: 5, y: 3 }, { x: 5, y: 4 }, { x: 5, y: 5 }, { x: 5, y: 6 }, { x: 5, y: 7 }, { x: 5, y: 8 },
+      { x: 10, y: 8 }, { x: 10, y: 9 }, { x: 10, y: 10 }, { x: 10, y: 11 }, { x: 10, y: 12 },
+      { x: 3, y: 11 }, { x: 4, y: 11 }, { x: 6, y: 11 }, { x: 7, y: 11 }, { x: 8, y: 11 }, { x: 9, y: 11 }
+    ],
+    stars: [
+      { x: 2, y: 6, collected: false }, { x: 7, y: 3, collected: false }, { x: 12, y: 7, collected: false },
+      { x: 8, y: 13, collected: false }, { x: 13, y: 9, collected: false }, { x: 1, y: 14, collected: false }, { x: 14, y: 2, collected: false }
+    ],
+    magneticFields: [{ x: 7, y: 7, strength: 1 }, { x: 13, y: 13, strength: -1 }, { x: 4, y: 14, strength: 1 }, { x: 14, y: 4, strength: -1 }]
+  },
+  {
+    size: 18,
+    start: { x: 0, y: 0 },
+    target: { x: 17, y: 17 },
+    obstacles: [
+      { x: 6, y: 4 }, { x: 6, y: 5 }, { x: 6, y: 6 }, { x: 6, y: 7 }, { x: 6, y: 8 }, { x: 6, y: 9 }, { x: 6, y: 10 },
+      { x: 11, y: 9 }, { x: 11, y: 10 }, { x: 11, y: 11 }, { x: 11, y: 12 }, { x: 11, y: 13 }, { x: 11, y: 14 },
+      { x: 4, y: 13 }, { x: 5, y: 13 }, { x: 7, y: 13 }, { x: 8, y: 13 }, { x: 9, y: 13 }, { x: 10, y: 13 }
+    ],
+    stars: [
+      { x: 3, y: 7, collected: false }, { x: 8, y: 4, collected: false }, { x: 13, y: 8, collected: false },
+      { x: 9, y: 15, collected: false }, { x: 14, y: 10, collected: false }, { x: 2, y: 16, collected: false }, 
+      { x: 15, y: 3, collected: false }, { x: 16, y: 14, collected: false }
+    ],
+    magneticFields: [{ x: 8, y: 8, strength: 1 }, { x: 15, y: 15, strength: -1 }, { x: 5, y: 16, strength: 1 }, { x: 16, y: 5, strength: -1 }]
+  },
+  {
+    size: 20,
+    start: { x: 0, y: 0 },
+    target: { x: 19, y: 19 },
+    obstacles: [
+      { x: 7, y: 5 }, { x: 7, y: 6 }, { x: 7, y: 7 }, { x: 7, y: 8 }, { x: 7, y: 9 }, { x: 7, y: 10 }, { x: 7, y: 11 }, { x: 7, y: 12 },
+      { x: 12, y: 10 }, { x: 12, y: 11 }, { x: 12, y: 12 }, { x: 12, y: 13 }, { x: 12, y: 14 }, { x: 12, y: 15 }, { x: 12, y: 16 },
+      { x: 5, y: 15 }, { x: 6, y: 15 }, { x: 8, y: 15 }, { x: 9, y: 15 }, { x: 10, y: 15 }, { x: 11, y: 15 }
+    ],
+    stars: [
+      { x: 4, y: 8, collected: false }, { x: 9, y: 5, collected: false }, { x: 14, y: 9, collected: false },
+      { x: 10, y: 17, collected: false }, { x: 15, y: 11, collected: false }, { x: 3, y: 18, collected: false },
+      { x: 16, y: 4, collected: false }, { x: 17, y: 15, collected: false }, { x: 18, y: 7, collected: false }
+    ],
+    magneticFields: [{ x: 9, y: 9, strength: 1 }, { x: 17, y: 17, strength: -1 }, { x: 6, y: 18, strength: 1 }, { x: 18, y: 6, strength: -1 }]
+  },
+  {
+    size: 22,
+    start: { x: 0, y: 0 },
+    target: { x: 21, y: 21 },
+    obstacles: [
+      { x: 8, y: 6 }, { x: 8, y: 7 }, { x: 8, y: 8 }, { x: 8, y: 9 }, { x: 8, y: 10 }, { x: 8, y: 11 }, { x: 8, y: 12 }, { x: 8, y: 13 }, { x: 8, y: 14 },
+      { x: 13, y: 11 }, { x: 13, y: 12 }, { x: 13, y: 13 }, { x: 13, y: 14 }, { x: 13, y: 15 }, { x: 13, y: 16 }, { x: 13, y: 17 }, { x: 13, y: 18 },
+      { x: 6, y: 17 }, { x: 7, y: 17 }, { x: 9, y: 17 }, { x: 10, y: 17 }, { x: 11, y: 17 }, { x: 12, y: 17 }
+    ],
+    stars: [
+      { x: 5, y: 9, collected: false }, { x: 10, y: 6, collected: false }, { x: 15, y: 10, collected: false },
+      { x: 11, y: 19, collected: false }, { x: 16, y: 12, collected: false }, { x: 4, y: 20, collected: false },
+      { x: 17, y: 5, collected: false }, { x: 18, y: 16, collected: false }, { x: 19, y: 8, collected: false }, { x: 20, y: 18, collected: false }
+    ],
+    magneticFields: [{ x: 10, y: 10, strength: 1 }, { x: 19, y: 19, strength: -1 }, { x: 7, y: 20, strength: 1 }, { x: 20, y: 7, strength: -1 }]
+  },
+  {
+    size: 24,
+    start: { x: 0, y: 0 },
+    target: { x: 23, y: 23 },
+    obstacles: [
+      { x: 9, y: 7 }, { x: 9, y: 8 }, { x: 9, y: 9 }, { x: 9, y: 10 }, { x: 9, y: 11 }, { x: 9, y: 12 }, { x: 9, y: 13 }, { x: 9, y: 14 }, { x: 9, y: 15 }, { x: 9, y: 16 },
+      { x: 14, y: 12 }, { x: 14, y: 13 }, { x: 14, y: 14 }, { x: 14, y: 15 }, { x: 14, y: 16 }, { x: 14, y: 17 }, { x: 14, y: 18 }, { x: 14, y: 19 }, { x: 14, y: 20 },
+      { x: 7, y: 19 }, { x: 8, y: 19 }, { x: 10, y: 19 }, { x: 11, y: 19 }, { x: 12, y: 19 }, { x: 13, y: 19 }
+    ],
+    stars: [
+      { x: 6, y: 10, collected: false }, { x: 11, y: 7, collected: false }, { x: 16, y: 11, collected: false },
+      { x: 12, y: 21, collected: false }, { x: 17, y: 13, collected: false }, { x: 5, y: 22, collected: false },
+      { x: 18, y: 6, collected: false }, { x: 19, y: 17, collected: false }, { x: 20, y: 9, collected: false }, 
+      { x: 21, y: 19, collected: false }, { x: 22, y: 11, collected: false }
+    ],
+    magneticFields: [{ x: 11, y: 11, strength: 1 }, { x: 21, y: 21, strength: -1 }, { x: 8, y: 22, strength: 1 }, { x: 22, y: 8, strength: -1 }]
+  },
+  {
+    size: 26,
+    start: { x: 0, y: 0 },
+    target: { x: 25, y: 25 },
+    obstacles: [
+      { x: 10, y: 8 }, { x: 10, y: 9 }, { x: 10, y: 10 }, { x: 10, y: 11 }, { x: 10, y: 12 }, { x: 10, y: 13 }, { x: 10, y: 14 }, { x: 10, y: 15 }, { x: 10, y: 16 }, { x: 10, y: 17 }, { x: 10, y: 18 },
+      { x: 15, y: 13 }, { x: 15, y: 14 }, { x: 15, y: 15 }, { x: 15, y: 16 }, { x: 15, y: 17 }, { x: 15, y: 18 }, { x: 15, y: 19 }, { x: 15, y: 20 }, { x: 15, y: 21 }, { x: 15, y: 22 },
+      { x: 8, y: 21 }, { x: 9, y: 21 }, { x: 11, y: 21 }, { x: 12, y: 21 }, { x: 13, y: 21 }, { x: 14, y: 21 }
+    ],
+    stars: [
+      { x: 7, y: 11, collected: false }, { x: 12, y: 8, collected: false }, { x: 17, y: 12, collected: false },
+      { x: 13, y: 23, collected: false }, { x: 18, y: 14, collected: false }, { x: 6, y: 24, collected: false },
+      { x: 19, y: 7, collected: false }, { x: 20, y: 18, collected: false }, { x: 21, y: 10, collected: false },
+      { x: 22, y: 20, collected: false }, { x: 23, y: 12, collected: false }, { x: 24, y: 22, collected: false }
+    ],
+    magneticFields: [{ x: 12, y: 12, strength: 1 }, { x: 23, y: 23, strength: -1 }, { x: 9, y: 24, strength: 1 }, { x: 24, y: 9, strength: -1 }]
+  },
+  {
+    size: 28,
+    start: { x: 0, y: 0 },
+    target: { x: 27, y: 27 },
+    obstacles: [
+      { x: 11, y: 9 }, { x: 11, y: 10 }, { x: 11, y: 11 }, { x: 11, y: 12 }, { x: 11, y: 13 }, { x: 11, y: 14 }, { x: 11, y: 15 }, { x: 11, y: 16 }, { x: 11, y: 17 }, { x: 11, y: 18 }, { x: 11, y: 19 }, { x: 11, y: 20 },
+      { x: 16, y: 14 }, { x: 16, y: 15 }, { x: 16, y: 16 }, { x: 16, y: 17 }, { x: 16, y: 18 }, { x: 16, y: 19 }, { x: 16, y: 20 }, { x: 16, y: 21 }, { x: 16, y: 22 }, { x: 16, y: 23 }, { x: 16, y: 24 },
+      { x: 9, y: 23 }, { x: 10, y: 23 }, { x: 12, y: 23 }, { x: 13, y: 23 }, { x: 14, y: 23 }, { x: 15, y: 23 }
+    ],
+    stars: [
+      { x: 8, y: 12, collected: false }, { x: 13, y: 9, collected: false }, { x: 18, y: 13, collected: false },
+      { x: 14, y: 25, collected: false }, { x: 19, y: 15, collected: false }, { x: 7, y: 26, collected: false },
+      { x: 20, y: 8, collected: false }, { x: 21, y: 19, collected: false }, { x: 22, y: 11, collected: false },
+      { x: 23, y: 21, collected: false }, { x: 24, y: 13, collected: false }, { x: 25, y: 23, collected: false }, { x: 26, y: 15, collected: false }
+    ],
+    magneticFields: [{ x: 13, y: 13, strength: 1 }, { x: 25, y: 25, strength: -1 }, { x: 10, y: 26, strength: 1 }, { x: 26, y: 10, strength: -1 }]
+  },
+  {
+    size: 30,
+    start: { x: 0, y: 0 },
+    target: { x: 29, y: 29 },
+    obstacles: [
+      { x: 12, y: 10 }, { x: 12, y: 11 }, { x: 12, y: 12 }, { x: 12, y: 13 }, { x: 12, y: 14 }, { x: 12, y: 15 }, { x: 12, y: 16 }, { x: 12, y: 17 }, { x: 12, y: 18 }, { x: 12, y: 19 }, { x: 12, y: 20 }, { x: 12, y: 21 }, { x: 12, y: 22 },
+      { x: 17, y: 15 }, { x: 17, y: 16 }, { x: 17, y: 17 }, { x: 17, y: 18 }, { x: 17, y: 19 }, { x: 17, y: 20 }, { x: 17, y: 21 }, { x: 17, y: 22 }, { x: 17, y: 23 }, { x: 17, y: 24 }, { x: 17, y: 25 }, { x: 17, y: 26 },
+      { x: 10, y: 25 }, { x: 11, y: 25 }, { x: 13, y: 25 }, { x: 14, y: 25 }, { x: 15, y: 25 }, { x: 16, y: 25 }
+    ],
+    stars: [
+      { x: 9, y: 13, collected: false }, { x: 14, y: 10, collected: false }, { x: 19, y: 14, collected: false },
+      { x: 15, y: 27, collected: false }, { x: 20, y: 16, collected: false }, { x: 8, y: 28, collected: false },
+      { x: 21, y: 9, collected: false }, { x: 22, y: 20, collected: false }, { x: 23, y: 12, collected: false },
+      { x: 24, y: 22, collected: false }, { x: 25, y: 14, collected: false }, { x: 26, y: 24, collected: false }, 
+      { x: 27, y: 16, collected: false }, { x: 28, y: 26, collected: false }
+    ],
+    magneticFields: [{ x: 14, y: 14, strength: 1 }, { x: 27, y: 27, strength: -1 }, { x: 11, y: 28, strength: 1 }, { x: 28, y: 11, strength: -1 }]
+  }
+];
+
+   const wordBuildingChallenges = [
+  {
+    letters: ["K", "O", "M", "P", "L", "E", "K", "S", "I", "T", "A", "S"],
+    targetWords: ["KOMPLEKS", "KOMPLEK", "SIMPEL", "KOMPAS", "TEKS", "KELAS", "SIKLUS", "POLITIK", "PLASTIK", "ELASTIK", "SKEPTIS", "TAKTIS", "MISTIK", "KOST", "SLOT", "TIPS", "KOPI", "SAPI", "PASTI", "TOPI"],
+    minWords: 8,
+    timeLimit: 180
+  },
+  {
+    letters: ["P", "R", "O", "D", "U", "K", "T", "I", "V", "I", "T", "A", "S"],
+    targetWords: ["PRODUKTIVITAS", "PRODUKTIV", "AKTIVITAS", "KREATIF", "ADAPTIF", "POSITIF", "AKTIF", "PRAKTIS", "DRASTIS", "ARTISTIK", "STATISTIK", "PRIVAT", "RAPID", "VALID", "SOLID", "VIRUS", "DOSIS", "RADIO", "STUDIO", "AUDIT"],
+    minWords: 7,
+    timeLimit: 200
+  },
+  {
+    letters: ["S", "A", "K", "U", "R", "A", "N", "E", "K", "O", "M", "I", "D"],
+    targetWords: ["SAKURA", "SENKA", "NEKO", "DOKU", "KAMI", "SADO", "OKUDA", "ARASUJI", "TORA", "RAKU", "KASA", "SENSU", "KURO", "SORA", "KOI", "KURA", "KUSUDAMA", "KAIRO", "AKU", "SUDO"],
+    minWords: 8,
+    timeLimit: 180
+  },
+  {
+    letters: ["I", "N", "T", "E", "L", "L", "I", "G", "E", "N", "C", "E"],
+    targetWords: ["INTEL", "GENIUS", "ENGINE", "LINE", "NICE", "CELL", "LENT", "CLING", "GENIE", "LICE", "TILE", "TELL", "GLEN", "GENTLE", "ELEGENT", "LIT", "NET", "TEN", "ICE", "LEG"],
+    minWords: 10,
+    timeLimit: 150
+  },
+  {
+    letters: ["C", "R", "E", "A", "T", "I", "V", "I", "T", "Y"],
+    targetWords: ["CREATIVE", "CRAVE", "RITE", "CITY", "TIRE", "TIE", "CAT", "CAVE", "VET", "ART", "VAT", "RAY", "ICE", "TRY", "RIVET", "VARY", "VERT", "CITE", "TEAR", "ARC"],
+    minWords: 7,
+    timeLimit: 160
+  },
+  {
+    letters: ["E", "N", "V", "I", "R", "O", "N", "M", "E", "N", "T"],
+    targetWords: ["ENVIRONMENT", "NORM", "MENTOR", "NERVE", "EVENT", "MINE", "TEN", "NET", "MORN", "TERM", "INVENT", "MOVE", "VOTE", "INTER", "NEON", "RENT", "TONE", "NOTE", "IRON", "OMEN"],
+    minWords: 8,
+    timeLimit: 180
+  },
+  {
+    letters: ["B", "U", "D", "A", "Y", "A", "L", "O", "K", "A", "L"],
+    targetWords: ["BUDAYA", "LOKAL", "KOLAB", "BALOK", "LABA", "KODA", "BOLA", "AKAL", "ALOK", "LOBA", "DOKA", "KAYA", "ADUK", "DULU", "KULO", "KULA", "BAYU", "LUAR", "ULAK", "KOLA"],
+    minWords: 8,
+    timeLimit: 170
+  },
+  {
+    letters: ["G", "A", "M", "I", "F", "I", "K", "A", "S", "I"],
+    targetWords: ["GAMIFIKASI", "GAMING", "KASI", "FIKSI", "KISAH", "ASIK", "SIAGA", "SIGMA", "KIAS", "FIKIR", "GAS", "ISA", "KAMI", "SISI", "MAKI", "SAKI", "SIA", "MAGI", "SIFA", "FIKA"],
+    minWords: 7,
+    timeLimit: 150
+  },
+  {
+    letters: ["H", "I", "K", "A", "R", "U", "M", "A", "K", "I"],
+    targetWords: ["HIKARU", "MAKI", "KUMA", "KARI", "HARU", "AKI", "HARI", "RUKI", "KAMI", "IKARU", "MAKU", "KIRA", "ARU", "KAI", "HIKA", "KIKU", "HIMA", "RIMA", "AIM", "IKA"],
+    minWords: 7,
+    timeLimit: 140
+  },
+  {
+    letters: ["S", "T", "A", "R", "T", "U", "P", "B", "I", "S", "N", "I", "S"],
+    targetWords: ["STARTUP", "BISNIS", "TIPS", "BITS", "SISTEM", "BINTANG", "SPIN", "TUNIS", "PINTAR", "TRUST", "SUN", "TUB", "BUST", "BURN", "RUST", "BUS", "NIP", "SIN", "SUB", "TAP"],
+    minWords: 9,
+    timeLimit: 180
+  },
+  {
+    letters: ["T", "E", "K", "N", "O", "L", "O", "G", "I"],
+    targetWords: ["TEKNOLOGI", "LOGIN", "GENTOK", "TEKO", "TIK", "KIN", "LOT", "GEN", "LOG", "KIT", "GIN", "TEN", "GEL", "NET", "LEG", "INK", "OIL", "TON", "LET", "EGO"],
+    minWords: 6,
+    timeLimit: 140
+  },
+  {
+    letters: ["K", "A", "R", "A", "K", "T", "E", "R"],
+    targetWords: ["KARAKTER", "KARAT", "KATA", "TERKA", "KERA", "AKAR", "RATA", "TAKA", "ARTA", "KART", "TEKA", "TERA", "TARA", "RAKA", "KER", "RET", "ARK", "TER", "ERA", "ART"],
+    minWords: 6,
+    timeLimit: 130
+  },
+  {
+    letters: ["A", "S", "T", "R", "O", "N", "O", "M", "I"],
+    targetWords: ["ASTRONOMI", "ASTRO", "STROM", "NOMOR", "ROMA", "ATOM", "SARI", "ROTI", "MORTI", "MISO", "SOMA", "ORAM", "AMOR", "STAR", "TRIO", "AIR", "RAN", "MOI", "ARM", "SIT"],
+    minWords: 7,
+    timeLimit: 170
+  },
+  {
+    letters: ["P", "E", "M", "B", "E", "L", "A", "J", "A", "R", "A", "N"],
+    targetWords: ["PEMBELAJARAN", "BELAJAR", "AJARAN", "BELA", "RAJA", "LAMA", "RAMA", "LARA", "BARA", "MARA", "ALAM", "JARI", "BARA", "RAJA", "ARE", "PELA", "BELA", "JARA", "RANA", "PENA"],
+    minWords: 8,
+    timeLimit: 190
+  },
+  {
+    letters: ["E", "K", "S", "P", "L", "O", "R", "A", "S", "I"],
+    targetWords: ["EKSPLORASI", "EKSPLO", "LARIS", "POLAR", "SIAL", "SORA", "RAIS", "PISA", "KIOS", "SOLAR", "SKOR", "LOKA", "RIAS", "ALIR", "ISRA", "ROSA", "SORA", "ASKI", "SIAP", "PERI"],
+    minWords: 7,
+    timeLimit: 160
+  },
+  {
+    letters: ["T", "E", "K", "N", "I", "S", "I", "A", "N"],
+    targetWords: ["TEKNISIAN", "TEKNISI", "TEKNIK", "SENI", "ISTANA", "SIANTAR", "NAIK", "SITA", "TEKA", "KASI", "NET", "NIK", "SEN", "TIN", "TAN", "SIA", "AIT", "ANEK", "KITA", "SANK"],
+    minWords: 6,
+    timeLimit: 140
+  },
+  {
+    letters: ["M", "A", "N", "A", "J", "E", "M", "E", "N"],
+    targetWords: ["MANAJEMEN", "MENANJAK", "NAMA", "NEMEN", "MANA", "JEMEN", "AJAM", "JANE", "MENE", "ENAM", "NEJA", "JENA", "MENJ", "JEM", "MEN", "AME", "NEN", "ANA", "MAE", "EME"],
+    minWords: 5,
+    timeLimit: 120
+  },
+  {
+    letters: ["K", "A", "T", "A", "K", "A", "N", "A"],
+    targetWords: ["KATAKANA", "KATA", "KANA", "KAKA", "NAKA", "TANA", "ANKA", "AKAN", "KANT", "KAKA", "TANKA", "KANA", "ATAK", "ANTAK", "ANKA", "TANA", "ANK", "KAT", "NAK", "ATA"],
+    minWords: 6,
+    timeLimit: 130
+  },
+  {
+    letters: ["S", "U", "S", "H", "I", "Y", "A", "K", "I"],
+    targetWords: ["SUSHIYAKI", "SUSHI", "YAKI", "KAYA", "KISI", "HUSI", "ISU", "KAI", "HIS", "SHU", "AKI", "SUKI", "YUKI", "YAKU", "KIYA", "SAY", "SHI", "IYA", "YASU", "USI"],
+    minWords: 7,
+    timeLimit: 150
+  },
+  
+  {
+    letters: ["さ/sa", "く/ku", "ら/ra", "や/ya", "ま/ma", "も/mo", "と/to", "し/shi", "ん/n", "じ/ji"],
+    targetWords: ["さくら", "やま", "やました", "もと", "しんじ", "しん", "じん", "しや", "とし", "くら"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["た/ta", "な/na", "か/ka", "あ/a", "い/i", "か/ka", "わ/wa", "ひ/hi", "ろ/ro", "し/shi"],
+    targetWords: ["たなか", "あい", "かわ", "ひろし", "ひろ", "しろ", "かた", "あわ", "たし", "いし"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["ね/ne", "こ/ko", "い/i", "ぬ/nu", "さ/sa", "か/ka", "な/na", "と/to", "り/ri"],
+    targetWords: ["ねこ", "いぬ", "さかな", "とり", "さけ", "いさ", "こと", "なと", "りさ", "さい"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["ひ/hi", "こ/ko", "う/u", "き/ki", "で/de", "ん/n", "し/shi", "ゃ/ya", "じ/ji", "て/te", "ん/n", "し/shi", "ゃ/ya"],
+    targetWords: ["ひこうき", "でんしゃ", "じてんしゃ", "きしゃ", "しゃてん", "じてん", "でん", "こう", "じこ", "でしゃ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["お/o", "ち/chi", "ゃ/ya", "ご/go", "は/ha", "ん/n", "す/su", "い/i", "か/ka", "み/mi", "ず/zu"],
+    targetWords: ["おちゃ", "ごはん", "すいか", "みず", "おみず", "ちゃすい", "ごみ", "すい", "はん", "ちゃ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["せ/se", "ん/n", "せ/se", "い/i", "が/ga", "く/ku", "せ/se", "い/i", "が/ga", "っ/tsu", "こ/ko", "う/u"],
+    targetWords: ["せんせい", "がくせい", "がっこう", "こう", "せい", "がく", "せいこう", "せいせい", "こうこう", "せこう"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["と/to", "う/u", "き/ki", "ょ/kyo", "う/u", "お/o", "お/o", "さ/sa", "か/ka", "き/ki", "ょ/kyo", "う/u", "と/to"],
+    targetWords: ["とうきょう", "おおさか", "きょうと", "ときょう", "さか", "おお", "きょう", "とう", "とお", "さとう"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["す/su", "し/shi", "て/te", "ん/n", "ぷ/pu", "ら/ra", "ら/ra", "ー/-", "め/me", "ん/n", "う/u", "ど/do", "ん/n"],
+    targetWords: ["すし", "てんぷら", "らーめん", "うどん", "てん", "らめん", "めん", "どん", "ぷら", "らん"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["し/shi", "ゅ/yu", "く/ku", "だ/da", "い/i", "べ/be", "ん/n", "き/ki", "ょ/kyo", "う/u", "が/ga", "っ/tsu", "こ/ko", "う/u"],
+    targetWords: ["しゅくだい", "べんきょう", "がっこう", "きょう", "だい", "べん", "しゅく", "がく", "こう", "しゅう"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["は/ha", "る/ru", "な/na", "つ/tsu", "あ/a", "き/ki", "ふ/fu", "ゆ/yu", "き/ki", "せ/se", "つ/tsu"],
+    targetWords: ["はる", "なつ", "あき", "ふゆ", "きせつ", "きふ", "せつ", "ふき", "きな", "つき"],
+    minWords: 6,
+    timeLimit: 160
+  },
+    {
+    letters: ["の/no", "り/ri", "も/mo", "の/no", "く/ku", "る/ru", "ま/ma", "で/de", "ん/n", "し/shi", "ゃ/ya"],
+    targetWords: ["のりもの", "でんしゃ", "くるま", "のり", "もの", "のく", "りゃ", "しん", "しや", "での"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["び/bi", "ょ/kyo", "う/u", "い/i", "ん/n", "か/ka", "ん/n", "ご/go", "し/shi", "ゅ/yu"],
+    targetWords: ["びょういん", "かんごし", "しゅ", "いん", "かん", "ごし", "びょう", "しゅう", "かし", "いか"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["て/te", "が/ga", "み/mi", "え/e", "ん/n", "ぴ/pi", "つ/tsu", "け/ke", "し/shi", "ご/go", "む/mu"],
+    targetWords: ["てがみ", "えんぴつ", "けしごむ", "けし", "ぴつ", "しご", "むけ", "がみ", "ごむ", "けつ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["じ/ji", "か/ka", "ん/n", "と/to", "け/ke", "あ/a", "さ/sa", "ひ/hi", "よ/yo", "る/ru"],
+    targetWords: ["じかん", "とけい", "あさ", "ひる", "よる", "かん", "けい", "じけ", "あさけ", "さよ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["し/shi", "ょ/kyo", "く/ku", "じ/ji", "つ/tsu", "か/ka", "い/i", "か/ka", "ん/n", "け/ke"],
+    targetWords: ["しょくじ", "つかい", "かいけい", "けい", "じつ", "くけ", "しょく", "かじ", "いけ", "けつ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["で/de", "ん/n", "わ/wa", "け/ke", "い/i", "たい/tai", "か/ka", "ん/n", "じ/ji", "ち/chi"],
+    targetWords: ["でんわ", "けいたい", "かんじ", "たいち", "けん", "ちか", "けい", "じたい", "かち", "でじ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["う/u", "み/mi", "や/ya", "ま/ma", "か/ka", "ぜ/ze", "あ/a", "め/me", "ゆ/yu", "き/ki"],
+    targetWords: ["うみ", "やま", "かぜ", "あめ", "ゆき", "あま", "まき", "きゆ", "ゆま", "めき"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["り/ri", "ょ/kyo", "こ/ko", "う/u", "た/ta", "び/bi", "く/ku", "う/u", "こ/ko", "う/u"],
+    targetWords: ["りょこう", "こうくう", "たび", "くうこう", "こうこ", "こく", "たく", "りく", "びこう", "こた"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["か/ka", "ぞ/zo", "く/ku", "お/o", "や/ya", "こ/ko", "そ/so", "ふ/fu", "ぼ/bo", "し/shi"],
+    targetWords: ["かぞく", "おや", "こそ", "そふ", "そぼ", "かこ", "ふし", "やぼ", "やく", "しょ"],
+    minWords: 6,
+    timeLimit: 160
+  },
+  {
+    letters: ["に/ni", "ち/chi", "よ/yo", "う/u", "び/bi", "げ/ge", "つ/tsu", "す/su", "い/i", "も/mo"],
+    targetWords: ["にちようび", "げつようび", "すいようび", "もくようび", "にち", "よう", "げつ", "びす", "つよ", "もす"],
+    minWords: 6,
+    timeLimit: 160
+  }
+
+
+];
 
 
     // Chess Pieces
@@ -3222,10 +3780,23 @@ const mazeLevels = [
     let mazeCompleted = false;
 
     // Chess Game State
-    let chessBoard = JSON.parse(JSON.stringify(initialChessBoard)); // Game state
-    let chessTurn = 'w'; // 'w' for white, 'b' for black
+    let chessBoard = JSON.parse(JSON.stringify(initialChessBoard));
+    let chessTurn = 'w';
     let selectedChessPiece = null;
     let possibleMoves = [];
+
+    // Polaris Game State
+    let polarisLevel = 0;
+    let polarisPlayerPos = { x: 0, y: 0 };
+    let polarisStars = [];
+    let polarisCompleted = false;
+
+    // Word Building Game State
+    let wordBuildingLevel = 0;
+    let availableLetters = [];
+    let currentWord = '';
+    let foundWords = [];
+    let wordBuildingCompleted = false;
 
     // DOM Elements
     const app = document.getElementById('app');
@@ -3261,12 +3832,22 @@ const mazeLevels = [
             <div class="game-mode maze" data-mode="maze">
               <span class="mode-icon">🧭</span>
               <h3>Labirin Extreme</h3>
-              <p>20 level labirin menantang</p>
+              <p>3 level labirin menantang</p>
             </div>
             <div class="game-mode chess" data-mode="chess">
               <span class="mode-icon">♟️</span>
               <h3>Catur</h3>
               <p>Permainan strategi klasik</p>
+            </div>
+            <div class="game-mode polaris" data-mode="polaris">
+              <span class="mode-icon">🌟</span>
+              <h3>Polaris Extreme</h3>
+              <p>Navigasi melalui medan magnet dan rintangan</p>
+            </div>
+            <div class="game-mode wordbuilding" data-mode="wordbuilding">
+              <span class="mode-icon">📝</span>
+              <h3>Bangun Kata Extreme</h3>
+              <p>Susun kata dari huruf yang tersedia</p>
             </div>
           </div>
         </div>
@@ -3280,6 +3861,10 @@ const mazeLevels = [
             startMazeGame();
           } else if (currentGameMode === 'chess') {
             startChessGame();
+          } else if (currentGameMode === 'polaris') {
+            startPolarisGame();
+          } else if (currentGameMode === 'wordbuilding') {
+            startWordBuildingGame();
           } else {
             startGame();
           }
@@ -3414,7 +3999,7 @@ const mazeLevels = [
 
       renderMazeBoard();
       setupMazeEventListeners();
-      startTimer(); // Timer for maze
+      startTimer();
     }
 
     function renderMazeBoard() {
@@ -3430,26 +4015,25 @@ const mazeLevels = [
 
           const isStartCell = (row === level.start.row && col === level.start.col);
           const isEndCell = (row === level.end.row && col === level.end.col);
-          // A cell is a wall if it's in the walls list AND it's not the start or end cell.
-          // This is a safeguard against poorly defined level data.
           const isWall = !isStartCell && !isEndCell && level.walls.some(wall => wall[0] === row && wall[1] === col);
 
           if (isWall) {
             cell.classList.add('maze-wall');
+            cell.textContent = '🗿';
           } else {
             cell.classList.add('maze-path');
             if (isStartCell) {
               cell.classList.add('maze-start');
+              cell.textContent = '🏠';
             }
             if (isEndCell) {
               cell.classList.add('maze-end');
+              cell.textContent = '🎯';
             }
             if (row === mazePlayerPos.row && col === mazePlayerPos.col) {
-              const player = document.createElement('div');
-              player.className = 'maze-player';
-              cell.appendChild(player);
+              cell.textContent = '🚀';
             }
-            if (mazeVisited[row] && mazeVisited[row][col]) {
+            if (mazeVisited[row] && mazeVisited[row][col] && !(row === mazePlayerPos.row && col === mazePlayerPos.col)) {
               cell.classList.add('maze-visited');
             }
           }
@@ -3492,7 +4076,7 @@ const mazeLevels = [
 
       renderChessBoard();
       setupChessEventListeners();
-      startTimer(); // Timer for chess
+      startTimer();
     }
 
     function renderChessBoard() {
@@ -3510,7 +4094,7 @@ const mazeLevels = [
           const pieceOnSquare = chessBoard[row][col];
 
           if (selectedChessPiece && possibleMoves.some(move => move.row === row && move.col === col)) {
-            if (pieceOnSquare && pieceOnSquare[0] !== chessTurn) { // If it's a capture move
+            if (pieceOnSquare && pieceOnSquare[0] !== chessTurn) {
               square.classList.add('capture-highlight');
             } else {
               square.classList.add('highlight');
@@ -3534,6 +4118,216 @@ const mazeLevels = [
       }
     }
 
+    function renderPolarisGame() {
+      const level = polarisLevels[polarisLevel];
+      polarisPlayerPos = { ...level.start };
+      polarisStars = level.stars.map(star => ({ ...star, collected: false }));
+      polarisCompleted = false;
+
+      document.documentElement.style.setProperty('--size', level.size);
+
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+              </div>
+              <span class="timer-text">2:00</span>
+            </div>
+            <div class="score">Level: ${polarisLevel + 1}/${polarisLevels.length} | Skor: ${score}</div>
+          </div>
+          
+          <div class="polaris-container">
+            <div class="maze-level">🧭 Polaris Navigation - Level ${polarisLevel + 1}</div>
+            <p style="text-align: center; margin-bottom: 1rem; opacity: 0.8;">
+              Kumpulkan semua bintang ⭐ dan capai target 🎯<br>
+              🧲 = Medan magnet (menarik) | ⚡ = Medan tolak (menolak)
+            </p>
+            <div class="polaris-board" id="polarisBoardElement"></div>
+            
+            <div class="maze-controls">
+              <div class="maze-buttons">
+                <button id="polarisUp" class="maze-button">↑</button>
+                <button id="polarisLeft" class="maze-button">←</button>
+                <button id="polarisDown" class="maze-button">↓</button>
+                <button id="polarisRight" class="maze-button">→</button>
+              </div>
+              <button id="polarisReset" class="maze-button">Reset Level</button>
+              <div style="text-align: center; margin-top: 1rem;">
+                <span>Bintang: <span id="starsCollected">0</span>/<span id="totalStars">3</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderPolarisBoard();
+      setupPolarisEventListeners();
+      startTimer();
+    }
+
+    function renderPolarisBoard() {
+      const level = polarisLevels[polarisLevel];
+      const polarisBoardElement = document.getElementById('polarisBoardElement');
+      if (!polarisBoardElement) return;
+      polarisBoardElement.innerHTML = '';
+
+      // Update stars counter
+      const starsCollectedEl = document.getElementById('starsCollected');
+      const totalStarsEl = document.getElementById('totalStars');
+      if (starsCollectedEl) starsCollectedEl.textContent = polarisStars.filter(s => s.collected).length;
+      if (totalStarsEl) totalStarsEl.textContent = polarisStars.length;
+
+      for (let y = 0; y < level.size; y++) {
+        for (let x = 0; x < level.size; x++) {
+          const cell = document.createElement('div');
+          cell.className = 'polaris-cell';
+
+          const isPlayer = polarisPlayerPos.x === x && polarisPlayerPos.y === y;
+          const isStart = level.start.x === x && level.start.y === y;
+          const isTarget = level.target.x === x && level.target.y === y;
+          const isObstacle = level.obstacles.some(obs => obs.x === x && obs.y === y);
+          const star = polarisStars.find(s => s.x === x && s.y === y);
+          const magneticField = level.magneticFields.find(f => f.x === x && f.y === y);
+
+          if (isObstacle) {
+            cell.classList.add('polaris-obstacle');
+            cell.textContent = '🗿';
+          } else if (magneticField) {
+            if (magneticField.strength > 0) {
+              cell.classList.add('polaris-magnetic');
+              cell.textContent = '🧲';
+            } else {
+              cell.classList.add('polaris-repulsion');
+              cell.textContent = '⚡';
+            }
+          }
+
+          if (isPlayer) {
+            cell.textContent = '🚀';
+          } else if (!isPlayer && isStart && !magneticField && !isObstacle) {
+            cell.textContent = '🏠';
+          } else if (!isPlayer && isTarget && !magneticField && !isObstacle) {
+            cell.textContent = '🎯';
+          } else if (!isPlayer && star && !star.collected && !magneticField && !isObstacle) {
+            cell.textContent = '⭐';
+          }
+
+          polarisBoardElement.appendChild(cell);
+        }
+      }
+    }
+
+    function renderWordBuildingGame() {
+      const challenge = wordBuildingChallenges[wordBuildingLevel];
+      availableLetters = [...challenge.letters];
+      currentWord = '';
+      foundWords = [];
+      wordBuildingCompleted = false;
+
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+              </div>
+              <span class="timer-text">3:00</span>
+            </div>
+            <div class="score">Skor: ${score}</div>
+          </div>
+          
+          <div class="word-container">
+            <div class="maze-level">📝 Bangun Kata Extreme</div>
+            <p style="text-align: center; margin-bottom: 1rem; opacity: 0.8;">
+              Target: ${challenge.minWords} kata | Ditemukan: <span id="foundCount">0</span>
+            </p>
+            
+            <div style="margin-bottom: 1rem;">
+              <h3 style="margin-bottom: 0.5rem;">Kata Saat Ini:</h3>
+              <div class="word-current" id="currentWordDisplay"></div>
+            </div>
+            
+            <div class="word-controls">
+              <button id="submitWord" class="word-button submit">Submit Kata</button>
+              <button id="clearWord" class="word-button clear">Clear</button>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <h3 style="margin-bottom: 0.5rem;">Huruf Tersedia:</h3>
+              <div class="word-letters" id="availableLettersDisplay"></div>
+            </div>
+            
+            <div>
+              <h3 style="margin-bottom: 0.5rem;">Kata yang Ditemukan:</h3>
+              <div class="word-found" id="foundWordsDisplay"></div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      updateWordBuildingDisplay();
+      setupWordBuildingEventListeners();
+      startTimer();
+    }
+
+    function updateWordBuildingDisplay() {
+      const challenge = wordBuildingChallenges[wordBuildingLevel];
+      
+      // Update found count
+      const foundCountEl = document.getElementById('foundCount');
+      if (foundCountEl) foundCountEl.textContent = foundWords.length;
+
+      // Update current word
+      const currentWordDisplay = document.getElementById('currentWordDisplay');
+      if (currentWordDisplay) {
+        currentWordDisplay.innerHTML = '';
+        currentWord.split('').forEach((letter, index) => {
+          const tile = document.createElement('div');
+          tile.className = 'letter-tile';
+          tile.textContent = letter;
+          tile.onclick = () => removeLetterFromWord(index);
+          currentWordDisplay.appendChild(tile);
+        });
+      }
+
+      // Update available letters
+      const availableLettersDisplay = document.getElementById('availableLettersDisplay');
+      if (availableLettersDisplay) {
+        availableLettersDisplay.innerHTML = '';
+        availableLetters.forEach((letter, index) => {
+          const tile = document.createElement('div');
+          tile.className = 'letter-tile';
+          tile.textContent = letter;
+          tile.onclick = () => addLetterToWord(letter, index);
+          availableLettersDisplay.appendChild(tile);
+        });
+      }
+
+      // Update found words
+      const foundWordsDisplay = document.getElementById('foundWordsDisplay');
+      if (foundWordsDisplay) {
+        foundWordsDisplay.innerHTML = '';
+        foundWords.forEach(word => {
+          const tile = document.createElement('div');
+          tile.className = 'found-word-tile';
+          tile.textContent = `${word} (+${word.length * 5})`;
+          foundWordsDisplay.appendChild(tile);
+        });
+      }
+    }
+
     function renderResults() {
       app.innerHTML = `
         <div class="results-container">
@@ -3542,8 +4336,8 @@ const mazeLevels = [
             
             <div class="score-display">
               <div class="score-circle">
-                <div class="score-value">${(currentGameMode === 'maze' || currentGameMode === 'chess') ? (mazeCompleted || (currentGameMode === 'chess' && isKingCaptured()) ? 'Menang!' : 'Kalah') : score}</div>
-                <div class="score-label">${(currentGameMode === 'maze' || currentGameMode === 'chess') ? currentGameMode.toUpperCase() : 'Poin'}</div>
+                <div class="score-value">${getResultScore()}</div>
+                <div class="score-label">${getResultLabel()}</div>
               </div>
             </div>
             
@@ -3560,18 +4354,19 @@ const mazeLevels = [
         </div>
       `;
 
-      if (score >= 100 && currentGameMode !== 'maze' && currentGameMode !== 'chess') {
+      if (shouldShowConfetti()) {
         createConfetti();
-      } else if ((mazeCompleted || (currentGameMode === 'chess' && isKingCaptured())) && (currentGameMode === 'maze' || currentGameMode === 'chess')) {
-        createConfetti(); // Confetti for winning maze or chess
       }
-
 
       document.getElementById('playAgain').addEventListener('click', () => {
         if (currentGameMode === 'maze') {
           startMazeGame();
         } else if (currentGameMode === 'chess') {
           startChessGame();
+        } else if (currentGameMode === 'polaris') {
+          startPolarisGame();
+        } else if (currentGameMode === 'wordbuilding') {
+          startWordBuildingGame();
         } else {
           startGame();
         }
@@ -3586,7 +4381,7 @@ const mazeLevels = [
     function startGame() {
       currentPage = 'game';
       score = 0;
-      timeLeft = 60; // Default for riddle/puzzle etc.
+      timeLeft = 60;
       questionCount = 0;
       usedQuestions = { riddle: [], puzzle: [], logic: [], math: [] };
       renderGame();
@@ -3596,7 +4391,7 @@ const mazeLevels = [
       currentPage = 'maze';
       mazeLevel = 0;
       score = 0;
-      timeLeft = 60; // Timer per level for maze
+      timeLeft = 60;
       renderMazeGame();
     }
 
@@ -3609,6 +4404,22 @@ const mazeLevels = [
       score = 0;
       timeLeft = 300;
       renderChessGame();
+    }
+
+    function startPolarisGame() {
+      currentPage = 'polaris';
+      polarisLevel = 0;
+      score = 0;
+      timeLeft = 120;
+      renderPolarisGame();
+    }
+
+    function startWordBuildingGame() {
+      currentPage = 'wordbuilding';
+      wordBuildingLevel = 0;
+      score = 0;
+      timeLeft = wordBuildingChallenges[0].timeLimit;
+      renderWordBuildingGame();
     }
 
     function getRandomQuestion(mode) {
@@ -3632,7 +4443,7 @@ const mazeLevels = [
 
     function startTimer() {
       clearInterval(timerInterval);
-      const gameDuration = (currentGameMode === 'chess') ? 300 : ((currentGameMode === 'maze') ? 60 : 60); // Maze timer per level
+      const gameDuration = getGameDuration();
       timeLeft = gameDuration;
       updateTimerDisplay();
 
@@ -3642,13 +4453,7 @@ const mazeLevels = [
 
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
-          if (currentGameMode === 'chess' && !isKingCaptured()) {
-            alert('Waktu habis! Permainan berakhir seri atau sesuai aturan waktu.');
-          } else if (currentGameMode === 'maze' && !mazeCompleted) {
-            alert('Waktu habis! Anda gagal menyelesaikan labirin.');
-          }
-          // For other games, or if maze/chess ended by time with no win/loss yet
-          if (currentPage !== 'results') { // Avoid double rendering if already ended by win/loss
+          if (currentPage !== 'results') {
             currentPage = 'results';
             renderResults();
           }
@@ -3656,30 +4461,27 @@ const mazeLevels = [
       }, 1000);
     }
 
-    function isKingCaptured() {
-      let whiteKingPresent = false, blackKingPresent = false;
-      for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 8; c++) {
-          if (chessBoard[r][c] === 'wK') whiteKingPresent = true;
-          if (chessBoard[r][c] === 'bK') blackKingPresent = true;
-        }
+    function getGameDuration() {
+      switch (currentGameMode) {
+        case 'chess': return 300;
+        case 'polaris': return 120;
+        case 'wordbuilding': return wordBuildingChallenges[wordBuildingLevel].timeLimit;
+        default: return 60;
       }
-      return !whiteKingPresent || !blackKingPresent;
     }
-
 
     function updateTimerDisplay() {
       const minutes = Math.floor(timeLeft / 60);
       const seconds = timeLeft % 60;
       const timerText = document.querySelector('.timer-text');
-      const gameDuration = (currentGameMode === 'chess') ? 300 : ((currentGameMode === 'maze') ? 60 : 60);
+      const gameDuration = getGameDuration();
 
       if (timerText) {
         timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
         const timerPath = document.getElementById('timerPath');
         if (timerPath) {
-          const circumference = 125.6; // 2 * Math.PI * 20
+          const circumference = 125.6;
           const offset = timeLeft >= 0 ? circumference - (timeLeft / gameDuration) * circumference : circumference;
           timerPath.style.strokeDashoffset = offset;
 
@@ -3772,18 +4574,17 @@ const mazeLevels = [
 
       if (newRow === level.end.row && newCol === level.end.col) {
         mazeCompleted = true;
-        score += 50 + (mazeLevel * 10); // Maze score system: base 50 + 10 per level
+        score += 50 + (mazeLevel * 10);
         const scoreDisplay = document.querySelector('.score');
         if (scoreDisplay) scoreDisplay.textContent = `Level: ${mazeLevel + 1}/${mazeLevels.length} | Skor: ${score}`;
 
-        clearInterval(timerInterval); // Stop timer for current level
+        clearInterval(timerInterval);
 
         setTimeout(() => {
           if (mazeLevel < mazeLevels.length - 1) {
             if (confirm(`Selamat! Anda menyelesaikan Level ${mazeLevel + 1}. Lanjut ke level berikutnya?`)) {
               mazeLevel++;
-              // timeLeft = 60; // Timer will be reset by startMazeGame -> renderMazeGame -> startTimer
-              renderMazeGame(); // This will re-initiate timer for the new level
+              renderMazeGame();
             } else {
               currentPage = 'results';
               renderResults();
@@ -3798,18 +4599,195 @@ const mazeLevels = [
       renderMazeBoard();
     }
 
+    function movePolarisPlayer(direction) {
+  if (polarisCompleted || timeLeft <= 0) return;
+
+  const level = polarisLevels[polarisLevel];
+  let newX = polarisPlayerPos.x;
+  let newY = polarisPlayerPos.y;
+
+  switch (direction) {
+    case 'up': newY = Math.max(0, newY - 1); break;
+    case 'down': newY = Math.min(level.size - 1, newY + 1); break;
+    case 'left': newX = Math.max(0, newX - 1); break;
+    case 'right': newX = Math.min(level.size - 1, newX + 1); break;
+  }
+
+  // Check for obstacles
+  const hasObstacle = level.obstacles.some(obs => obs.x === newX && obs.y === newY);
+  if (hasObstacle) return;
+
+  // Apply magnetic field effects - DIPERBAIKI: hanya berlaku jika tepat di sebelah medan magnet
+  level.magneticFields.forEach(field => {
+    const distance = Math.abs(field.x - newX) + Math.abs(field.y - newY);
+    // Medan magnet hanya berlaku jika pemain tepat bersebelahan (distance = 1)
+    if (distance === 1) {
+      if (field.strength > 0) {
+        // Attraction - pull towards field (hanya 1 langkah)
+        if (field.x > newX && newX < level.size - 1) newX++;
+        else if (field.x < newX && newX > 0) newX--;
+        if (field.y > newY && newY < level.size - 1) newY++;
+        else if (field.y < newY && newY > 0) newY--;
+      } else {
+        // Repulsion - push away from field (hanya 1 langkah)
+        if (field.x > newX && newX > 0) newX--;
+        else if (field.x < newX && newX < level.size - 1) newX++;
+        if (field.y > newY && newY > 0) newY--;
+        else if (field.y < newY && newY < level.size - 1) newY++;
+      }
+      
+      // Pastikan tidak keluar dari batas dan tidak menabrak obstacle
+      newX = Math.max(0, Math.min(level.size - 1, newX));
+      newY = Math.max(0, Math.min(level.size - 1, newY));
+      
+      const hasObstacleAfterMagnet = level.obstacles.some(obs => obs.x === newX && obs.y === newY);
+      if (hasObstacleAfterMagnet) {
+        // Jika terdorong ke obstacle, batalkan efek magnet
+        newX = polarisPlayerPos.x;
+        newY = polarisPlayerPos.y;
+        // Terapkan gerakan normal
+        switch (direction) {
+          case 'up': newY = Math.max(0, newY - 1); break;
+          case 'down': newY = Math.min(level.size - 1, newY + 1); break;
+          case 'left': newX = Math.max(0, newX - 1); break;
+          case 'right': newX = Math.min(level.size - 1, newX + 1); break;
+        }
+      }
+    }
+  });
+
+  polarisPlayerPos = { x: newX, y: newY };
+
+  // Check for star collection
+  polarisStars = polarisStars.map(star => 
+    star.x === newX && star.y === newY ? { ...star, collected: true } : star
+  );
+
+  // Check for level completion
+  if (newX === level.target.x && newY === level.target.y) {
+    const allStarsCollected = polarisStars.every(star => star.collected);
+    if (allStarsCollected) {
+      polarisCompleted = true; // TAMBAHKAN INI
+      score += 50 + polarisLevel * 20;
+      const scoreEl = document.querySelector('.score');
+      if (scoreEl) scoreEl.textContent = `Level: ${polarisLevel + 1}/${polarisLevels.length} | Skor: ${score}`;
+      
+      clearInterval(timerInterval);
+      
+      setTimeout(() => {
+        if (polarisLevel < polarisLevels.length - 1) {
+          if (confirm(`Selamat! Level ${polarisLevel + 1} selesai. Lanjut ke level berikutnya?`)) {
+            polarisLevel++;
+            polarisCompleted = false; // RESET STATUS
+            renderPolarisGame();
+          } else {
+            currentPage = 'results';
+            renderResults();
+          }
+        } else {
+          alert('Selamat! Anda telah menyelesaikan semua level Polaris!');
+          currentPage = 'results';
+          renderResults();
+        }
+      }, 500); // TAMBAH DELAY SEDIKIT
+    }
+  }
+
+  renderPolarisBoard();
+}
+
+    function addLetterToWord(letter, index) {
+      if (currentWord.length >= 12) return;
+      
+      currentWord += letter;
+      availableLetters.splice(index, 1);
+      updateWordBuildingDisplay();
+    }
+
+    function removeLetterFromWord(index) {
+      const letter = currentWord[index];
+      currentWord = currentWord.slice(0, index) + currentWord.slice(index + 1);
+      availableLetters.push(letter);
+      updateWordBuildingDisplay();
+    }
+
+    function submitWord() {
+      if (currentWord.length < 3) return;
+
+      const challenge = wordBuildingChallenges[wordBuildingLevel];
+      const isValidWord = challenge.targetWords.includes(currentWord);
+
+      if (isValidWord && !foundWords.includes(currentWord)) {
+        foundWords.push(currentWord);
+        score += currentWord.length * 5;
+        const scoreEl = document.querySelector('.score');
+        if (scoreEl) scoreEl.textContent = `Skor: ${score}`;
+
+        if (foundWords.length >= challenge.minWords) {
+          clearInterval(timerInterval);
+          setTimeout(() => {
+            alert('Selamat! Anda telah mencapai target kata!');
+            currentPage = 'results';
+            renderResults();
+          }, 100);
+          return;
+        }
+      }
+
+      // Return letters to available pool
+      currentWord.split('').forEach(letter => {
+        availableLetters.push(letter);
+      });
+      currentWord = '';
+      updateWordBuildingDisplay();
+    }
+
+    function clearWord() {
+      currentWord.split('').forEach(letter => {
+        availableLetters.push(letter);
+      });
+      currentWord = '';
+      updateWordBuildingDisplay();
+    }
+
     function calculateScore(isCorrect, qCount) {
       if (!isCorrect) return 0;
       const basePoints = 10;
       return basePoints;
     }
 
+    function getResultScore() {
+      if (currentGameMode === 'maze' || currentGameMode === 'polaris') {
+        return mazeCompleted || polarisCompleted ? 'Menang!' : 'Kalah';
+      }
+      if (currentGameMode === 'chess') {
+        return isKingCaptured() ? 'Menang!' : 'Seri';
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted ? 'Selesai!' : score;
+      }
+      return score;
+    }
+
+    function getResultLabel() {
+      if (currentGameMode === 'maze' || currentGameMode === 'polaris' || currentGameMode === 'chess' || currentGameMode === 'wordbuilding') {
+        return currentGameMode.toUpperCase();
+      }
+      return 'Poin';
+    }
+
     function getFeedbackTitle() {
       if (currentGameMode === 'maze') {
         return mazeCompleted ? "LABIRIN DITAKLUKKAN! 🎉" : "GAGAL DI LABIRIN 😟";
       }
+      if (currentGameMode === 'polaris') {
+        return polarisCompleted ? "POLARIS DITAKLUKKAN! 🌟" : "GAGAL DI POLARIS 😟";
+      }
       if (currentGameMode === 'chess') {
         return isKingCaptured() ? "SKAKMAT! ♚♛" : "PERMAINAN BERAKHIR";
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted ? "KATA MASTER! 📝" : "WAKTU HABIS! ⏰";
       }
       if (score >= 100) return "LUAR BIASA! 🎉";
       if (score >= 50) return "HEBAT! 👍";
@@ -3818,15 +4796,45 @@ const mazeLevels = [
 
     function getFeedbackText() {
       if (currentGameMode === 'maze') {
-        return mazeCompleted ? `Anda menyelesaikan semua level labirin dengan total skor ${score}!` : "Anda tidak berhasil menyelesaikan labirin tepat waktu atau terjebak.";
+        return mazeCompleted ? `Anda menyelesaikan semua level labirin dengan total skor ${score}!` : "Anda tidak berhasil menyelesaikan labirin tepat waktu.";
+      }
+      if (currentGameMode === 'polaris') {
+        return polarisCompleted ? `Anda menyelesaikan semua level Polaris dengan total skor ${score}!` : "Anda tidak berhasil menyelesaikan Polaris tepat waktu.";
       }
       if (currentGameMode === 'chess') {
-        const winner = chessTurn === 'w' ? 'Hitam' : 'Putih'; // If king captured, current turn is loser's
+        const winner = chessTurn === 'w' ? 'Hitam' : 'Putih';
         return isKingCaptured() ? `${winner} menang!` : (timeLeft <= 0 ? "Waktu habis. Permainan berakhir." : "Permainan berakhir.");
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted ? `Anda berhasil menemukan ${foundWords.length} kata dengan skor ${score}!` : `Anda menemukan ${foundWords.length} kata dengan skor ${score}.`;
       }
       if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Skor fantastis!";
       if (score >= 50) return "Hasil yang sangat bagus! Sedikit lagi bisa mencapai skor sempurna!";
       return "Setiap permainan adalah kesempatan untuk belajar. Coba lagi untuk meningkatkan skor Anda!";
+    }
+
+    function shouldShowConfetti() {
+      if (currentGameMode === 'maze' || currentGameMode === 'polaris') {
+        return mazeCompleted || polarisCompleted;
+      }
+      if (currentGameMode === 'chess') {
+        return isKingCaptured();
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted;
+      }
+      return score >= 100;
+    }
+
+    function isKingCaptured() {
+      let whiteKingPresent = false, blackKingPresent = false;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (chessBoard[r][c] === 'wK') whiteKingPresent = true;
+          if (chessBoard[r][c] === 'bK') blackKingPresent = true;
+        }
+      }
+      return !whiteKingPresent || !blackKingPresent;
     }
 
     function getChessPieceMoves(piece, row, col) {
@@ -3923,19 +4931,19 @@ const mazeLevels = [
 
       const fromRow = selectedChessPiece.row;
       const fromCol = selectedChessPiece.col;
-      const pieceToMove = chessBoard[fromRow][fromCol]; // Get the piece string
+      const pieceToMove = chessBoard[fromRow][fromCol];
 
       const isValidMove = possibleMoves.some(move => move.row === toRow && move.col === toCol);
       if (!isValidMove) {
-        selectedChessPiece = null; // Deselect if invalid move target
+        selectedChessPiece = null;
         possibleMoves = [];
         renderChessBoard();
         return;
       }
 
       // Execute move
-      chessBoard[toRow][toCol] = pieceToMove; // Place the piece
-      chessBoard[fromRow][fromCol] = ''; // Empty the original square
+      chessBoard[toRow][toCol] = pieceToMove;
+      chessBoard[fromRow][fromCol] = '';
 
       // Pawn promotion (simple: to Queen)
       if (pieceToMove[1] === 'P' && ((pieceToMove[0] === 'w' && toRow === 0) || (pieceToMove[0] === 'b' && toRow === 7))) {
@@ -3956,7 +4964,7 @@ const mazeLevels = [
       if (isKingCaptured()) {
         clearInterval(timerInterval);
         setTimeout(() => {
-          const winner = chessBoard[toRow][toCol][0] === 'w' ? 'Putih' : 'Hitam'; // The one who made the capturing move
+          const winner = chessBoard[toRow][toCol][0] === 'w' ? 'Putih' : 'Hitam';
           alert(`Permainan berakhir! ${winner} menang!`);
           currentPage = 'results';
           renderResults();
@@ -4027,7 +5035,6 @@ const mazeLevels = [
       document.addEventListener('keydown', keydownHandlerMaze);
 
       document.getElementById('mazeReset').addEventListener('click', () => {
-        // timeLeft = 60; // Timer will be reset by renderMazeGame -> startTimer
         renderMazeGame();
       });
     }
@@ -4043,20 +5050,20 @@ const mazeLevels = [
       }
 
       chessBoardClickHandler = (e) => {
-        if (timeLeft <= 0 || isKingCaptured()) return; // Don't allow moves if game over
+        if (timeLeft <= 0 || isKingCaptured()) return;
         const target = e.target;
-        const squareElement = target.closest('.chess-square'); // Click might be on square or piece
+        const squareElement = target.closest('.chess-square');
 
-        if (!squareElement) return; // Clicked outside board or on non-square
+        if (!squareElement) return;
 
         const row = parseInt(squareElement.dataset.row);
         const col = parseInt(squareElement.dataset.col);
 
-        if (selectedChessPiece) { // A piece is already selected, try to move it
+        if (selectedChessPiece) {
           makeChessMove(row, col);
-        } else { // No piece selected, try to select one
+        } else {
           const pieceName = chessBoard[row][col];
-          if (pieceName && pieceName[0] === chessTurn) { // If there's a piece of the current player's color
+          if (pieceName && pieceName[0] === chessTurn) {
             selectedChessPiece = { row, col, piece: pieceName };
             possibleMoves = getChessPieceMoves(pieceName, row, col);
             const chessStatusEl = document.querySelector('.chess-status');
@@ -4070,6 +5077,41 @@ const mazeLevels = [
       document.getElementById('chessReset').addEventListener('click', () => {
         startChessGame();
       });
+    }
+
+    let keydownHandlerPolaris = null;
+
+    function setupPolarisEventListeners() {
+      document.getElementById('polarisUp').addEventListener('click', () => movePolarisPlayer('up'));
+      document.getElementById('polarisDown').addEventListener('click', () => movePolarisPlayer('down'));
+      document.getElementById('polarisLeft').addEventListener('click', () => movePolarisPlayer('left'));
+      document.getElementById('polarisRight').addEventListener('click', () => movePolarisPlayer('right'));
+
+      if (keydownHandlerPolaris) {
+        document.removeEventListener('keydown', keydownHandlerPolaris);
+      }
+      keydownHandlerPolaris = (e) => {
+        if (currentPage !== 'polaris' || polarisCompleted || timeLeft <= 0) return;
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+          e.preventDefault();
+        }
+        switch (e.key) {
+          case 'ArrowUp': movePolarisPlayer('up'); break;
+          case 'ArrowDown': movePolarisPlayer('down'); break;
+          case 'ArrowLeft': movePolarisPlayer('left'); break;
+          case 'ArrowRight': movePolarisPlayer('right'); break;
+        }
+      };
+      document.addEventListener('keydown', keydownHandlerPolaris);
+
+      document.getElementById('polarisReset').addEventListener('click', () => {
+        renderPolarisGame();
+      });
+    }
+
+    function setupWordBuildingEventListeners() {
+      document.getElementById('submitWord').addEventListener('click', submitWord);
+      document.getElementById('clearWord').addEventListener('click', clearWord);
     }
 
     // Effects
