@@ -4375,6 +4375,356 @@ const wordWondersLevels = [
       createParticles();
     }
 
+    function renderGame() {
+      currentQuestion = getRandomQuestion(currentGameMode);
+      questionCount++;
+      answered = false;
+      isCorrect = false;
+      pointsEarned = 0;
+
+      // Determine question type display
+      let typeDisplay = '';
+      let typeClass = '';
+      switch (currentGameMode) {
+        case 'riddle':
+          typeDisplay = 'TEKA-TEKI';
+          typeClass = 'riddle';
+          break;
+        case 'puzzle':
+          typeDisplay = 'PUZZLE';
+          typeClass = 'puzzle';
+          break;
+        case 'logic':
+          typeDisplay = 'LOGIKA';
+          typeClass = 'logic';
+          break;
+        case 'math':
+          typeDisplay = 'MATEMATIKA';
+          typeClass = 'math';
+          break;
+      }
+
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+              </div>
+              <span class="timer-text">1:00</span>
+            </div>
+            <div class="score">Skor: ${score}</div>
+          </div>
+          
+          <div class="question-container">
+            <div class="question-type ${typeClass}">${typeDisplay}</div>
+            <div class="question">${currentQuestion.text}</div>
+            
+            ${currentQuestion.type === 'multiple-choice' ? `
+              <div class="options">
+                ${currentQuestion.options.map((option, index) => `
+                  <button class="option-button" data-answer="${option}">${option}</button>
+                `).join('')}
+              </div>
+            ` : `
+              <div class="answer-input">
+                <input id="userAnswer" class="answer-field" placeholder="Ketik jawaban Anda..." autocomplete="off">
+                <button id="submitAnswer" class="submit-button">Submit</button>
+              </div>
+            `}
+            
+            <div class="feedback hidden">
+              <div class="feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}">
+                ${isCorrect ? '🎉' : '❌'}
+                ${isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`}
+                ${currentQuestion.explanation ? `<div class="explanation">${currentQuestion.explanation}</div>` : ''}
+              </div>
+              <button id="nextButton" class="next-button">Pertanyaan Berikutnya</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      startTimer();
+      setupGameEventListeners();
+    }
+
+    function renderMazeGame() {
+      const level = mazeLevels[mazeLevel];
+      mazePlayerPos = { ...level.start };
+      mazeVisited = Array(level.rows).fill(null).map(() => Array(level.cols).fill(false));
+      if (mazeVisited[level.start.row]) mazeVisited[level.start.row][level.start.col] = true;
+      mazeCompleted = false;
+
+      document.documentElement.style.setProperty('--rows', level.rows);
+      document.documentElement.style.setProperty('--cols', level.cols);
+
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+              </div>
+              <span class="timer-text">1:00</span>
+            </div>
+            <div class="score">Level: ${mazeLevel + 1}/${mazeLevels.length} | Skor: ${score}</div>
+          </div>
+          
+          <div class="maze-container">
+            <div class="maze-level">Labirin Level ${mazeLevel + 1}</div>
+            <div class="maze-board" id="mazeBoardElement"></div>
+            
+            <div class="maze-controls">
+              <div class="maze-buttons">
+                <button id="mazeUp" class="maze-button">↑</button>
+                <button id="mazeLeft" class="maze-button">←</button>
+                <button id="mazeDown" class="maze-button">↓</button>
+                <button id="mazeRight" class="maze-button">→</button>
+              </div>
+              <button id="mazeReset" class="maze-button">Reset Level</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderMazeBoard();
+      setupMazeEventListeners();
+      startTimer();
+    }
+
+    function renderMazeBoard() {
+      const level = mazeLevels[mazeLevel];
+      const mazeBoardElement = document.getElementById('mazeBoardElement');
+      if (!mazeBoardElement) return;
+      mazeBoardElement.innerHTML = '';
+
+      for (let row = 0; row < level.rows; row++) {
+        for (let col = 0; col < level.cols; col++) {
+          const cell = document.createElement('div');
+          cell.className = 'maze-cell';
+
+          const isStartCell = (row === level.start.row && col === level.start.col);
+          const isEndCell = (row === level.end.row && col === level.end.col);
+          const isWall = !isStartCell && !isEndCell && level.walls.some(wall => wall[0] === row && wall[1] === col);
+
+          if (isWall) {
+            cell.classList.add('maze-wall');
+            cell.textContent = '🗿';
+          } else {
+            cell.classList.add('maze-path');
+            if (isStartCell) {
+              cell.classList.add('maze-start');
+              cell.textContent = '🏠';
+            }
+            if (isEndCell) {
+              cell.classList.add('maze-end');
+              cell.textContent = '🎯';
+            }
+            if (row === mazePlayerPos.row && col === mazePlayerPos.col) {
+              cell.textContent = '🚀';
+            }
+            if (mazeVisited[row] && mazeVisited[row][col] && !(row === mazePlayerPos.row && col === mazePlayerPos.col)) {
+              cell.classList.add('maze-visited');
+            }
+          }
+          mazeBoardElement.appendChild(cell);
+        }
+      }
+    }
+
+    function renderChessGame() {
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+              </div>
+              <span class="timer-text">5:00</span>
+            </div>
+            <div class="score">Catur</div>
+          </div>
+          
+          <div class="chess-container">
+            <div class="chess-board" id="chessBoardElement"></div>
+            
+            <div class="chess-controls">
+              <div class="chess-info">
+                <div class="chess-turn">Giliran: ${chessTurn === 'w' ? 'Putih' : 'Hitam'}</div>
+                <div class="chess-status">Pilih bidak untuk memulai</div>
+              </div>
+              <button id="chessReset" class="maze-button">Reset Permainan</button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderChessBoard();
+      setupChessEventListeners();
+      startTimer();
+    }
+
+    function renderChessBoard() {
+      const chessBoardElement = document.getElementById('chessBoardElement');
+      if (!chessBoardElement) return;
+      chessBoardElement.innerHTML = '';
+
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          const square = document.createElement('div');
+          square.className = `chess-square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+          square.dataset.row = row;
+          square.dataset.col = col;
+
+          const pieceOnSquare = chessBoard[row][col];
+
+          if (selectedChessPiece && possibleMoves.some(move => move.row === row && move.col === col)) {
+            if (pieceOnSquare && pieceOnSquare[0] !== chessTurn) {
+              square.classList.add('capture-highlight');
+            } else {
+              square.classList.add('highlight');
+            }
+          }
+
+          if (pieceOnSquare) {
+            const pieceElement = document.createElement('div');
+            pieceElement.className = 'chess-piece';
+            pieceElement.textContent = chessPieces[pieceOnSquare];
+            pieceElement.dataset.row = row;
+            pieceElement.dataset.col = col;
+
+            if (selectedChessPiece && selectedChessPiece.row === row && selectedChessPiece.col === col) {
+              pieceElement.classList.add('selected');
+            }
+            square.appendChild(pieceElement);
+          }
+          chessBoardElement.appendChild(square);
+        }
+      }
+    }
+
+    function renderPolarisGame() {
+      const level = polarisLevels[polarisLevel];
+      polarisPlayerPos = { ...level.start };
+      polarisStars = level.stars.map(star => ({ ...star, collected: false }));
+      polarisCompleted = false;
+
+      document.documentElement.style.setProperty('--size', level.size);
+
+      app.innerHTML = `
+        <div class="game-container">
+          <div class="game-header">
+            <div class="timer-container">
+              <div class="timer-circle">
+                <svg width="60" height="60" viewBox="0 0 44 44">
+                  <circle cx="22" cy="22" r="20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="3"></circle>
+                  <circle id="timerPath" cx="22" cy="22" r="20" fill="none" stroke="#00e676" stroke-width="3" 
+                    stroke-dasharray="125.6" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 22 22)">
+                  </circle>
+                </svg>
+              </div>
+              <span class="timer-text">2:00</span>
+            </div>
+            <div class="score">Level: ${polarisLevel + 1}/${polarisLevels.length} | Skor: ${score}</div>
+          </div>
+          
+          <div class="polaris-container">
+            <div class="maze-level">🧭 Polaris Navigation - Level ${polarisLevel + 1}</div>
+            <p style="text-align: center; margin-bottom: 1rem; opacity: 0.8;">
+              Kumpulkan semua bintang ⭐ dan capai target 🎯<br>
+              🧲 = Medan magnet (menarik) | ⚡ = Medan tolak (menolak)
+            </p>
+            <div class="polaris-board" id="polarisBoardElement"></div>
+            
+            <div class="maze-controls">
+              <div class="maze-buttons">
+                <button id="polarisUp" class="maze-button">↑</button>
+                <button id="polarisLeft" class="maze-button">←</button>
+                <button id="polarisDown" class="maze-button">↓</button>
+                <button id="polarisRight" class="maze-button">→</button>
+              </div>
+              <button id="polarisReset" class="maze-button">Reset Level</button>
+              <div style="text-align: center; margin-top: 1rem;">
+                <span>Bintang: <span id="starsCollected">0</span>/<span id="totalStars">3</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      renderPolarisBoard();
+      setupPolarisEventListeners();
+      startTimer();
+    }
+
+    function renderPolarisBoard() {
+      const level = polarisLevels[polarisLevel];
+      const polarisBoardElement = document.getElementById('polarisBoardElement');
+      if (!polarisBoardElement) return;
+      polarisBoardElement.innerHTML = '';
+
+      // Update stars counter
+      const starsCollectedEl = document.getElementById('starsCollected');
+      const totalStarsEl = document.getElementById('totalStars');
+      if (starsCollectedEl) starsCollectedEl.textContent = polarisStars.filter(s => s.collected).length;
+      if (totalStarsEl) totalStarsEl.textContent = polarisStars.length;
+
+      for (let y = 0; y < level.size; y++) {
+        for (let x = 0; x < level.size; x++) {
+          const cell = document.createElement('div');
+          cell.className = 'polaris-cell';
+
+          const isPlayer = polarisPlayerPos.x === x && polarisPlayerPos.y === y;
+          const isStart = level.start.x === x && level.start.y === y;
+          const isTarget = level.target.x === x && level.target.y === y;
+          const isObstacle = level.obstacles.some(obs => obs.x === x && obs.y === y);
+          const star = polarisStars.find(s => s.x === x && s.y === y);
+          const magneticField = level.magneticFields.find(f => f.x === x && f.y === y);
+
+          if (isObstacle) {
+            cell.classList.add('polaris-obstacle');
+            cell.textContent = '🗿';
+          } else if (magneticField) {
+            if (magneticField.strength > 0) {
+              cell.classList.add('polaris-magnetic');
+              cell.textContent = '🧲';
+            } else {
+              cell.classList.add('polaris-repulsion');
+              cell.textContent = '⚡';
+            }
+          }
+
+          if (isPlayer) {
+            cell.textContent = '🚀';
+          } else if (!isPlayer && isStart && !magneticField && !isObstacle) {
+            cell.textContent = '🏠';
+          } else if (!isPlayer && isTarget && !magneticField && !isObstacle) {
+            cell.textContent = '🎯';
+          } else if (!isPlayer && star && !star.collected && !magneticField && !isObstacle) {
+            cell.textContent = '⭐';
+          }
+
+          polarisBoardElement.appendChild(cell);
+        }
+      }
+    }
+
     // Word of Wonders Functions
     function startWordWondersGame() {
       currentPage = 'wordwonders';
@@ -4835,7 +5185,689 @@ const wordWondersLevels = [
     }
 
     // Add all other existing functions (maze, chess, polaris, word building, etc.)
+
+    // Game Logic
+    function startGame() {
+      currentPage = 'game';
+      score = 0;
+      timeLeft = 60;
+      questionCount = 0;
+      usedQuestions = { riddle: [], puzzle: [], logic: [], math: [] };
+      renderGame();
+    }
+
+    function startMazeGame() {
+      currentPage = 'maze';
+      mazeLevel = 0;
+      score = 0;
+      timeLeft = 60;
+      renderMazeGame();
+    }
+
+    function startChessGame() {
+      currentPage = 'chess';
+      chessBoard = JSON.parse(JSON.stringify(initialChessBoard));
+      chessTurn = 'w';
+      selectedChessPiece = null;
+      possibleMoves = [];
+      score = 0;
+      timeLeft = 300;
+      renderChessGame();
+    }
+
+    function startPolarisGame() {
+      currentPage = 'polaris';
+      polarisLevel = 0; // Pastikan dimulai dari level 0
+      score = 0;
+      timeLeft = 120;
+      renderPolarisGame();
+    }
+
+    function startWordBuildingGame() {
+      currentPage = 'wordbuilding';
+      wordBuildingLevel = 0;
+      score = 0;
+      timeLeft = wordBuildingChallenges[0].timeLimit;
+      renderWordBuildingGame();
+    }
+
+    function getRandomQuestion(mode) {
+      if (!questions[mode] || questions[mode].length === 0) {
+        return { text: "Tidak ada pertanyaan untuk mode ini.", answer: "", type: "info" };
+      }
+      const availableQuestions = questions[mode].filter(q => !usedQuestions[mode].includes(q.text));
+
+      if (availableQuestions.length === 0) {
+        usedQuestions[mode] = [];
+        const allModeQuestions = questions[mode];
+        return JSON.parse(JSON.stringify(allModeQuestions[Math.floor(Math.random() * allModeQuestions.length)]));
+      }
+
+      const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+      const question = availableQuestions[randomIndex];
+      usedQuestions[mode].push(question.text);
+
+      return JSON.parse(JSON.stringify(question));
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      const gameDuration = getGameDuration();
+      timeLeft = gameDuration;
+      updateTimerDisplay();
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          if (currentPage !== 'results') {
+            currentPage = 'results';
+            renderResults();
+          }
+        }
+      }, 1000);
+    }
+
+    function getGameDuration() {
+      switch (currentGameMode) {
+        case 'chess': return 300;
+        case 'polaris': return 120;
+        case 'wordbuilding': return wordBuildingChallenges[wordBuildingLevel].timeLimit;
+        default: return 60;
+      }
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      const timerText = document.querySelector('.timer-text');
+      const gameDuration = getGameDuration();
+
+      if (timerText) {
+        timerText.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        const timerPath = document.getElementById('timerPath');
+        if (timerPath) {
+          const circumference = 125.6;
+          const offset = timeLeft >= 0 ? circumference - (timeLeft / gameDuration) * circumference : circumference;
+          timerPath.style.strokeDashoffset = offset;
+
+          if (timeLeft > gameDuration * 0.6) {
+            timerPath.style.stroke = '#00e676';
+          } else if (timeLeft > gameDuration * 0.3) {
+            timerPath.style.stroke = '#ffc107';
+          } else {
+            timerPath.style.stroke = '#ff5252';
+          }
+        }
+      }
+    }
+
+    function checkAnswer(answer) {
+      if (answered) return;
+      answered = true;
+
+      if (currentQuestion.type === 'riddle' || currentQuestion.type === 'sequence' ||
+        currentQuestion.type === 'word-problem' || currentQuestion.type === 'tricky-math' ||
+        currentQuestion.type === 'logic-puzzle') {
+        isCorrect = answer.trim().toLowerCase() === currentQuestion.answer.toLowerCase();
+      } else {
+        isCorrect = answer === currentQuestion.answer;
+      }
+
+      pointsEarned = calculateScore(isCorrect, questionCount);
+      if (isCorrect) {
+        score += pointsEarned;
+      }
+
+      const feedbackElement = document.querySelector('.feedback');
+      if (!feedbackElement) return;
+      feedbackElement.classList.remove('hidden');
+
+      const feedbackMessageEl = feedbackElement.querySelector('.feedback-message');
+      if (feedbackMessageEl) {
+        feedbackMessageEl.className = `feedback-message ${isCorrect ? 'correct-feedback' : 'incorrect-feedback'}`;
+        let messageContent = `${isCorrect ? '🎉' : '❌'} `;
+        messageContent += isCorrect ? `Benar! +${pointsEarned} poin` : `Salah! Jawaban benar: ${currentQuestion.answer}`;
+        if (currentQuestion.explanation) {
+          messageContent += `<div class="explanation">${currentQuestion.explanation}</div>`;
+        }
+        feedbackMessageEl.innerHTML = messageContent;
+      }
+
+      if (currentQuestion.type === 'multiple-choice') {
+        document.querySelectorAll('.option-button').forEach(button => {
+          if (button.dataset.answer === currentQuestion.answer) {
+            button.classList.add('correct');
+          } else if (button.dataset.answer === answer && !isCorrect) {
+            button.classList.add('incorrect');
+          }
+          button.disabled = true;
+        });
+      } else {
+        const answerInput = document.getElementById('userAnswer');
+        const submitButton = document.getElementById('submitAnswer');
+        if (answerInput) answerInput.disabled = true;
+        if (submitButton) submitButton.disabled = true;
+      }
+      const scoreEl = document.querySelector('.score');
+      if (scoreEl) scoreEl.textContent = `Skor: ${score}`;
+    }
+
+    function moveMazePlayer(direction) {
+      if (mazeCompleted || timeLeft <= 0) return;
+
+      const level = mazeLevels[mazeLevel];
+      let newRow = mazePlayerPos.row;
+      let newCol = mazePlayerPos.col;
+
+      switch (direction) {
+        case 'up': newRow--; break;
+        case 'down': newRow++; break;
+        case 'left': newCol--; break;
+        case 'right': newCol++; break;
+      }
+
+      if (newRow < 0 || newRow >= level.rows || newCol < 0 || newCol >= level.cols) return;
+
+      const isStartCell = (newRow === level.start.row && newCol === level.start.col);
+      const isEndCell = (newRow === level.end.row && newCol === level.end.col);
+      const isWall = !isStartCell && !isEndCell && level.walls.some(wall => wall[0] === newRow && wall[1] === col);
+      if (isWall) return;
+
+      mazePlayerPos.row = newRow;
+      mazePlayerPos.col = newCol;
+      if (mazeVisited[newRow]) mazeVisited[newRow][newCol] = true;
+
+      if (newRow === level.end.row && newCol === level.end.col) {
+        mazeCompleted = true;
+        score += 50 + (mazeLevel * 10);
+        const scoreDisplay = document.querySelector('.score');
+        if (scoreDisplay) scoreDisplay.textContent = `Level: ${mazeLevel + 1}/${mazeLevels.length} | Skor: ${score}`;
+
+        clearInterval(timerInterval);
+
+        setTimeout(() => {
+          if (mazeLevel < mazeLevels.length - 1) {
+            if (confirm(`Selamat! Anda menyelesaikan Level ${mazeLevel + 1}. Lanjut ke level berikutnya?`)) {
+              mazeLevel++;
+              renderMazeGame();
+            } else {
+              currentPage = 'results';
+              renderResults();
+            }
+          } else {
+            alert('Selamat! Anda telah menyelesaikan semua level labirin!');
+            currentPage = 'results';
+            renderResults();
+          }
+        }, 100);
+      }
+      renderMazeBoard();
+    }
+
+    
+function movePolarisPlayer(direction) {
+  if (polarisCompleted || timeLeft <= 0) return;
+
+  const level = polarisLevels[polarisLevel];
+  let newX = polarisPlayerPos.x;
+  let newY = polarisPlayerPos.y;
+
+  switch (direction) {
+    case 'up': newY = Math.max(0, newY - 1); break;
+    case 'down': newY = Math.min(level.size - 1, newY + 1); break;
+    case 'left': newX = Math.max(0, newX - 1); break;
+    case 'right': newX = Math.min(level.size - 1, newX + 1); break;
+  }
+
+  // Check for obstacles
+  const hasObstacle = level.obstacles.some(obs => obs.x === newX && obs.y === newY);
+  if (hasObstacle) return;
+
+  // Apply magnetic field effects - hanya berlaku jika tepat bersebelahan
+  level.magneticFields.forEach(field => {
+    const distance = Math.abs(field.x - newX) + Math.abs(field.y - newY);
+    if (distance === 1) {
+      if (field.strength > 0) {
+        // Attraction - pull towards field (hanya 1 langkah)
+        if (field.x > newX && newX < level.size - 1) newX++;
+        else if (field.x > newX && newX > 0) newX--;
+        if (field.y > newY && newY < level.size - 1) newY++;
+        else if (field.y > newY && newY > 0) newY--;
+      } else {
+        // Repulsion - push away from field (hanya 1 langkah)
+        if (field.x > newX && newX > 0) newX--;
+        else if (field.x < newX && newX < level.size - 1) newX++;
+        if (field.y > newY && newY > 0) newY--;
+        else if (field.y < newY && newY < level.size - 1) newY++;
+      }
+      
+      // Pastikan tidak keluar dari batas dan tidak menabrak obstacle
+      newX = Math.max(0, Math.min(level.size - 1, newX));
+      newY = Math.max(0, Math.min(level.size - 1, newY));
+      
+      const hasObstacleAfterMagnet = level.obstacles.some(obs => obs.x === newX && obs.y === newY);
+      if (hasObstacleAfterMagnet) {
+        // Jika terdorong ke obstacle, batalkan efek magnet
+        newX = polarisPlayerPos.x;
+        newY = polarisPlayerPos.y;
+        // Terapkan gerakan normal
+        switch (direction) {
+          case 'up': newY = Math.max(0, newY - 1); break;
+          case 'down': newY = Math.min(level.size - 1, newY + 1); break;
+          case 'left': newX = Math.max(0, newX - 1); break;
+          case 'right': newX = Math.min(level.size - 1, newX + 1); break;
+        }
+      }
+    }
+  });
+
+  polarisPlayerPos = { x: newX, y: newY };
+
+  // Check for star collection
+  polarisStars = polarisStars.map(star => 
+    star.x === newX && star.y === newY ? { ...star, collected: true } : star
+  );
+
+  // Check for level completion
+  if (newX === level.target.x && newY === level.target.y) {
+    const allStarsCollected = polarisStars.every(star => star.collected);
+    if (allStarsCollected) {
+      score += 50 + polarisLevel * 20;
+      clearInterval(timerInterval);
+      
+      if (polarisLevel < polarisLevels.length - 1) {
+        setTimeout(() => {
+          if (confirm(`Selamat! Level ${polarisLevel + 1} selesai. Lanjut ke level berikutnya?`)) {
+            polarisLevel++; // PERBAIKAN: Increment dulu baru render
+            renderPolarisGame();
+          } else {
+            currentPage = 'results';
+            renderResults();
+          }
+        }, 100);
+      } else {
+        setTimeout(() => {
+          alert('Selamat! Anda telah menyelesaikan semua level Polaris!');
+          currentPage = 'results';
+          renderResults();
+        }, 100);
+      }
+    }
+  }
+
+  renderPolarisBoard();
+}
+
+function getResultScore() {
+      if (currentGameMode === 'maze' || currentGameMode === 'polaris') {
+        return mazeCompleted || polarisCompleted ? 'Menang!' : 'Kalah';
+      }
+      if (currentGameMode === 'chess') {
+        return isKingCaptured() ? 'Menang!' : 'Seri';
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted ? 'Selesai!' : score;
+      }
+      return score;
+    }
+
+    function getFeedbackTitle() {
+      if (currentGameMode === 'maze') {
+        return mazeCompleted ? "LABIRIN DITAKLUKKAN! 🎉" : "GAGAL DI LABIRIN 😟";
+      }
+      if (currentGameMode === 'polaris') {
+        return polarisCompleted ? "POLARIS DITAKLUKKAN! 🌟" : "GAGAL DI POLARIS 😟";
+      }
+      if (currentGameMode === 'chess') {
+        return isKingCaptured() ? "SKAKMAT! ♚♛" : "PERMAINAN BERAKHIR";
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted ? "KATA MASTER! 📝" : "WAKTU HABIS! ⏰";
+      }
+      if (score >= 100) return "LUAR BIASA! 🎉";
+      if (score >= 50) return "HEBAT! 👍";
+      return "TERUS BERLATIH! 💪";
+    }
+
+    function getFeedbackText() {
+      if (currentGameMode === 'maze') {
+        return mazeCompleted ? `Anda menyelesaikan semua level labirin dengan total skor ${score}!` : "Anda tidak berhasil menyelesaikan labirin tepat waktu.";
+      }
+      if (currentGameMode === 'polaris') {
+        return polarisCompleted ? `Anda menyelesaikan semua level Polaris dengan total skor ${score}!` : "Anda tidak berhasil menyelesaikan Polaris tepat waktu.";
+      }
+      if (currentGameMode === 'chess') {
+        const winner = chessTurn === 'w' ? 'Hitam' : 'Putih';
+        return isKingCaptured() ? `${winner} menang!` : (timeLeft <= 0 ? "Waktu habis. Permainan berakhir." : "Permainan berakhir.");
+      }
+      if (currentGameMode === 'wordbuilding') {
+        return wordBuildingCompleted ? `Anda berhasil menemukan ${foundWords.length} kata dengan skor ${score}!` : `Anda menemukan ${foundWords.length} kata dengan skor ${score}.`;
+      }
+      if (score >= 100) return "Anda benar-benar ahli dalam teka-teki! Skor fantastis!";
+      if (score >= 50) return "Hasil yang sangat bagus! Sedikit lagi bisa mencapai skor sempurna!";
+      return "Setiap permainan adalah kesempatan untuk belajar. Coba lagi untuk meningkatkan skor Anda!";
+    }
+
+    function isKingCaptured() {
+      let whiteKingPresent = false, blackKingPresent = false;
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+          if (chessBoard[r][c] === 'wK') whiteKingPresent = true;
+          if (chessBoard[r][c] === 'bK') blackKingPresent = true;
+        }
+      }
+      return !whiteKingPresent || !blackKingPresent;
+    }
+
+    function getChessPieceMoves(piece, row, col) {
+      const moves = [];
+      const color = piece[0];
+
+      switch (piece[1]) {
+        case 'P': // Pawn
+          const direction = color === 'w' ? -1 : 1;
+          const oneStepRow = row + direction;
+          const twoStepsRow = row + 2 * direction;
+
+          // Move one step forward
+          if (oneStepRow >= 0 && oneStepRow < 8 && !chessBoard[oneStepRow][col]) {
+            moves.push({ row: oneStepRow, col: col, isCapture: false });
+            // Move two steps forward
+            if (((color === 'w' && row === 6) || (color === 'b' && row === 1))) {
+              if (twoStepsRow >= 0 && twoStepsRow < 8 && !chessBoard[twoStepsRow][col]) {
+                moves.push({ row: twoStepsRow, col: col, isCapture: false });
+              }
+            }
+          }
+
+          // Capture diagonally
+          for (const dc of [-1, 1]) {
+            const captureCol = col + dc;
+            if (oneStepRow >= 0 && oneStepRow < 8 && captureCol >= 0 && captureCol < 8) {
+              const targetPiece = chessBoard[oneStepRow][captureCol];
+              if (targetPiece && targetPiece[0] !== color) {
+                moves.push({ row: oneStepRow, col: captureCol, isCapture: true });
+              }
+            }
+          }
+          break;
+
+        case 'R':
+        case 'B':
+        case 'Q':
+          const pieceDirections = {
+            'R': [[1, 0], [-1, 0], [0, 1], [0, -1]],
+            'B': [[1, 1], [1, -1], [-1, 1], [-1, -1]],
+            'Q': [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]
+          }[piece[1]];
+
+          for (const [dr, dc] of pieceDirections) {
+            for (let i = 1; i < 8; i++) {
+              const newRow = row + dr * i;
+              const newCol = col + dc * i;
+              if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) break;
+              const targetPiece = chessBoard[newRow][newCol];
+              if (!targetPiece) {
+                moves.push({ row: newRow, col: newCol, isCapture: false });
+              } else {
+                if (targetPiece[0] !== color) {
+                  moves.push({ row: newRow, col: newCol, isCapture: true });
+                }
+                break;
+              }
+            }
+          }
+          break;
+
+        case 'N': // Knight
+          for (const [dr, dc] of [[2, 1], [2, -1], [-2, 1], [-2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2]]) {
+            const newRow = row + dr;
+            const newCol = col + dc;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+              const targetPiece = chessBoard[newRow][newCol];
+              if (!targetPiece || targetPiece[0] !== color) {
+                moves.push({ row: newRow, col: newCol, isCapture: !!targetPiece });
+              }
+            }
+          }
+          break;
+
+        case 'K': // King
+          for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+            const newRow = row + dr;
+            const newCol = col + dc;
+            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+              const targetPiece = chessBoard[newRow][newCol];
+              if (!targetPiece || targetPiece[0] !== color) {
+                moves.push({ row: newRow, col: newCol, isCapture: !!targetPiece });
+              }
+            }
+          }
+          break;
+      }
+      return moves;
+    }
+
+    function makeChessMove(toRow, toCol) {
+      if (!selectedChessPiece || timeLeft <= 0) return;
+
+      const fromRow = selectedChessPiece.row;
+      const fromCol = selectedChessPiece.col;
+      const pieceToMove = chessBoard[fromRow][fromCol];
+
+      const isValidMove = possibleMoves.some(move => move.row === toRow && move.col === toCol);
+      if (!isValidMove) {
+        selectedChessPiece = null;
+        possibleMoves = [];
+        renderChessBoard();
+        return;
+      }
+
+      // Execute move
+      chessBoard[toRow][toCol] = pieceToMove;
+      chessBoard[fromRow][fromCol] = '';
+
+      // Pawn promotion (simple: to Queen)
+      if (pieceToMove[1] === 'P' && ((pieceToMove[0] === 'w' && toRow === 0) || (pieceToMove[0] === 'b' && toRow === 7))) {
+        chessBoard[toRow][toCol] = pieceToMove[0] + 'Q';
+      }
+
+      chessTurn = chessTurn === 'w' ? 'b' : 'w';
+      selectedChessPiece = null;
+      possibleMoves = [];
+
+      renderChessBoard();
+
+      const chessTurnEl = document.querySelector('.chess-turn');
+      const chessStatusEl = document.querySelector('.chess-status');
+      if (chessTurnEl) chessTurnEl.textContent = `Giliran: ${chessTurn === 'w' ? 'Putih' : 'Hitam'}`;
+      if (chessStatusEl) chessStatusEl.textContent = 'Pilih bidak untuk memulai';
+
+      if (isKingCaptured()) {
+        clearInterval(timerInterval);
+        setTimeout(() => {
+          const winner = chessBoard[toRow][toCol][0] === 'w' ? 'Putih' : 'Hitam';
+          alert(`Permainan berakhir! ${winner} menang!`);
+          currentPage = 'results';
+          renderResults();
+        }, 100);
+      }
+    }
+
+    // Event Listeners Setup
+    function setupGameEventListeners() {
+      document.querySelectorAll('.option-button').forEach(button => {
+        button.addEventListener('click', () => {
+          checkAnswer(button.dataset.answer);
+        });
+      });
+
+      const submitButton = document.getElementById('submitAnswer');
+      const userAnswerInput = document.getElementById('userAnswer');
+
+      if (submitButton && userAnswerInput) {
+        submitButton.addEventListener('click', () => {
+          if (userAnswerInput.value.trim()) {
+            checkAnswer(userAnswerInput.value);
+          }
+        });
+        userAnswerInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && userAnswerInput.value.trim()) {
+            checkAnswer(userAnswerInput.value);
+          }
+        });
+      }
+
+      const nextButton = document.getElementById('nextButton');
+      if (nextButton) {
+        nextButton.addEventListener('click', () => {
+          if (questionCount < 10) {
+            renderGame();
+          } else {
+            currentPage = 'results';
+            renderResults();
+          }
+        });
+      }
+    }
+
+    let keydownHandlerMaze = null;
+
+    function setupMazeEventListeners() {
+      document.getElementById('mazeUp').addEventListener('click', () => moveMazePlayer('up'));
+      document.getElementById('mazeDown').addEventListener('click', () => moveMazePlayer('down'));
+      document.getElementById('mazeLeft').addEventListener('click', () => moveMazePlayer('left'));
+      document.getElementById('mazeRight').addEventListener('click', () => moveMazePlayer('right'));
+
+      if (keydownHandlerMaze) {
+        document.removeEventListener('keydown', keydownHandlerMaze);
+      }
+      keydownHandlerMaze = (e) => {
+        if (currentPage !== 'maze' || mazeCompleted || timeLeft <= 0) return;
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+          e.preventDefault();
+        }
+        switch (e.key) {
+          case 'ArrowUp': moveMazePlayer('up'); break;
+          case 'ArrowDown': moveMazePlayer('down'); break;
+          case 'ArrowLeft': moveMazePlayer('left'); break;
+          case 'ArrowRight': moveMazePlayer('right'); break;
+        }
+      };
+      document.addEventListener('keydown', keydownHandlerMaze);
+
+      document.getElementById('mazeReset').addEventListener('click', () => {
+        renderMazeGame();
+      });
+    }
+
+    let chessBoardClickHandler = null;
+
+    function setupChessEventListeners() {
+      const chessBoardElement = document.getElementById('chessBoardElement');
+      if (!chessBoardElement) return;
+
+      if (chessBoardClickHandler) {
+        chessBoardElement.removeEventListener('click', chessBoardClickHandler);
+      }
+
+      chessBoardClickHandler = (e) => {
+        if (timeLeft <= 0 || isKingCaptured()) return;
+        const target = e.target;
+        const squareElement = target.closest('.chess-square');
+
+        if (!squareElement) return;
+
+        const row = parseInt(squareElement.dataset.row);
+        const col = parseInt(squareElement.dataset.col);
+
+        if (selectedChessPiece) {
+          makeChessMove(row, col);
+        } else {
+          const pieceName = chessBoard[row][col];
+          if (pieceName && pieceName[0] === chessTurn) {
+            selectedChessPiece = { row, col, piece: pieceName };
+            possibleMoves = getChessPieceMoves(pieceName, row, col);
+            const chessStatusEl = document.querySelector('.chess-status');
+            if (chessStatusEl) chessStatusEl.textContent = 'Pilih tujuan atau bidak lain';
+            renderChessBoard();
+          }
+        }
+      };
+      chessBoardElement.addEventListener('click', chessBoardClickHandler);
+
+      document.getElementById('chessReset').addEventListener('click', () => {
+        startChessGame();
+      });
+    }
+
+    let keydownHandlerPolaris = null;
+
+    function setupPolarisEventListeners() {
+      document.getElementById('polarisUp').addEventListener('click', () => movePolarisPlayer('up'));
+      document.getElementById('polarisDown').addEventListener('click', () => movePolarisPlayer('down'));
+      document.getElementById('polarisLeft').addEventListener('click', () => movePolarisPlayer('left'));
+      document.getElementById('polarisRight').addEventListener('click', () => movePolarisPlayer('right'));
+
+      if (keydownHandlerPolaris) {
+        document.removeEventListener('keydown', keydownHandlerPolaris);
+      }
+      keydownHandlerPolaris = (e) => {
+        if (currentPage !== 'polaris' || polarisCompleted || timeLeft <= 0) return;
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+          e.preventDefault();
+        }
+        switch (e.key) {
+          case 'ArrowUp': movePolarisPlayer('up'); break;
+          case 'ArrowDown': movePolarisPlayer('down'); break;
+          case 'ArrowLeft': movePolarisPlayer('left'); break;
+          case 'ArrowRight': movePolarisPlayer('right'); break;
+        }
+      };
+      document.addEventListener('keydown', keydownHandlerPolaris);
+
+      document.getElementById('polarisReset').addEventListener('click', () => {
+        renderPolarisGame();
+      });
+    }
     // ... (keeping all the existing game logic intact)
+
+
+
+    function createParticles() {
+      const existingParticles = document.querySelector('.particles-container');
+      if (existingParticles) existingParticles.remove();
+
+      const particlesContainer = document.createElement('div');
+      particlesContainer.className = 'particles-container';
+      particlesContainer.style.position = 'fixed';
+      particlesContainer.style.top = '0';
+      particlesContainer.style.left = '0';
+      particlesContainer.style.width = '100%';
+      particlesContainer.style.height = '100%';
+      particlesContainer.style.pointerEvents = 'none';
+      particlesContainer.style.zIndex = '-1';
+      document.body.appendChild(particlesContainer);
+
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        const size = Math.random() * 5 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+        const animationDuration = Math.random() * 20 + 10;
+        particle.style.animation = `float ${animationDuration}s infinite ease-in-out`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particle.style.opacity = Math.random() * 0.5 + 0.1;
+        particlesContainer.appendChild(particle);
+      }
+    }
 
     function createConfetti() {
       const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
@@ -4873,38 +5905,7 @@ const wordWondersLevels = [
       }
     }
 
-    function createParticles() {
-      const existingParticles = document.querySelector('.particles-container');
-      if (existingParticles) existingParticles.remove();
-
-      const particlesContainer = document.createElement('div');
-      particlesContainer.className = 'particles-container';
-      particlesContainer.style.position = 'fixed';
-      particlesContainer.style.top = '0';
-      particlesContainer.style.left = '0';
-      particlesContainer.style.width = '100%';
-      particlesContainer.style.height = '100%';
-      particlesContainer.style.pointerEvents = 'none';
-      particlesContainer.style.zIndex = '-1';
-      document.body.appendChild(particlesContainer);
-
-      for (let i = 0; i < 30; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        const size = Math.random() * 5 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-        const animationDuration = Math.random() * 20 + 10;
-        particle.style.animation = `float ${animationDuration}s infinite ease-in-out`;
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        particle.style.opacity = Math.random() * 0.5 + 0.1;
-        particlesContainer.appendChild(particle);
-      }
-    }
-
-    // Initialize the game
+    // Initialize
     renderHome();
   </script>
 </body>
