@@ -90,7 +90,12 @@
       box-shadow: var(--shadow);
     }
 
-    button:active {
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button:active:not(:disabled) {
       transform: scale(0.96);
     }
 
@@ -194,7 +199,7 @@
       transition: all 0.2s ease;
     }
 
-    .btn-ghost:active {
+    .btn-ghost:active:not(:disabled) {
       background: rgba(255, 255, 255, 0.05);
     }
 
@@ -261,7 +266,7 @@
       min-height: 60px;
     }
 
-    .rate-btn:active {
+    .rate-btn:active:not(:disabled) {
       transform: scale(0.96);
     }
 
@@ -335,6 +340,46 @@
       color: var(--muted);
     }
 
+    /* Add word form */
+    .add-word-form {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .add-word-form input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .add-word-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .error-message {
+      background: rgba(251, 113, 133, 0.1);
+      border: 1px solid rgba(251, 113, 133, 0.3);
+      color: var(--danger);
+      padding: 12px;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
     /* Mobile optimizations */
     @media (max-width: 600px) {
       .app {
@@ -373,6 +418,14 @@
         padding: 10px 6px;
         font-size: 13px;
         min-height: 50px;
+      }
+
+      .add-word-form {
+        flex-direction: column;
+      }
+
+      .add-word-form input {
+        min-width: auto;
       }
     }
 
@@ -488,6 +541,19 @@
 
     <div class="grid">
       <div class="panel">
+        <div class="add-word-form">
+          <input id="wordInput" placeholder="Masukkan kata bahasa Inggris..." />
+          <button id="addWordBtn">Tambah Kata</button>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <div class="muted" style="font-size: 12px;">
+            💡 Tips: Untuk kata yang tidak ditemukan, gunakan format manual: "kata,terjemahan"
+          </div>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
+
         <input id="search" class="search" placeholder="Cari kata atau arti..." />
 
         <div class="stats">
@@ -586,6 +652,7 @@
     let deck = [];
     let queue = [];
     let current = null;
+    let isLoading = false;
 
     function todayDate() {
       const d = new Date();
@@ -3916,6 +3983,295 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
     }
 
+    // --- API Functions ---
+    async function translateWord(word) {
+      try {
+        // Try multiple APIs in sequence
+        
+        // API 1: MyMemory (Free, supports CORS)
+        try {
+          const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|id`);
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.responseData && data.responseData.translatedText) {
+              const translation = data.responseData.translatedText;
+              // Don't return if it's the same as input (means no translation found)
+              if (translation.toLowerCase() !== word.toLowerCase()) {
+                return translation;
+              }
+            }
+          }
+        } catch (e) {
+          console.log('MyMemory API failed, trying alternatives...');
+        }
+
+        // API 2: LibreTranslate (if available)
+        try {
+          const response = await fetch('https://libretranslate.de/translate', {
+            method: 'POST',
+            body: JSON.stringify({
+              q: word,
+              source: 'en',
+              target: 'id'
+            }),
+            headers: { 'Content-Type': 'application/json' }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.translatedText && data.translatedText.toLowerCase() !== word.toLowerCase()) {
+              return data.translatedText;
+            }
+          }
+        } catch (e) {
+          console.log('LibreTranslate API failed, trying fallback...');
+        }
+
+        // Fallback: Use a simple dictionary for common words
+        const commonWords = {
+          'hello': 'halo',
+          'world': 'dunia',
+          'good': 'baik',
+          'bad': 'buruk',
+          'yes': 'ya',
+          'no': 'tidak',
+          'please': 'tolong',
+          'thank': 'terima kasih',
+          'sorry': 'maaf',
+          'excuse': 'permisi',
+          'help': 'bantuan',
+          'love': 'cinta',
+          'like': 'suka',
+          'want': 'ingin',
+          'need': 'perlu',
+          'go': 'pergi',
+          'come': 'datang',
+          'eat': 'makan',
+          'drink': 'minum',
+          'sleep': 'tidur',
+          'wake': 'bangun',
+          'work': 'kerja',
+          'study': 'belajar',
+          'read': 'baca',
+          'write': 'tulis',
+          'speak': 'bicara',
+          'listen': 'dengar',
+          'see': 'lihat',
+          'look': 'pandang',
+          'find': 'temukan',
+          'give': 'berikan',
+          'take': 'ambil',
+          'make': 'buat',
+          'do': 'lakukan',
+          'think': 'pikir',
+          'know': 'tahu',
+          'understand': 'mengerti',
+          'learn': 'belajar',
+          'teach': 'ajar',
+          'buy': 'beli',
+          'sell': 'jual',
+          'pay': 'bayar',
+          'money': 'uang',
+          'time': 'waktu',
+          'day': 'hari',
+          'night': 'malam',
+          'morning': 'pagi',
+          'afternoon': 'siang',
+          'evening': 'sore',
+          'today': 'hari ini',
+          'tomorrow': 'besok',
+          'yesterday': 'kemarin',
+          'week': 'minggu',
+          'month': 'bulan',
+          'year': 'tahun',
+          'house': 'rumah',
+          'car': 'mobil',
+          'food': 'makanan',
+          'water': 'air',
+          'fire': 'api',
+          'book': 'buku',
+          'table': 'meja',
+          'chair': 'kursi',
+          'door': 'pintu',
+          'window': 'jendela',
+          'friend': 'teman',
+          'family': 'keluarga',
+          'father': 'ayah',
+          'mother': 'ibu',
+          'child': 'anak',
+          'man': 'laki-laki',
+          'woman': 'perempuan',
+          'person': 'orang',
+          'people': 'orang-orang',
+          'big': 'besar',
+          'small': 'kecil',
+          'hot': 'panas',
+          'cold': 'dingin',
+          'new': 'baru',
+          'old': 'lama',
+          'young': 'muda',
+          'beautiful': 'cantik',
+          'ugly': 'jelek',
+          'happy': 'senang',
+          'sad': 'sedih',
+          'angry': 'marah',
+          'afraid': 'takut',
+          'tired': 'lelah',
+          'hungry': 'lapar',
+          'thirsty': 'haus',
+          'sick': 'sakit',
+          'healthy': 'sehat',
+          'strong': 'kuat',
+          'weak': 'lemah',
+          'fast': 'cepat',
+          'slow': 'lambat',
+          'easy': 'mudah',
+          'hard': 'sulit',
+          'right': 'benar',
+          'wrong': 'salah',
+          'ask': 'tanya',
+          'abandon': 'tinggalkan',
+          'my': 'saya/ku'
+        };
+
+        const lowerWord = word.toLowerCase();
+        if (commonWords[lowerWord]) {
+          return commonWords[lowerWord];
+        }
+
+        throw new Error('Translation not available for this word');
+      } catch (error) {
+        console.error('Translation error:', error);
+        throw error;
+      }
+    }
+
+    async function addWordFromAPI(input) {
+      if (!input.trim()) {
+        showError('Masukkan kata yang valid');
+        return;
+      }
+
+      // Check if input contains comma (manual format: word,translation)
+      if (input.includes(',')) {
+        const [word, translation] = input.split(',').map(s => s.trim());
+        
+        if (!word || !translation) {
+          showError('Format manual: kata,terjemahan (contoh: hello,halo)');
+          return;
+        }
+
+        // Check if word already exists
+        const existing = deck.find(card => card.front.toLowerCase() === word.toLowerCase());
+        if (existing) {
+          showError('Kata sudah ada dalam daftar');
+          return;
+        }
+
+        const newCard = {
+          front: word,
+          back: translation,
+          id: Date.now(),
+          interval: 0,
+          repetition: 0,
+          ef: 2.5,
+          due: todayDate(),
+          easeHistory: [],
+          history: []
+        };
+
+        deck.push(newCard);
+        saveToStorage();
+        renderAll();
+        
+        // Clear input
+        document.getElementById('wordInput').value = '';
+        
+        showSuccess(`Berhasil menambahkan: ${word} - ${translation}`);
+        return;
+      }
+
+      // Auto translation mode
+      const word = input.trim();
+
+      // Check if word already exists
+      const existing = deck.find(card => card.front.toLowerCase() === word.toLowerCase());
+      if (existing) {
+        showError('Kata sudah ada dalam daftar');
+        return;
+      }
+
+      setLoading(true);
+      showError(''); // Clear previous errors
+
+      try {
+        const translation = await translateWord(word);
+        
+        const newCard = {
+          front: word,
+          back: translation,
+          id: Date.now(),
+          interval: 0,
+          repetition: 0,
+          ef: 2.5,
+          due: todayDate(),
+          easeHistory: [],
+          history: []
+        };
+
+        deck.push(newCard);
+        saveToStorage();
+        renderAll();
+        
+        // Clear input
+        document.getElementById('wordInput').value = '';
+        
+        showSuccess(`Berhasil menambahkan: ${word} - ${translation}`);
+      } catch (error) {
+        if (error.message === 'Translation not available for this word') {
+          showError(`Terjemahan untuk "${word}" tidak tersedia. Gunakan format manual: ${word},terjemahan`);
+        } else {
+          showError('Gagal menerjemahkan kata. Silakan coba lagi atau gunakan format manual: kata,terjemahan');
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function setLoading(loading) {
+      isLoading = loading;
+      const addBtn = document.getElementById('addWordBtn');
+      const wordInput = document.getElementById('wordInput');
+      
+      addBtn.disabled = loading;
+      wordInput.disabled = loading;
+      
+      if (loading) {
+        addBtn.textContent = 'Menerjemahkan...';
+        document.body.classList.add('loading');
+      } else {
+        addBtn.textContent = 'Tambah Kata';
+        document.body.classList.remove('loading');
+      }
+    }
+
+    function showError(message) {
+      const errorEl = document.getElementById('errorMessage');
+      if (message) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      } else {
+        errorEl.style.display = 'none';
+      }
+    }
+
+    function showSuccess(message) {
+      // Simple success feedback - you can enhance this
+      console.log('Success:', message);
+      // Could add a success message element similar to error message
+    }
+
     function rebuildQueue() {
       const t = todayDate();
       queue = deck
@@ -3955,7 +4311,8 @@
         return;
       }
 
-      filteredDeck.forEach((c, idx) => {
+      filteredDeck.forEach(c => {
+        const actualIndex = deck.findIndex(card => card.id === c.id);
         const div = document.createElement('div');
         div.className = 'list-item';
         div.innerHTML = `
@@ -3963,8 +4320,9 @@
             <strong>${c.front}</strong>
             <div class="muted" style="font-size:13px">${c.back}</div>
           </div>
-          <div>
-            <button class="btn-ghost" data-idx="${idx}">Study</button>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-ghost" data-idx="${actualIndex}">Study</button>
+            <button class="btn-ghost" data-remove="${actualIndex}" style="background: var(--danger); color: white;">×</button>
           </div>
         `;
         el.appendChild(div);
@@ -4048,7 +4406,7 @@
         card.ef = Math.max(1.3, card.ef + (0.1 - (5 - score) * (0.08 + (5 - score) * 0.02)));
       }
 
-      card.due = new Date(now + card.interval * 24 * 60 * 60 * 3000).getTime();
+      card.due = new Date(now + card.interval * 24 * 60 * 60 * 1000).getTime();
       card.history = card.history || [];
       card.history.push({ date: Date.now(), score });
       card.easeHistory = card.easeHistory || [];
@@ -4140,6 +4498,18 @@
 
     document.getElementById('list').addEventListener('click', e => {
       const btn = e.target.closest('button[data-idx]');
+      const removeBtn = e.target.closest('button[data-remove]');
+      
+      if (removeBtn) {
+        const idx = parseInt(removeBtn.dataset.remove);
+        if (!isNaN(idx) && confirm('Hapus kata ini dari daftar?')) {
+          deck.splice(idx, 1);
+          saveToStorage();
+          renderAll();
+        }
+        return;
+      }
+      
       if (!btn) return;
 
       const idx = parseInt(btn.dataset.idx);
@@ -4148,6 +4518,22 @@
       queue.unshift(idx);
       loadNext();
       renderStats();
+    });
+
+    document.getElementById('addWordBtn').addEventListener('click', () => {
+      const input = document.getElementById('wordInput').value.trim();
+      if (input && !isLoading) {
+        addWordFromAPI(input);
+      }
+    });
+
+    document.getElementById('wordInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !isLoading) {
+        const input = e.target.value.trim();
+        if (input) {
+          addWordFromAPI(input);
+        }
+      }
     });
 
     document.getElementById('studyNext').addEventListener('click', () => {
