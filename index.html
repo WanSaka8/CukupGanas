@@ -520,6 +520,125 @@
       border-radius: var(--radius);
       cursor: pointer;
     }
+
+    /* New Translator Styles */
+    .translator-container {
+      margin-top: 20px;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: var(--radius);
+      padding: 18px;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+
+    .translator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .translator-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .language-select {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .swap-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .swap-btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .translator-input {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 16px;
+      resize: none;
+      margin-bottom: 12px;
+    }
+
+    .translator-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+    }
+
+    .translator-output {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .translator-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .translate-btn {
+      background: var(--accent);
+      color: #022;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .translate-btn:hover {
+      background: var(--accent-dark);
+    }
+
+    .translator-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      color: var(--muted);
+    }
+
+    .translator-error {
+      color: var(--danger);
+      font-size: 14px;
+      margin-top: 8px;
+    }
   </style>
 </head>
 
@@ -613,12 +732,42 @@
           </div>
         </div>
 
-        <div style="margin-top:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div class="muted">Daftar kosakata</div>
+        <!-- New Translator Section -->
+        <div class="translator-container">
+          <div class="translator-header">
+            <div class="translator-title"></div>
+            <div class="language-selector">
+              <select id="translateFrom" class="language-select">
+                <option value="en">English</option>
+                <option value="id" selected>Indonesia</option>
+              </select>
+              <button id="swapLanguages" class="swap-btn" title="Tukar bahasa">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="17 1 21 5 17 9"></polyline>
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                  <polyline points="7 23 3 19 7 15"></polyline>
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                </svg>
+              </button>
+              <select id="translateTo" class="language-select">
+                <option value="en" selected>English</option>
+                <option value="id">Indonesia</option>
+              </select>
+            </div>
           </div>
 
-          <div id="deckPreviewList" style="max-height:180px;overflow:auto"></div>
+          <textarea id="translateInput" class="translator-input" placeholder="Ketik teks di sini..."></textarea>
+
+          <div id="translateOutput" class="translator-output">
+            <div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>
+          </div>
+
+          <div id="translatorError" class="translator-error" style="display: none;"></div>
+
+          <div class="translator-footer">
+            <button id="translateBtn" class="translate-btn">Terjemahkan</button>
+          </div>
         </div>
       </div>
     </div>
@@ -3102,13 +3251,1008 @@
         ["dryly", "dengan kering"],
         ["dutifully", "dengan patuh"],
 
-        ['eat', 'makan'], ['end', 'mengakhiri'], ['explain', 'menjelaskan'],
-        
+        ['eat', 'makan'],
+        ['end', 'mengakhiri'],
+        ['explain', 'menjelaskan'],
+        ['earn', 'memperoleh'],
+        ['eat', 'makan'],
+        ['echo', 'menggema'],
+        ['edit', 'mengedit'],
+        ['educate', 'mendidik'],
+        ['effect', 'menyebabkan'],
+        ['elect', 'memilih (secara resmi)'],
+        ['elevate', 'mengangkat / meningkatkan'],
+        ['eliminate', 'menghapuskan / menghilangkan'],
+        ['embark', 'memulai perjalanan'],
+        ['embed', 'menanamkan'],
+        ['embrace', 'merangkul / menerima'],
+        ['emerge', 'muncul'],
+        ['emit', 'memancarkan'],
+        ['emphasize', 'menekankan'],
+        ['employ', 'mempekerjakan'],
+        ['empower', 'memberdayakan'],
+        ['enable', 'memungkinkan'],
+        ['enact', 'memberlakukan (undang-undang)'],
+        ['enclose', 'melampirkan / mengurung'],
+        ['encode', 'mengkodekan'],
+        ['encounter', 'menghadapi / bertemu'],
+        ['encourage', 'mendorong / menyemangati'],
+        ['end', 'mengakhiri'],
+        ['endanger', 'membahayakan'],
+        ['endorse', 'mendukung / menyetujui'],
+        ['endure', 'bertahan / menanggung'],
+        ['energize', 'memberi energi'],
+        ['enforce', 'menegakkan (hukum)'],
+        ['engage', 'terlibat / melibatkan'],
+        ['enhance', 'meningkatkan'],
+        ['enjoy', 'menikmati'],
+        ['enlarge', 'memperbesar'],
+        ['enlighten', 'mencerahkan'],
+        ['enlist', 'mendaftar / merekrut'],
+        ['enrich', 'memperkaya'],
+        ['enroll', 'mendaftar'],
+        ['ensure', 'memastikan'],
+        ['entail', 'memerlukan / melibatkan'],
+        ['enter', 'masuk'],
+        ['entertain', 'menghibur'],
+        ['enthrall', 'memikat'],
+        ['entice', 'membujuk'],
+        ['entrust', 'mempercayakan'],
+        ['enumerate', 'menghitung / menyebutkan satu per satu'],
+        ['envision', 'membayangkan'],
+        ['equal', 'menyamakan'],
+        ['equate', 'menyamakan'],
+        ['equip', 'melengkapi'],
+        ['eradicate', 'membasmi'],
+        ['erase', 'menghapus'],
+        ['erode', 'mengikis'],
+        ['err', 'berbuat salah'],
+        ['escape', 'melarikan diri'],
+        ['escort', 'mengawal'],
+        ['eagle', 'elang'],
+        ['ear', 'telinga'],
+        ['earring', 'anting-anting'],
+        ['earth', 'bumi'],
+        ['earthquake', 'gempa bumi'],
+        ['ease', 'kemudahan'],
+        ['east', 'timur'],
+        ['echo', 'gema'],
+        ['economics', 'ilmu ekonomi'],
+        ['economy', 'ekonomi'],
+        ['edge', 'tepi'],
+        ['edition', 'edisi'],
+        ['editor', 'editor / penyunting'],
+        ['education', 'pendidikan'],
+        ['effect', 'dampak / efek'],
+        ['efficiency', 'efisiensi'],
+        ['effort', 'usaha'],
+        ['egg', 'telur'],
+        ['elbow', 'siku'],
+        ['election', 'pemilihan'],
+        ['electricity', 'listrik'],
+        ['electron', 'elektron'],
+        ['electronics', 'elektronika'],
+        ['element', 'unsur'],
+        ['elevator', 'lift'],
+        ['elite', 'elit'],
+        ['emotion', 'emosi'],
+        ['emperor', 'kaisar'],
+        ['emphasis', 'penekanan'],
+        ['empire', 'kerajaan'],
+        ['employee', 'karyawan'],
+        ['employer', 'pemberi kerja'],
+        ['employment', 'pekerjaan'],
+        ['enclosure', 'lampiran / kurungan'],
+        ['encounter', 'pertemuan'],
+        ['end', 'akhir'],
+        ['enemy', 'musuh'],
+        ['energy', 'energi'],
+        ['engine', 'mesin'],
+        ['engineer', 'insinyur'],
+        ['engineering', 'teknik'],
+        ['enjoyment', 'kenikmatan'],
+        ['enlightenment', 'pencerahan'],
+        ['enquiry', 'pertanyaan / penyelidikan'],
+        ['enrollment', 'pendaftaran'],
+        ['enthusiasm', 'antusiasme'],
+        ['entirety', 'keseluruhan'],
+        ['entrance', 'pintu masuk'],
+        ['entry', 'masukan / entri'],
+        ['envelope', 'amplop'],
+        ['environment', 'lingkungan'],
+        ['episode', 'episode'],
+        ['equation', 'persamaan'],
+        ['equipment', 'peralatan'],
+        ['era', 'era / zaman'],
+        ['error', 'kesalahan'],
+        ['escalator', 'eskalator'],
+        ['escape', 'pelarian'],
+        ['essay', 'esai / karangan'],
+        ['essence', 'inti / esensi'],
+        ['estate', 'tanah / properti'],
+        ['estimate', 'perkiraan'],
+        ['ethics', 'etika'],
+        ['event', 'peristiwa'],
+        ['evidence', 'bukti'],
+        ['exam', 'ujian'],
+        ['example', 'contoh'],
+        ['excellence', 'keunggulan'],
+        ['exception', 'pengecualian'],
+        ['exchange', 'pertukaran'],
+        ['excitement', 'kegembiraan'],
+        ['exercise', 'latihan'],
+        ['exhibition', 'pameran'],
+        ['existence', 'keberadaan'],
+        ['exit', 'keluar'],
+        ['expansion', 'perluasan'],
+        ['expectation', 'harapan'],
+        ['experience', 'pengalaman'],
+        ['experiment', 'percobaan'],
+        ['expert', 'ahli'],
+        ['explanation', 'penjelasan'],
+        ['explosion', 'ledakan'],
+        ['export', 'ekspor'],
+        ['exposure', 'paparan'],
+        ['expression', 'ekspresi'],
+        ['extension', 'perpanjangan'],
+        ['extent', 'tingkat / sejauh mana'],
+        ['external', 'bagian luar'],
+        ['extreme', 'ekstrem / puncak'],
+        ['eye', 'mata'],
+        ['eyebrow', 'alis'],
+        ['eyelash', 'bulu mata'],
+        ['eyelid', 'kelopak mata'],
+        ['eager', 'bersemangat'],
+        ['early', 'awal / dini'],
+        ['earnest', 'bersungguh-sungguh'],
+        ['earthy', 'bersahaja / seperti tanah'],
+        ['east', 'timur'],
+        ['eastern', 'timur (bagian)'],
+        ['easy', 'mudah'],
+        ['ecological', 'ekologis'],
+        ['economic', 'ekonomi'],
+        ['economical', 'hemat'],
+        ['ecstatic', 'sangat gembira'],
+        ['edible', 'dapat dimakan'],
+        ['educated', 'berpendidikan'],
+        ['educational', 'bersifat pendidikan'],
+        ['effective', 'efektif'],
+        ['efficient', 'efisien'],
+        ['elaborate', 'rumit / terperinci'],
+        ['elastic', 'elastis'],
+        ['elderly', 'tua / lanjut usia'],
+        ['electrical', 'berkaitan dengan listrik'],
+        ['electric', 'bertenaga listrik'],
+        ['electronic', 'elektronik'],
+        ['elegant', 'anggun'],
+        ['elementary', 'dasar'],
+        ['eligible', 'memenuhi syarat'],
+        ['elite', 'elit'],
+        ['emotional', 'emosional'],
+        ['empathetic', 'penuh empati'],
+        ['empty', 'kosong'],
+        ['enchanting', 'mempesona'],
+        ['encouraging', 'menggembirakan'],
+        ['endless', 'tak berujung'],
+        ['energetic', 'penuh energi'],
+        ['engaging', 'menarik'],
+        ['enormous', 'sangat besar'],
+        ['enough', 'cukup'],
+        ['entertaining', 'menghibur'],
+        ['enthusiastic', 'antusias'],
+        ['entire', 'seluruh'],
+        ['environmental', 'lingkungan'],
+        ['equal', 'setara'],
+        ['equatorial', 'khatulistiwa'],
+        ['equivalent', 'setara'],
+        ['erect', 'tegak'],
+        ['erratic', 'tidak menentu'],
+        ['essential', 'penting / esensial'],
+        ['eternal', 'abadi'],
+        ['ethical', 'etis'],
+        ['ethnic', 'etnis'],
+        ['euphoric', 'euforia / gembira luar biasa'],
+        ['even', 'rata / genap'],
+        ['eventful', 'penuh peristiwa'],
+        ['eventual', 'akhirnya / kelak'],
+        ['everlasting', 'abadi'],
+        ['evil', 'jahat'],
+        ['exact', 'tepat'],
+        ['excellent', 'unggul'],
+        ['exceptional', 'luar biasa'],
+        ['excessive', 'berlebihan'],
+        ['excited', 'bersemangat'],
+        ['exciting', 'menarik'],
+        ['exclusive', 'eksklusif'],
+        ['exotic', 'eksotis'],
+        ['expected', 'yang diharapkan'],
+        ['expensive', 'mahal'],
+        ['experienced', 'berpengalaman'],
+        ['expert', 'ahli'],
+        ['explicit', 'jelas / eksplisit'],
+        ['explosive', 'mudah meledak'],
+        ['express', 'cepat / kilat'],
+        ['extended', 'diperpanjang'],
+        ['extensive', 'luas'],
+        ['external', 'eksternal / luar'],
+        ['extra', 'tambahan'],
+        ['extraordinary', 'luar biasa'],
+        ['extreme', 'ekstrem'],
+        ['eagerly', 'dengan bersemangat'],
+        ['early', 'lebih awal'],
+        ['earnestly', 'dengan sungguh-sungguh'],
+        ['easily', 'dengan mudah'],
+        ['economically', 'secara hemat'],
+        ['ecstatically', 'dengan gembira luar biasa'],
+        ['effectively', 'secara efektif'],
+        ['efficiently', 'secara efisien'],
+        ['elaborately', 'secara rumit / terperinci'],
+        ['elegantly', 'dengan anggun'],
+        ['emotionally', 'secara emosional'],
+        ['emphatically', 'dengan tegas'],
+        ['endlessly', 'tanpa henti'],
+        ['energetically', 'dengan penuh energi'],
+        ['entirely', 'sepenuhnya'],
+        ['equally', 'secara setara'],
+        ['erratically', 'secara tidak menentu'],
+        ['especially', 'terutama'],
+        ['essentially', 'pada dasarnya'],
+        ['eternally', 'selamanya'],
+        ['ethically', 'secara etis'],
+        ['eventually', 'akhirnya'],
+        ['ever', 'pernah'],
+        ['evermore', 'selamanya'],
+        ['exactly', 'tepat'],
+        ['exceedingly', 'sangat'],
+        ['exclusively', 'secara eksklusif'],
+        ['explicitly', 'secara eksplisit'],
+        ['extensively', 'secara luas'],
+        ['externally', 'secara eksternal'],
+        ['extraordinarily', 'secara luar biasa'],
+        ['extremely', 'sangat'],
+        ['evacuate', 'mengevakuasi'],
+        ['evade', 'menghindari'],
+        ['evaluate', 'menilai / mengevaluasi'],
+        ['evaporate', 'menguap'],
+        ['even', 'meratakan'],
+        ['evict', 'mengusir'],
+        ['evidence', 'membuktikan'],
+        ['evoke', 'membangkitkan (kenangan/perasaan)'],
+        ['evolve', 'berkembang'],
+        ['exacerbate', 'memperburuk'],
+        ['exaggerate', 'melebih-lebihkan'],
+        ['examine', 'memeriksa'],
+        ['exceed', 'melebihi'],
+        ['excel', 'unggul dalam'],
+        ['exchange', 'menukar'],
+        ['exclude', 'mengecualikan'],
+        ['excuse', 'memaafkan'],
+        ['execute', 'mengeksekusi'],
+        ['exercise', 'berolahraga'],
+        ['exert', 'mengeluarkan tenaga'],
+        ['exhale', 'menghembuskan napas'],
+        ['exhaust', 'menguras tenaga'],
+        ['exhibit', 'memamerkan'],
+        ['exist', 'ada'],
+        ['expand', 'memperluas'],
+        ['expect', 'mengharapkan'],
+        ['expedite', 'mempercepat'],
+        ['expel', 'mengusir / mengeluarkan'],
+        ['experience', 'mengalami'],
+        ['experiment', 'mencoba / bereksperimen'],
+        ['expire', 'kadaluarsa'],
+        ['explain', 'menjelaskan'],
+        ['explode', 'meledak'],
+        ['exploit', 'memanfaatkan'],
+        ['explore', 'menjelajahi'],
+        ['export', 'mengekspor'],
+        ['expose', 'memaparkan / membongkar'],
+        ['express', 'mengungkapkan'],
+        ['extend', 'memperpanjang'],
+        ['extinguish', 'memadamkan'],
+        ['extract', 'mengekstrak / mengambil inti'],
+        ['eye', 'memperhatikan / mengamati'],
+        ['exaggeration', 'berlebihan'],
+        ['examination', 'ujian / pemeriksaan'],
+        ['excellence', 'keunggulan'],
+        ['excess', 'kelebihan'],
+        ['exchange', 'pertukaran'],
+        ['exclamation', 'seruan'],
+        ['execution', 'pelaksanaan / eksekusi'],
+        ['executor', 'pelaksana'],
+        ['exemption', 'pembebasan'],
+        ['exercise', 'latihan'],
+        ['exhalation', 'hembusan napas'],
+        ['exhaustion', 'kelelahan'],
+        ['exhibit', 'pameran'],
+        ['existence', 'keberadaan'],
+        ['expansion', 'perluasan'],
+        ['expectancy', 'harapan (angka / umur)'],
+        ['expedition', 'ekspedisi'],
+        ['expense', 'biaya'],
+        ['experience', 'pengalaman'],
+        ['experiment', 'percobaan'],
+        ['expertise', 'keahlian'],
+        ['expiration', 'kadaluarsa'],
+        ['explanation', 'penjelasan'],
+        ['exploration', 'penjelajahan'],
+        ['explosion', 'ledakan'],
+        ['exporter', 'pengekspor'],
+        ['exposure', 'paparan'],
+        ['expression', 'ekspresi'],
+        ['extension', 'perpanjangan'],
+        ['extinction', 'kepunahan'],
+        ['extract', 'ekstrak'],
+        ['eyelet', 'lubang kecil (pada kain/sepatu)'],
+        ['eyewitness', 'saksi mata'],
+        ['evacuated', 'dievakuasi'],
+        ['evanescent', 'cepat berlalu'],
+        ['evasive', 'mengelak'],
+        ['evaluative', 'bersifat penilaian'],
+        ['even-tempered', 'bertemperamen tenang'],
+        ['eventual', 'akhirnya terjadi'],
+        ['evergreen', 'hijau sepanjang tahun'],
+        ['evident', 'jelas'],
+        ['evil-minded', 'berpikiran jahat'],
+        ['evolutionary', 'bersifat evolusi'],
+        ['exacting', 'menuntut tinggi'],
+        ['exalted', 'mulia / tinggi'],
+        ['exasperated', 'kesal'],
+        ['excessive', 'berlebihan'],
+        ['excitable', 'mudah bersemangat'],
+        ['exclusive', 'eksklusif'],
+        ['excruciating', 'sangat menyakitkan'],
+        ['exemplary', 'patut dicontoh'],
+        ['exempt', 'bebas (dari kewajiban)'],
+        ['exhilarating', 'menyegarkan / menggembirakan'],
+        ['exigent', 'mendesak'],
+        ['exotic', 'eksotis'],
+        ['expansive', 'luas / terbuka'],
+        ['experimental', 'eksperimental'],
+        ['explicit', 'jelas / gamblang'],
+        ['expressive', 'ekspresif'],
+        ['exquisite', 'indah sekali'],
+        ['extant', 'masih ada'],
+        ['extensive', 'luas'],
+        ['extra-large', 'sangat besar'],
+        ['extravagant', 'boros'],
+        ['extreme', 'ekstrem'],
+        ['eye-catching', 'menarik perhatian'],
+        ['eyeless', 'tanpa mata'],
+        ['evidently', 'nyata / jelas'],
+        ['exceedingly', 'sangat / luar biasa'],
+        ['exceptionally', 'secara luar biasa'],
+        ['excessively', 'secara berlebihan'],
+        ['exclusively', 'secara eksklusif'],
+        ['exhaustively', 'secara menyeluruh'],
+        ['expeditiously', 'secara cepat'],
+        ['explicitly', 'secara eksplisit'],
+        ['expressively', 'secara ekspresif'],
+        ['exquisitely', 'dengan sangat indah'],
+        ['extensively', 'secara luas'],
+        ['externally', 'secara eksternal'],
+        ['extraordinarily', 'secara luar biasa'],
+        ['extremely', 'sangat'],
+        ['eye-to-eye', 'sepakat'],
+
         ['feel', 'merasa'],
-        ['find', 'menemukan'], ['follow', 'mengikuti'],
-        
+        ['find', 'menemukan'],
+        ['follow', 'mengikuti'],
+        ['fabric', 'kain / bahan'],
+        ['fabricate', 'membuat / memalsukan'],
+        ['fabulous', 'luar biasa'],
+        ['facade', 'bagian depan bangunan / tampak luar'],
+        ['face', 'wajah / menghadapi'],
+        ['facilitate', 'memfasilitasi'],
+        ['facility', 'fasilitas'],
+        ['fact', 'fakta'],
+        ['faction', 'faksi / kelompok'],
+        ['factor', 'faktor'],
+        ['factory', 'pabrik'],
+        ['faculty', 'fakultas'],
+        ['fade', 'memudar'],
+        ['fail', 'gagal'],
+        ['failure', 'kegagalan'],
+        ['faint', 'pingsan / lemah'],
+        ['fair', 'adil / pameran'],
+        ['fairly', 'secara adil / cukup'],
+        ['faith', 'iman / kepercayaan'],
+        ['faithful', 'setia'],
+        ['fake', 'palsu / memalsukan'],
+        ['fall', 'jatuh / musim gugur'],
+        ['false', 'salah / palsu'],
+        ['fame', 'ketenaran'],
+        ['familiar', 'akrab / dikenal'],
+        ['family', 'keluarga'],
+        ['famine', 'kelaparan'],
+        ['famous', 'terkenal'],
+        ['fan', 'kipas / penggemar'],
+        ['fancy', 'mengira / mewah'],
+        ['fantastic', 'fantastis'],
+        ['fantasy', 'fantasi / khayalan'],
+        ['far', 'jauh'],
+        ['fare', 'tarif / ongkos'],
+        ['farm', 'pertanian'],
+        ['farmer', 'petani'],
+        ['farming', 'pertanian'],
+        ['fascinate', 'memikat'],
+        ['fascination', 'ketertarikan yang besar'],
+        ['fashion', 'mode / fesyen'],
+        ['fast', 'cepat / berpuasa'],
+        ['fasten', 'mengencangkan / memasang'],
+        ['fat', 'lemak / gemuk'],
+        ['fatal', 'fatal / mematikan'],
+        ['fate', 'takdir'],
+        ['father', 'ayah'],
+        ['fatigue', 'kelelahan'],
+        ['fault', 'kesalahan'],
+        ['favor', 'kebaikan / memihak'],
+        ['favorable', 'menguntungkan'],
+        ['favorite', 'favorit / kesukaan'],
+        ['fear', 'takut / rasa takut'],
+        ['fearless', 'tidak takut'],
+        ['feasible', 'layak / memungkinkan'],
+        ['feast', 'pesta besar'],
+        ['feather', 'bulu'],
+        ['feature', 'fitur / menampilkan'],
+        ['federal', 'federal / negara bagian'],
+        ['fee', 'biaya'],
+        ['feed', 'memberi makan'],
+        ['feedback', 'umpan balik'],
+        ['feel', 'merasa'],
+        ['feeling', 'perasaan'],
+        ['fellow', 'rekan / sesama'],
+        ['fellowship', 'persahabatan'],
+        ['female', 'perempuan'],
+        ['fence', 'pagar'],
+        ['ferocious', 'ganas'],
+        ['fertile', 'subur'],
+        ['fertility', 'kesuburan'],
+        ['fertilize', 'memupuk'],
+        ['festival', 'festival / perayaan'],
+        ['fetch', 'mengambil / membawa'],
+        ['fever', 'demam'],
+        ['few', 'sedikit'],
+        ['fiber', 'serat'],
+        ['fiction', 'fiksi'],
+        ['field', 'lapangan / bidang'],
+        ['fierce', 'garang'],
+        ['fight', 'berkelahi / pertarungan'],
+        ['fighter', 'petarung'],
+        ['figure', 'angka / tokoh'],
+        ['file', 'berkas / mengarsipkan'],
+        ['fill', 'mengisi'],
+        ['film', 'film / merekam'],
+        ['filter', 'saringan / menyaring'],
+        ['final', 'terakhir / final'],
+        ['finally', 'akhirnya'],
+        ['finance', 'keuangan / membiayai'],
+        ['financial', 'keuangan'],
+        ['find', 'menemukan'],
+        ['fine', 'bagus / denda'],
+        ['finger', 'jari'],
+        ['finish', 'menyelesaikan'],
+        ['finite', 'terbatas'],
+        ['fire', 'api / menembak / memecat'],
+        ['firefighter', 'petugas pemadam kebakaran'],
+        ['fireplace', 'perapian'],
+        ['firm', 'perusahaan / tegas'],
+        ['firmly', 'dengan tegas'],
+        ['first', 'pertama'],
+        ['firsthand', 'langsung'],
+        ['fiscal', 'fiskal / keuangan'],
+        ['fish', 'ikan / memancing'],
+        ['fisherman', 'nelayan'],
+        ['fishing', 'memancing'],
+        ['fit', 'cocok / sehat'],
+        ['fitness', 'kebugaran'],
+        ['fix', 'memperbaiki'],
+        ['fixture', 'perlengkapan tetap'],
+        ['flag', 'bendera / menandai'],
+        ['flame', 'nyala api'],
+        ['flank', 'sayap / sisi'],
+        ['flash', 'kilat / mem-flash'],
+        ['flat', 'datar / apartemen'],
+        ['flatter', 'memuji berlebihan'],
+        ['flavor', 'rasa / bumbu'],
+        ['flaw', 'cacat / kelemahan'],
+        ['flee', 'melarikan diri'],
+        ['fleet', 'armada'],
+        ['flesh', 'daging'],
+        ['flexible', 'fleksibel'],
+        ['flight', 'penerbangan'],
+        ['flip', 'membalikkan'],
+        ['float', 'mengapung'],
+        ['flock', 'bergerombol / kawanan'],
+        ['flood', 'banjir'],
+        ['floor', 'lantai'],
+        ['flour', 'tepung'],
+        ['flourish', 'berkembang pesat'],
+        ['flow', 'mengalir'],
+        ['flower', 'bunga'],
+        ['flu', 'flu'],
+        ['fluid', 'cairan'],
+        ['flush', 'menyiram / memerah'],
+        ['fly', 'terbang'],
+        ['focus', 'fokus'],
+        ['fog', 'kabut'],
+        ['foil', 'menggagalkan / lembar logam tipis'],
+        ['fold', 'melipat'],
+        ['folk', 'rakyat / tradisional'],
+        ['follow', 'mengikuti'],
+        ['follower', 'pengikut'],
+        ['food', 'makanan'],
+        ['fool', 'orang bodoh / memperdaya'],
+        ['foolish', 'bodoh'],
+        ['foot', 'kaki / satuan panjang'],
+        ['football', 'sepak bola'],
+        ['footstep', 'jejak kaki'],
+        ['forbid', 'melarang'],
+        ['force', 'kekuatan / memaksa'],
+        ['forecast', 'ramalan / meramalkan'],
+        ['forehead', 'dahi'],
+        ['foreign', 'asing'],
+        ['foreigner', 'orang asing'],
+        ['forest', 'hutan'],
+        ['foresee', 'meramalkan'],
+        ['forever', 'selamanya'],
+        ['forget', 'melupakan'],
+        ['forgive', 'memaafkan'],
+        ['fork', 'garpu'],
+        ['form', 'bentuk / formulir'],
+        ['formal', 'resmi'],
+        ['formation', 'formasi / pembentukan'],
+        ['former', 'mantan'],
+        ['formidable', 'hebat / menggentarkan'],
+        ['formula', 'rumus'],
+        ['formulate', 'merumuskan'],
+        ['fortune', 'nasib / kekayaan'],
+        ['fortunate', 'beruntung'],
+        ['forum', 'forum'],
+        ['forward', 'maju / mengirimkan'],
+        ['fossil', 'fosil'],
+        ['foster', 'mengasuh / memelihara'],
+        ['found', 'mendirikan'],
+        ['foundation', 'pondasi / yayasan'],
+        ['founder', 'pendiri'],
+        ['fountain', 'air mancur'],
+        ['four', 'empat'],
+        ['fourth', 'keempat'],
+        ['fox', 'rubah'],
+        ['fraction', 'pecahan'],
+        ['fragile', 'rapuh'],
+        ['fragment', 'pecahan'],
+        ['frame', 'bingkai / kerangka'],
+        ['framework', 'kerangka kerja'],
+        ['frank', 'terus terang'],
+        ['fraud', 'penipuan'],
+        ['free', 'bebas / gratis'],
+        ['freedom', 'kebebasan'],
+        ['freeway', 'jalan bebas hambatan'],
+        ['freeze', 'membeku'],
+        ['freight', 'muatan'],
+        ['frequency', 'frekuensi'],
+        ['frequent', 'sering'],
+        ['fresh', 'segar'],
+        ['freshman', 'mahasiswa baru'],
+        ['friend', 'teman'],
+        ['friendly', 'ramah'],
+        ['friendship', 'persahabatan'],
+        ['fright', 'ketakutan'],
+        ['frighten', 'menakuti'],
+        ['frightened', 'ketakutan'],
+        ['frightening', 'menakutkan'],
+        ['fringe', 'pinggiran'],
+        ['frog', 'katak'],
+        ['from', 'dari'],
+        ['front', 'depan'],
+        ['frontier', 'perbatasan'],
+        ['frost', 'embun beku'],
+        ['frown', 'mengernyit'],
+        ['fruit', 'buah'],
+        ['frustrate', 'membuat frustrasi'],
+        ['frustrated', 'frustrasi'],
+        ['frustrating', 'mengecewakan'],
+        ['fuel', 'bahan bakar'],
+        ['fulfill', 'memenuhi'],
+        ['full', 'penuh'],
+        ['fully', 'sepenuhnya'],
+        ['fun', 'kesenangan'],
+        ['function', 'fungsi'],
+        ['functional', 'fungsional'],
+        ['fund', 'dana / mendanai'],
+        ['fundamental', 'mendasar'],
+        ['funeral', 'pemakaman'],
+        ['funny', 'lucu'],
+        ['fur', 'bulu binatang'],
+        ['furious', 'marah sekali'],
+        ['furnace', 'tungku'],
+        ['furnish', 'melengkapi'],
+        ['furniture', 'perabot'],
+        ['further', 'lebih jauh'],
+        ['fury', 'kemarahan'],
+        ['fuse', 'sekring / menyatu'],
+        ['fusion', 'peleburan'],
+        ['future', 'masa depan'],
+        ['fable', 'dongeng'],
+        ['fabrication', 'pemalsuan / pembuatan'],
+        ['faceless', 'tanpa wajah / anonim'],
+        ['facet', 'sisi / aspek'],
+        ['facial', 'perawatan wajah / wajah'],
+        ['facsimile', 'salinan'],
+        ['factional', 'bersifat faksi'],
+        ['factorial', 'faktorial'],
+        ['fad', 'tren sesaat'],
+        ['fail-safe', 'aman dari kegagalan'],
+        ['faint-hearted', 'penakut'],
+        ['fair-minded', 'berpikiran adil'],
+        ['fairness', 'keadilan'],
+        ['faithless', 'tidak setia'],
+        ['falcon', 'elang jenis alap-alap'],
+        ['fallacy', 'kesesatan berpikir'],
+        ['fallout', 'dampak negatif'],
+        ['falsehood', 'kepalsuan'],
+        ['falsify', 'memalsukan'],
+        ['falter', 'goyah / ragu-ragu'],
+        ['fame-hungry', 'haus ketenaran'],
+        ['familiarize', 'membiasakan'],
+        ['famished', 'sangat lapar'],
+        ['fanatic', 'fanatik'],
+        ['fanciful', 'aneh / khayalan'],
+        ['fang', 'taring'],
+        ['fantasize', 'berfantasi'],
+        ['faraway', 'jauh'],
+        ['farewell', 'selamat tinggal'],
+        ['farmhand', 'pekerja pertanian'],
+        ['farmhouse', 'rumah pertanian'],
+        ['farmyard', 'halaman pertanian'],
+        ['far-reaching', 'luas jangkauannya'],
+        ['far-sighted', 'visioner'],
+        ['fascism', 'fasisme'],
+        ['fashionable', 'modis'],
+        ['fast-track', 'jalur cepat'],
+        ['fastener', 'pengikat'],
+        ['fatalism', 'fatalisme'],
+        ['fatality', 'kematian'],
+        ['fatherhood', 'keayahan'],
+        ['fathom', 'mengukur kedalaman / memahami'],
+        ['fatness', 'kegemukan'],
+        ['fatten', 'menggemukkan'],
+        ['faultless', 'tanpa cacat'],
+        ['faulty', 'rusak / cacat'],
+        ['favoritism', 'pilih kasih'],
+        ['fearful', 'penakut'],
+        ['fearsome', 'menakutkan'],
+        ['feathered', 'berbulu'],
+        ['featherweight', 'sangat ringan'],
+        ['feathery', 'mirip bulu'],
+        ['featureless', 'tanpa ciri khas'],
+        ['federalism', 'paham federal'],
+        ['federation', 'persekutuan'],
+        ['feebleness', 'kelemahan'],
+        ['feign', 'berpura-pura'],
+        ['feint', 'tipuan gerakan'],
+        ['felicity', 'kebahagiaan'],
+        ['feline', 'kucing / seperti kucing'],
+        ['fellowman', 'sesama manusia'],
+        ['fellowship', 'beasiswa / persahabatan'],
+        ['feminine', 'feminin'],
+        ['feminism', 'feminisme'],
+        ['fermentation', 'fermentasi'],
+        ['ferret', 'musang ferret'],
+        ['fertilizer', 'pupuk'],
+        ['fervent', 'bersemangat'],
+        ['fervor', 'semangat membara'],
+        ['festive', 'meriah'],
+        ['fetching', 'menarik / mempesona'],
+        ['feudal', 'feodal'],
+        ['feverish', 'demam / gelisah'],
+        ['fiber-optic', 'serat optik'],
+        ['fictional', 'fiksi'],
+        ['fiddle', 'biola kecil / mengutak-atik'],
+        ['fidelity', 'kesetiaan'],
+        ['fieldwork', 'kerja lapangan'],
+        ['fiend', 'iblis / musuh besar'],
+        ['fierceness', 'kegarangan'],
+        ['fierily', 'dengan garang'],
+        ['fiery', 'membara / berapi-api'],
+        ['fifth', 'kelima'],
+        ['figment', 'khayalan'],
+        ['figurative', 'kiasan'],
+        ['figurehead', 'pemimpin boneka'],
+        ['filament', 'filamen / benang halus'],
+        ['filibuster', 'mengulur waktu'],
+        ['filing', 'pengarsipan'],
+        ['fill-in', 'pengganti sementara'],
+        ['filled', 'terisi'],
+        ['filling', 'isian'],
+        ['film-making', 'pembuatan film'],
+        ['filtering', 'penyaringan'],
+        ['filthy', 'kotor sekali'],
+        ['finale', 'penutup'],
+        ['financeable', 'dapat dibiayai'],
+        ['financier', 'finansier / ahli keuangan'],
+        ['findings', 'temuan'],
+        ['fine-tune', 'menyempurnakan'],
+        ['fingerprint', 'sidik jari'],
+        ['fingertip', 'ujung jari'],
+        ['finicky', 'rewel'],
+        ['firearm', 'senjata api'],
+        ['fireball', 'bola api'],
+        ['firebrand', 'penghasut'],
+        ['fireproof', 'tahan api'],
+        ['fireside', 'tepi perapian'],
+        ['firestorm', 'badai api'],
+        ['firework', 'kembang api'],
+        ['firmware', 'perangkat lunak tetap'],
+        ['first-class', 'kelas satu'],
+        ['first-rate', 'kelas utama'],
+        ['fishery', 'perikanan'],
+        ['fishhook', 'kail ikan'],
+        ['fishing-rod', 'tongkat pancing'],
+        ['fission', 'pembelahan'],
+        ['fist', 'kepalan tangan'],
+        ['fitful', 'terputus-putus'],
+        ['fitness-tracker', 'pelacak kebugaran'],
+        ['fitting', 'cocok / perlengkapan'],
+        ['fivefold', 'lima kali lipat'],
+        ['fixtureless', 'tanpa perlengkapan'],
+        ['flaccid', 'lemas'],
+        ['flagpole', 'tiang bendera'],
+        ['flagrant', 'mencolok'],
+        ['flagship', 'produk unggulan'],
+        ['flair', 'bakat / gaya khas'],
+        ['flamethrower', 'penyembur api'],
+        ['flaming', 'menyala-nyala'],
+        ['flammable', 'mudah terbakar'],
+        ['flank', 'sayap / sisi'],
+        ['flap', 'mengepak / penutup kain'],
+        ['flare', 'nyala terang'],
+        ['flashback', 'kilas balik'],
+        ['flashlight', 'senter'],
+        ['flask', 'botol kecil'],
+        ['flatly', 'datar / tanpa emosi'],
+        ['flatten', 'meratakan'],
+        ['flatterer', 'penjilat'],
+        ['flattery', 'pujian berlebihan'],
+        ['flaunt', 'memamerkan'],
+        ['flavorful', 'penuh rasa'],
+        ['flawless', 'tanpa cacat'],
+        ['fleck', 'bercak'],
+        ['fleece', 'bulu domba / menipu'],
+        ['fleet-footed', 'gesit'],
+        ['fleshy', 'berdaging'],
+        ['flexibility', 'kelenturan'],
+        ['flick', 'sentakan / film'],
+        ['flightless', 'tidak bisa terbang'],
+        ['flighty', 'labil'],
+        ['flimsy', 'rapuh'],
+        ['flinch', 'menghindar'],
+        ['fling', 'melempar'],
+        ['flint', 'batu api'],
+        ['flippant', 'asal-asalan'],
+        ['flirt', 'menggoda'],
+        ['floatation', 'pengapungan'],
+        ['flock', 'kawanan'],
+        ['floodgate', 'pintu air'],
+        ['floorboard', 'papan lantai'],
+        ['flop', 'gagal total'],
+        ['flora', 'flora / tumbuhan'],
+        ['florist', 'penjual bunga'],
+        ['floury', 'bertepung'],
+        ['flowchart', 'diagram alir'],
+        ['flowerbed', 'petak bunga'],
+        ['flowerpot', 'pot bunga'],
+        ['fluency', 'kelancaran'],
+        ['fluent', 'fasih'],
+        ['fluff', 'bulu halus / isi ringan'],
+        ['fluffy', 'halus / empuk'],
+        ['fluidity', 'kecairan'],
+        ['fluorescent', 'berpendar'],
+        ['flurry', 'kekacauan / tiupan angin'],
+        ['flushness', 'keadaan sejajar'],
+        ['flute', 'seruling'],
+        ['flutter', 'berdebar / mengepak'],
+        ['flyer', 'selebaran'],
+        ['flyover', 'jembatan layang'],
+        ['foam', 'busa'],
+        ['focal', 'fokal / titik pusat'],
+        ['focus-group', 'kelompok diskusi terarah'],
+        ['fodder', 'pakan ternak'],
+        ['foggy', 'berkabut'],
+        ['foible', 'kelemahan kecil'],
+        ['foil', 'menggagalkan / lembar logam'],
+        ['foldable', 'dapat dilipat'],
+        ['foliage', 'daun-daunan'],
+        ['folk-song', 'lagu rakyat'],
+        ['folklore', 'cerita rakyat'],
+        ['follow-up', 'tindak lanjut'],
+        ['fond', 'suka / sayang'],
+        ['fondness', 'kesukaan'],
+        ['foodie', 'pecinta kuliner'],
+        ['foolproof', 'anti gagal'],
+        ['footage', 'rekaman video'],
+        ['footballer', 'pemain sepak bola'],
+        ['footbridge', 'jembatan penyeberangan'],
+        ['foothold', ' pijakan'],
+        ['footman', 'pelayan pria'],
+        ['footnote', 'catatan kaki'],
+        ['footpath', 'jalur pejalan kaki'],
+        ['footprint', 'jejak kaki'],
+        ['forage', 'mencari makan'],
+        ['foray', 'serangan mendadak'],
+        ['forbear', 'menahan diri'],
+        ['forbearance', 'kesabaran'],
+        ['forcible', 'dengan kekerasan'],
+        ['ford', 'menyeberangi sungai dangkal'],
+        ['forearm', 'lengan bawah'],
+        ['forecasting', 'peramalan'],
+        ['foreclose', 'menyita'],
+        ['forecourt', 'halaman depan'],
+        ['forefather', 'leluhur'],
+        ['forefront', 'garis depan'],
+        ['foreground', 'latar depan'],
+        ['forehand', 'pukulan forehand'],
+        ['foreknowledge', 'pengetahuan sebelumnya'],
+        ['foreleg', 'kaki depan'],
+        ['foreman', 'mandor'],
+        ['forename', 'nama depan'],
+        ['forensic', 'forensik'],
+        ['forepaw', 'cakar depan'],
+        ['forerunner', 'pendahulu'],
+        ['foreshadow', 'memberi pertanda'],
+        ['foresight', 'pandangan jauh'],
+        ['forestland', 'lahan hutan'],
+        ['forestry', 'kehutanan'],
+        ['foretaste', 'cicipan'],
+        ['foretell', 'meramalkan'],
+        ['forewarning', 'peringatan awal'],
+        ['foreword', 'kata pengantar'],
+        ['forfeit', 'kehilangan hak / denda'],
+        ['forge', 'menempa / memalsukan'],
+        ['forgery', 'pemalsuan'],
+        ['forlorn', 'sedih / putus asa'],
+        ['formality', 'formalitas'],
+        ['formation', 'pembentukan'],
+        ['formulaic', 'bersifat rumus'],
+        ['forsake', 'meninggalkan'],
+        ['forte', 'keahlian'],
+        ['fortify', 'memperkuat'],
+        ['fortitude', 'keteguhan hati'],
+        ['fortnight', 'dua minggu'],
+        ['fortress', 'benteng'],
+        ['fortunate', 'beruntung'],
+        ['forum', 'forum'],
+        ['forward-thinking', 'berpikir maju'],
+        ['fossilization', 'fosilisasi'],
+        ['foster-parent', 'orang tua asuh'],
+        ['foul', 'busuk / kotor'],
+        ['foundation-stone', 'batu pondasi'],
+        ['foundry', 'pabrik pengecoran'],
+        ['fountainhead', 'sumber'],
+        ['fourfold', 'empat kali lipat'],
+        ['foursome', 'kelompok berempat'],
+        ['fowl', 'unggas'],
+        ['foxhole', 'lubang perlindungan'],
+        ['foxtrot', 'tarian foxtrot'],
+        ['fractional', 'pecahan / kecil sekali'],
+        ['fracture', 'patah / retak'],
+        ['fragility', 'kerapuhan'],
+        ['fragmentation', 'fragmentasi / pemecahan'],
+        ['fragrance', 'aroma / wangi'],
+        ['fragrant', 'harum'],
+        ['frailty', 'kelemahan'],
+        ['franchise', 'waralaba'],
+        ['frankness', 'keterusterangan'],
+        ['fraternal', 'persaudaraan'],
+        ['fraternity', 'perkumpulan mahasiswa'],
+        ['fraudulent', 'curang'],
+        ['fraught', 'penuh (sesuatu)'],
+        ['fray', 'perkelahian / usang'],
+        ['frayed', 'aus / usang'],
+        ['freak', 'aneh / kegilaan'],
+        ['freckle', 'bintik-bintik kulit'],
+        ['freebie', 'barang gratis'],
+        ['freedman', 'mantan budak'],
+        ['freehand', 'tangan bebas'],
+        ['freelance', 'pekerja lepas'],
+        ['freeloader', 'penumpang gratisan'],
+        ['freely', 'secara bebas'],
+        ['freeman', 'orang bebas'],
+        ['freeze-dry', 'membekukan dan mengeringkan'],
+        ['freezer', 'lemari pendingin'],
+        ['freightage', 'ongkos muatan'],
+        ['freighter', 'kapal barang'],
+        ['frenetic', 'heboh / sangat sibuk'],
+        ['frenzied', 'panik'],
+        ['frequency-modulation', 'modulasi frekuensi'],
+        ['frequent-flier', 'penumpang sering'],
+        ['freshen', 'menyegarkan'],
+        ['freshness', 'kesegaran'],
+        ['fret', 'khawatir'],
+        ['friar', 'biarawan'],
+        ['friction', 'gesekan'],
+        ['fridge', 'kulkas'],
+        ['fried', 'digoreng'],
+        ['friendless', 'tanpa teman'],
+        ['frieze', 'pita dekoratif'],
+        ['frigate', 'kapal perang'],
+        ['frightful', 'mengerikan'],
+        ['frill', 'hiasan renda'],
+        ['fringe-benefit', 'tunjangan tambahan'],
+        ['frisk', 'menggeledah'],
+        ['frisky', 'lincah'],
+        ['fritter', 'menghabiskan sedikit demi sedikit'],
+        ['frivolity', 'hal sepele'],
+        ['frivolous', 'remeh'],
+        ['frock', 'gaun'],
+        ['frogman', 'penyelam militer'],
+        ['frolic', 'bermain riang'],
+        ['from-nowhere', 'muncul tiba-tiba'],
+        ['frontage', 'bagian depan bangunan'],
+        ['frontiersman', 'penjelajah perbatasan'],
+        ['frostbite', 'radang dingin'],
+        ['frosting', 'lapisan gula'],
+        ['frown-upon', 'tidak menyetujui'],
+        ['fruitful', 'berbuah / bermanfaat'],
+        ['fruitless', 'tidak membuahkan hasil'],
+        ['fruition', 'pencapaian'],
+        ['frustratingly', 'dengan mengecewakan'],
+        ['frying-pan', 'penggorengan'],
+        ['fuchsia', 'warna merah keunguan'],
+        ['fuck', 'bersetubuh / kata kasar'],
+        ['fudge', 'permen cokelat / mengubah data'],
+        ['fuel-cell', 'sel bahan bakar'],
+        ['fugitive', 'buronan'],
+        ['fulcrum', 'titik tumpu'],
+        ['fulfillment', 'pemenuhan'],
+        ['full-scale', 'skala penuh'],
+        ['full-time', 'penuh waktu'],
+        ['fully-fledged', 'sepenuhnya berkembang'],
+        ['fumigate', 'mengasapi dengan obat'],
+        ['functionary', 'petugas resmi'],
+        ['fundraiser', 'penggalang dana'],
+        ['fungal', 'jamur'],
+        ['fungicide', 'pembasmi jamur'],
+        ['fungus', 'jamur'],
+        ['fun-loving', 'suka bersenang-senang'],
+        ['functioning', 'berfungsi'],
+        ['funding', 'pendanaan'],
+        ['fundraiser', 'penggalangan dana'],
+        ['fungibility', 'pertukaran setara'],
+        ['fungible', 'dapat dipertukarkan'],
+        ['funhouse', 'rumah hiburan'],
+        ['funk', 'musik funk / ketakutan'],
+        ['funky', 'unik / keren'],
+        ['funnel', 'corong'],
+        ['funnybone', 'tulang yang terasa geli'],
+        ['furball', 'gumpalan bulu'],
+        ['furiousness', 'kemarahan besar'],
+        ['furrow', 'alur'],
+        ['furry', 'berbulu'],
+        ['furtherance', 'kemajuan'],
+        ['furthermore', 'selain itu'],
+        ['furtive', 'diam-diam'],
+        ['fuselage', 'badan pesawat'],
+        ['fusionism', 'fusi ideologi'],
+        ['fuss', 'keributan'],
+        ['fussy', 'rewel / ribet'],
+        ['fusty', 'bau apek'],
+        ['futile', 'sia-sia'],
+        ['futility', 'kesia-siaan'],
+        ['futureless', 'tanpa masa depan'],
+        ['futuristic', 'futuristis'],
+        ['fuzz', 'bulu halus / polisi (slang)'],
+        ['fuzzy', 'buram / berbulu halus'],
+
+
+
         ['get', 'mendapatkan'], ['give', 'memberi'], ['go', 'pergi'],
-        ['grow', 'tumbuh'], ['have', 'punya'], ['help', 'membantu'], ['hold', 'menahan'], ['keep', 'menjaga'],
+        ['grow', 'tumbuh'],
+        
+        ['have', 'punya'], ['help', 'membantu'], ['hold', 'menahan'],
+        
+        ['keep', 'menjaga'],
         ['know', 'tahu'], ['learn', 'belajar'], ['leave', 'meninggalkan'], ['let', 'membiarkan'], ['like', 'suka'],
         ['listen', 'mendengarkan'], ['live', 'tinggal'], ['look', 'melihat'], ['lose', 'kehilangan'], ['make', 'membuat'],
         ['measure', 'mengukur'], ['meet', 'bertemu'], ['move', 'bergerak'], ['offer', 'menawarkan'], ['open', 'membuka'],
@@ -3983,168 +5127,191 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
     }
 
-    // --- API Functions ---
-    async function translateWord(word) {
-      try {
-        // Try multiple APIs in sequence
-        
-        // API 1: MyMemory (Free, supports CORS)
-        try {
-          const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|id`);
-          
-          if (response.ok) {
-            const data = await response.json();
-            if (data.responseData && data.responseData.translatedText) {
-              const translation = data.responseData.translatedText;
-              // Don't return if it's the same as input (means no translation found)
-              if (translation.toLowerCase() !== word.toLowerCase()) {
-                return translation;
-              }
-            }
-          }
-        } catch (e) {
-          console.log('MyMemory API failed, trying alternatives...');
-        }
+    // --- Translation Functions ---
+    async function translateText(text, fromLang, toLang) {
+      if (!text.trim()) {
+        showTranslatorError('Masukkan teks yang akan diterjemahkan');
+        return '';
+      }
 
-        // API 2: LibreTranslate (if available)
+      // Cek jika teks mengandung koma (format manual)
+      if (text.includes(',')) {
+        return text; // Return as-is untuk format manual
+      }
+
+      try {
+        // API 1: LibreTranslate (lebih baik untuk kalimat panjang)
         try {
           const response = await fetch('https://libretranslate.de/translate', {
             method: 'POST',
             body: JSON.stringify({
-              q: word,
-              source: 'en',
-              target: 'id'
+              q: text,
+              source: fromLang,
+              target: toLang
             }),
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
           });
           
           if (response.ok) {
             const data = await response.json();
-            if (data.translatedText && data.translatedText.toLowerCase() !== word.toLowerCase()) {
+            if (data.translatedText) {
               return data.translatedText;
             }
           }
         } catch (e) {
-          console.log('LibreTranslate API failed, trying fallback...');
+          console.log('LibreTranslate API failed, trying MyMemory...');
         }
 
-        // Fallback: Use a simple dictionary for common words
-        const commonWords = {
-          'hello': 'halo',
-          'world': 'dunia',
-          'good': 'baik',
-          'bad': 'buruk',
-          'yes': 'ya',
-          'no': 'tidak',
-          'please': 'tolong',
-          'thank': 'terima kasih',
-          'sorry': 'maaf',
-          'excuse': 'permisi',
-          'help': 'bantuan',
-          'love': 'cinta',
-          'like': 'suka',
-          'want': 'ingin',
-          'need': 'perlu',
-          'go': 'pergi',
-          'come': 'datang',
-          'eat': 'makan',
-          'drink': 'minum',
-          'sleep': 'tidur',
-          'wake': 'bangun',
-          'work': 'kerja',
-          'study': 'belajar',
-          'read': 'baca',
-          'write': 'tulis',
-          'speak': 'bicara',
-          'listen': 'dengar',
-          'see': 'lihat',
-          'look': 'pandang',
-          'find': 'temukan',
-          'give': 'berikan',
-          'take': 'ambil',
-          'make': 'buat',
-          'do': 'lakukan',
-          'think': 'pikir',
-          'know': 'tahu',
-          'understand': 'mengerti',
-          'learn': 'belajar',
-          'teach': 'ajar',
-          'buy': 'beli',
-          'sell': 'jual',
-          'pay': 'bayar',
-          'money': 'uang',
-          'time': 'waktu',
-          'day': 'hari',
-          'night': 'malam',
-          'morning': 'pagi',
-          'afternoon': 'siang',
-          'evening': 'sore',
-          'today': 'hari ini',
-          'tomorrow': 'besok',
-          'yesterday': 'kemarin',
-          'week': 'minggu',
-          'month': 'bulan',
-          'year': 'tahun',
-          'house': 'rumah',
-          'car': 'mobil',
-          'food': 'makanan',
-          'water': 'air',
-          'fire': 'api',
-          'book': 'buku',
-          'table': 'meja',
-          'chair': 'kursi',
-          'door': 'pintu',
-          'window': 'jendela',
-          'friend': 'teman',
-          'family': 'keluarga',
-          'father': 'ayah',
-          'mother': 'ibu',
-          'child': 'anak',
-          'man': 'laki-laki',
-          'woman': 'perempuan',
-          'person': 'orang',
-          'people': 'orang-orang',
-          'big': 'besar',
-          'small': 'kecil',
-          'hot': 'panas',
-          'cold': 'dingin',
-          'new': 'baru',
-          'old': 'lama',
-          'young': 'muda',
-          'beautiful': 'cantik',
-          'ugly': 'jelek',
-          'happy': 'senang',
-          'sad': 'sedih',
-          'angry': 'marah',
-          'afraid': 'takut',
-          'tired': 'lelah',
-          'hungry': 'lapar',
-          'thirsty': 'haus',
-          'sick': 'sakit',
-          'healthy': 'sehat',
-          'strong': 'kuat',
-          'weak': 'lemah',
-          'fast': 'cepat',
-          'slow': 'lambat',
-          'easy': 'mudah',
-          'hard': 'sulit',
-          'right': 'benar',
-          'wrong': 'salah',
-          'ask': 'tanya',
-          'abandon': 'tinggalkan',
-          'my': 'saya/ku'
-        };
-
-        const lowerWord = word.toLowerCase();
-        if (commonWords[lowerWord]) {
-          return commonWords[lowerWord];
+        // API 2: MyMemory (fallback)
+        try {
+          const response = await fetch(
+            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`
+          );
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.responseData?.translatedText) {
+              return data.responseData.translatedText;
+            }
+          }
+        } catch (e) {
+          console.log('MyMemory API failed');
         }
 
-        throw new Error('Translation not available for this word');
+        // Fallback: Google Translate API (via CORS proxy)
+        try {
+          const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+          const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`;
+          
+          const response = await fetch(proxyUrl + apiUrl);
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data[0] && data[0][0] && data[0][0][0]) {
+              return data[0][0][0];
+            }
+          }
+        } catch (e) {
+          console.log('Google Translate API failed');
+        }
+
+        throw new Error('Semua API terjemahan gagal');
       } catch (error) {
         console.error('Translation error:', error);
-        throw error;
+        throw new Error('Gagal menerjemahkan. Silakan coba lagi atau gunakan format manual.');
       }
+    }
+
+    async function handleTranslate() {
+      const input = document.getElementById('translateInput').value.trim();
+      const fromLang = document.getElementById('translateFrom').value;
+      const toLang = document.getElementById('translateTo').value;
+      const output = document.getElementById('translateOutput');
+      const translateBtn = document.getElementById('translateBtn');
+      
+      if (!input) {
+        showTranslatorError('Masukkan teks yang akan diterjemahkan');
+        output.innerHTML = '<div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>';
+        return;
+      }
+
+      showTranslatorError('');
+      output.innerHTML = '<div class="translator-loading">Menerjemahkan...</div>';
+      translateBtn.disabled = true;
+
+      try {
+        // Split long text into chunks if needed
+        const maxChunkLength = 500;
+        let translations = [];
+        
+        if (input.length > maxChunkLength) {
+          // Split into sentences if possible
+          const sentences = input.split(/(?<=[.!?])\s+/);
+          let currentChunk = '';
+          
+          for (const sentence of sentences) {
+            if (currentChunk.length + sentence.length > maxChunkLength) {
+              if (currentChunk) {
+                const translated = await translateText(currentChunk, fromLang, toLang);
+                translations.push(translated);
+                currentChunk = '';
+              }
+              // If single sentence is too long, split by words
+              if (sentence.length > maxChunkLength) {
+                const words = sentence.split(/\s+/);
+                let wordChunk = '';
+                for (const word of words) {
+                  if (wordChunk.length + word.length > maxChunkLength) {
+                    if (wordChunk) {
+                      const translated = await translateText(wordChunk, fromLang, toLang);
+                      translations.push(translated);
+                      wordChunk = '';
+                    }
+                  }
+                  wordChunk += (wordChunk ? ' ' : '') + word;
+                }
+                if (wordChunk) {
+                  const translated = await translateText(wordChunk, fromLang, toLang);
+                  translations.push(translated);
+                }
+              } else {
+                currentChunk = sentence;
+              }
+            } else {
+              currentChunk += (currentChunk ? ' ' : '') + sentence;
+            }
+          }
+          
+          if (currentChunk) {
+            const translated = await translateText(currentChunk, fromLang, toLang);
+            translations.push(translated);
+          }
+          
+          output.innerHTML = translations.join(' ');
+        } else {
+          // Normal translation for short text
+          const translation = await translateText(input, fromLang, toLang);
+          output.innerHTML = translation || input; // Fallback to original if empty
+        }
+      } catch (error) {
+        console.error('Translation error:', error);
+        showTranslatorError(error.message);
+        output.innerHTML = input; // Fallback to original text
+      } finally {
+        translateBtn.disabled = false;
+      }
+    }
+
+    function swapLanguages() {
+      const fromSelect = document.getElementById('translateFrom');
+      const toSelect = document.getElementById('translateTo');
+      
+      const temp = fromSelect.value;
+      fromSelect.value = toSelect.value;
+      toSelect.value = temp;
+      
+      // Auto translate if there's text
+      const input = document.getElementById('translateInput').value.trim();
+      if (input) {
+        handleTranslate();
+      }
+    }
+
+    function showTranslatorError(message) {
+      const errorEl = document.getElementById('translatorError');
+      if (message) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      } else {
+        errorEl.style.display = 'none';
+      }
+    }
+
+    // --- Word Management Functions ---
+    async function translateWord(word) {
+      return translateText(word, 'en', 'id');
     }
 
     async function addWordFromAPI(input) {
@@ -4648,6 +5815,24 @@
         rebuildQueue();
         renderAll();
       }
+    });
+
+    // Translator Event Listeners
+    document.getElementById('translateBtn').addEventListener('click', handleTranslate);
+    document.getElementById('swapLanguages').addEventListener('click', swapLanguages);
+    
+    // Auto-translate when input changes (with debounce)
+    let translateTimeout;
+    document.getElementById('translateInput').addEventListener('input', (e) => {
+      clearTimeout(translateTimeout);
+      translateTimeout = setTimeout(() => {
+        if (e.target.value.trim().length > 0) {
+          handleTranslate();
+        } else {
+          document.getElementById('translateOutput').innerHTML = 
+            '<div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>';
+        }
+      }, 500);
     });
 
     function renderAll() {
