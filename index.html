@@ -639,6 +639,43 @@
       font-size: 14px;
       margin-top: 8px;
     }
+
+    /* Character counter */
+    .char-counter {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 8px;
+    }
+
+    /* Quality indicator */
+    .quality-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .quality-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+
+    .quality-dot.good {
+      background: var(--success);
+    }
+
+    .quality-dot.fair {
+      background: var(--warning);
+    }
+
+    .quality-dot.poor {
+      background: var(--danger);
+    }
   </style>
 </head>
 
@@ -742,8 +779,7 @@
                 <option value="id" selected>Indonesia</option>
               </select>
               <button id="swapLanguages" class="swap-btn" title="Tukar bahasa">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="17 1 21 5 17 9"></polyline>
                   <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
                   <polyline points="7 23 3 19 7 15"></polyline>
@@ -758,14 +794,20 @@
           </div>
 
           <textarea id="translateInput" class="translator-input" placeholder="Ketik teks di sini..."></textarea>
-
+          <div id="charCounter" class="char-counter">0/5000 karakter</div>
+          
           <div id="translateOutput" class="translator-output">
             <div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>
           </div>
-
+          
           <div id="translatorError" class="translator-error" style="display: none;"></div>
-
+          
           <div class="translator-footer">
+            <div id="qualityIndicator" class="quality-indicator" style="display: none;">
+              <span>Kualitas terjemahan:</span>
+              <div class="quality-dot"></div>
+              <span id="qualityText">Sedang</span>
+            </div>
             <button id="translateBtn" class="translate-btn">Terjemahkan</button>
           </div>
         </div>
@@ -802,6 +844,10 @@
     let queue = [];
     let current = null;
     let isLoading = false;
+
+    // API Keys (replace with your own)
+    const DEEPL_API_KEY = ''; // Get from https://www.deepl.com/pro#developer
+    const GOOGLE_API_KEY = ''; // Get from Google Cloud Console
 
     function todayDate() {
       const d = new Date();
@@ -5127,20 +5173,46 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
     }
 
-    // --- Translation Functions ---
+    // --- Enhanced Translation Functions ---
     async function translateText(text, fromLang, toLang) {
       if (!text.trim()) {
         showTranslatorError('Masukkan teks yang akan diterjemahkan');
         return '';
       }
 
-      // Cek jika teks mengandung koma (format manual)
+      // Check if text contains comma (manual format)
       if (text.includes(',')) {
-        return text; // Return as-is untuk format manual
+        return text;
       }
 
       try {
-        // API 1: LibreTranslate (lebih baik untuk kalimat panjang)
+        // 1. Try DeepL API first (if API key available)
+        if (DEEPL_API_KEY) {
+          try {
+            const deeplResponse = await fetchDeeplTranslation(text, fromLang, toLang);
+            if (deeplResponse) {
+              updateQualityIndicator('good');
+              return deeplResponse;
+            }
+          } catch (e) {
+            console.log('DeepL API failed, trying alternatives...');
+          }
+        }
+
+        // 2. Try Google Cloud Translation (if API key available)
+        if (GOOGLE_API_KEY) {
+          try {
+            const googleResponse = await fetchGoogleCloudTranslation(text, fromLang, toLang);
+            if (googleResponse) {
+              updateQualityIndicator('good');
+              return googleResponse;
+            }
+          } catch (e) {
+            console.log('Google Cloud Translation failed, trying fallback...');
+          }
+        }
+
+        // 3. Fallback to LibreTranslate
         try {
           const response = await fetch('https://libretranslate.de/translate', {
             method: 'POST',
@@ -5158,49 +5230,168 @@
           if (response.ok) {
             const data = await response.json();
             if (data.translatedText) {
-              return data.translatedText;
+              updateQualityIndicator('fair');
+              return postProcessTranslation(data.translatedText, text);
             }
           }
         } catch (e) {
-          console.log('LibreTranslate API failed, trying MyMemory...');
+          console.log('LibreTranslate failed, trying MyMemory...');
         }
 
-        // API 2: MyMemory (fallback)
-        try {
-          const response = await fetch(
-            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`
-          );
-          
-          if (response.ok) {
-            const data = await response.json();
-            if (data.responseData?.translatedText) {
-              return data.responseData.translatedText;
-            }
-          }
-        } catch (e) {
-          console.log('MyMemory API failed');
-        }
-
-        // Fallback: Google Translate API (via CORS proxy)
-        try {
-          const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-          const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`;
-          
-          const response = await fetch(proxyUrl + apiUrl);
-          if (response.ok) {
-            const data = await response.json();
-            if (data && data[0] && data[0][0] && data[0][0][0]) {
-              return data[0][0][0];
-            }
-          }
-        } catch (e) {
-          console.log('Google Translate API failed');
+        // 4. Final fallback to MyMemory
+        const myMemoryResponse = await fetchMyMemoryTranslation(text, fromLang, toLang);
+        if (myMemoryResponse) {
+          updateQualityIndicator(myMemoryResponse.matchScore > 0.8 ? 'fair' : 'poor');
+          return myMemoryResponse.translatedText;
         }
 
         throw new Error('Semua API terjemahan gagal');
       } catch (error) {
         console.error('Translation error:', error);
         throw new Error('Gagal menerjemahkan. Silakan coba lagi atau gunakan format manual.');
+      }
+    }
+
+    async function fetchDeeplTranslation(text, fromLang, toLang) {
+      if (!DEEPL_API_KEY) return null;
+      
+      try {
+        const response = await fetch('https://api-free.deepl.com/v2/translate', {
+          method: 'POST',
+          headers: {
+            'Authorization': `DeepL-Auth-Key ${DEEPL_API_KEY}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: [text],
+            source_lang: fromLang.toUpperCase(),
+            target_lang: toLang.toUpperCase(),
+            preserve_formatting: true,
+            formality: 'prefer_more'
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          return data.translations?.[0]?.text || null;
+        }
+      } catch (e) {
+        console.error('DeepL API error:', e);
+        return null;
+      }
+    }
+
+    async function fetchGoogleCloudTranslation(text, fromLang, toLang) {
+      if (!GOOGLE_API_KEY) return null;
+      
+      try {
+        const response = await fetch(
+          `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_API_KEY}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              q: text,
+              source: fromLang,
+              target: toLang,
+              format: 'text',
+              model: 'nmt'
+            })
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          return data.data?.translations?.[0]?.translatedText || null;
+        }
+      } catch (e) {
+        console.error('Google Cloud Translation error:', e);
+        return null;
+      }
+    }
+
+    async function fetchMyMemoryTranslation(text, fromLang, toLang) {
+      try {
+        const response = await fetch(
+          `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.responseData) {
+            return {
+              translatedText: postProcessTranslation(data.responseData.translatedText, text),
+              matchScore: data.responseData.match || 0
+            };
+          }
+        }
+      } catch (e) {
+        console.error('MyMemory error:', e);
+        return null;
+      }
+    }
+
+    function postProcessTranslation(translatedText, originalText) {
+      // 1. Preserve capitalization
+      if (originalText === originalText.toUpperCase()) {
+        translatedText = translatedText.toUpperCase();
+      } else if (originalText[0] === originalText[0].toUpperCase()) {
+        translatedText = translatedText.charAt(0).toUpperCase() + translatedText.slice(1);
+      }
+      
+      // 2. Preserve numbers and special characters
+      const specialChars = originalText.match(/[0-9$€¥£%°'"@#]/g);
+      if (specialChars) {
+        specialChars.forEach(char => {
+          translatedText = translatedText.replace(new RegExp(`\\${char}`, 'g'), char);
+        });
+      }
+      
+      // 3. Fix punctuation
+      translatedText = translatedText
+        .replace(/\s+([.,!?;:])/g, '$1')
+        .replace(/([a-zA-Z])'([a-zA-Z])/g, '$1\'$2');
+      
+      // 4. Preserve line breaks
+      if (originalText.includes('\n')) {
+        const originalLines = originalText.split('\n');
+        const translatedLines = translatedText.split('\n');
+        if (originalLines.length === translatedLines.length) {
+          translatedText = translatedLines.map((line, i) => {
+            if (originalLines[i].trim() === '') return '';
+            return line;
+          }).join('\n');
+        }
+      }
+      
+      return translatedText;
+    }
+
+    function updateQualityIndicator(quality) {
+      const indicator = document.getElementById('qualityIndicator');
+      const dot = indicator.querySelector('.quality-dot');
+      const text = document.getElementById('qualityText');
+      
+      indicator.style.display = 'flex';
+      dot.className = 'quality-dot';
+      
+      switch (quality) {
+        case 'good':
+          dot.classList.add('good');
+          text.textContent = 'Tinggi';
+          break;
+        case 'fair':
+          dot.classList.add('fair');
+          text.textContent = 'Sedang';
+          break;
+        case 'poor':
+          dot.classList.add('poor');
+          text.textContent = 'Rendah';
+          break;
+        default:
+          indicator.style.display = 'none';
       }
     }
 
@@ -5220,68 +5411,56 @@
       showTranslatorError('');
       output.innerHTML = '<div class="translator-loading">Menerjemahkan...</div>';
       translateBtn.disabled = true;
+      document.getElementById('qualityIndicator').style.display = 'none';
 
       try {
-        // Split long text into chunks if needed
-        const maxChunkLength = 500;
-        let translations = [];
-        
-        if (input.length > maxChunkLength) {
-          // Split into sentences if possible
-          const sentences = input.split(/(?<=[.!?])\s+/);
-          let currentChunk = '';
-          
-          for (const sentence of sentences) {
-            if (currentChunk.length + sentence.length > maxChunkLength) {
-              if (currentChunk) {
-                const translated = await translateText(currentChunk, fromLang, toLang);
-                translations.push(translated);
-                currentChunk = '';
-              }
-              // If single sentence is too long, split by words
-              if (sentence.length > maxChunkLength) {
-                const words = sentence.split(/\s+/);
-                let wordChunk = '';
-                for (const word of words) {
-                  if (wordChunk.length + word.length > maxChunkLength) {
-                    if (wordChunk) {
-                      const translated = await translateText(wordChunk, fromLang, toLang);
-                      translations.push(translated);
-                      wordChunk = '';
-                    }
-                  }
-                  wordChunk += (wordChunk ? ' ' : '') + word;
-                }
-                if (wordChunk) {
-                  const translated = await translateText(wordChunk, fromLang, toLang);
-                  translations.push(translated);
-                }
-              } else {
-                currentChunk = sentence;
-              }
-            } else {
-              currentChunk += (currentChunk ? ' ' : '') + sentence;
-            }
-          }
-          
-          if (currentChunk) {
-            const translated = await translateText(currentChunk, fromLang, toLang);
-            translations.push(translated);
-          }
-          
-          output.innerHTML = translations.join(' ');
+        // Optimize for long text
+        const MAX_CHARS = 2000;
+        if (input.length > MAX_CHARS) {
+          output.innerHTML = await translateLongText(input, fromLang, toLang);
         } else {
-          // Normal translation for short text
           const translation = await translateText(input, fromLang, toLang);
-          output.innerHTML = translation || input; // Fallback to original if empty
+          output.innerHTML = translation || input;
         }
       } catch (error) {
         console.error('Translation error:', error);
         showTranslatorError(error.message);
-        output.innerHTML = input; // Fallback to original text
+        output.innerHTML = input;
       } finally {
         translateBtn.disabled = false;
       }
+    }
+
+    async function translateLongText(text, fromLang, toLang) {
+      // Split text into paragraphs
+      const paragraphs = text.split(/\n\s*\n/);
+      let translatedParagraphs = [];
+      
+      for (const paragraph of paragraphs) {
+        if (paragraph.trim().length === 0) {
+          translatedParagraphs.push('');
+          continue;
+        }
+        
+        // Split into sentences
+        const sentences = paragraph.split(/(?<=[.!?])\s+/);
+        let translatedSentences = [];
+        
+        for (const sentence of sentences) {
+          if (sentence.trim().length === 0) continue;
+          
+          try {
+            const translated = await translateText(sentence, fromLang, toLang);
+            translatedSentences.push(translated || sentence);
+          } catch (e) {
+            translatedSentences.push(sentence);
+          }
+        }
+        
+        translatedParagraphs.push(translatedSentences.join(' '));
+      }
+      
+      return translatedParagraphs.join('\n\n');
     }
 
     function swapLanguages() {
@@ -5824,6 +6003,10 @@
     // Auto-translate when input changes (with debounce)
     let translateTimeout;
     document.getElementById('translateInput').addEventListener('input', (e) => {
+      // Update character counter
+      const charCounter = document.getElementById('charCounter');
+      charCounter.textContent = `${e.target.value.length}/5000 karakter`;
+      
       clearTimeout(translateTimeout);
       translateTimeout = setTimeout(() => {
         if (e.target.value.trim().length > 0) {
@@ -5831,6 +6014,7 @@
         } else {
           document.getElementById('translateOutput').innerHTML = 
             '<div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>';
+          document.getElementById('qualityIndicator').style.display = 'none';
         }
       }, 500);
     });
@@ -5845,6 +6029,13 @@
     // Initialize
     loadFromStorage();
     renderAll();
+
+    // Initialize character counter
+    document.getElementById('translateInput').addEventListener('focus', () => {
+      const input = document.getElementById('translateInput');
+      const charCounter = document.getElementById('charCounter');
+      charCounter.textContent = `${input.value.length}/5000 karakter`;
+    });
   </script>
 </body>
 
