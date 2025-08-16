@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>VocabSR - Simple Anki-like Spaced Repetition</title>
   <style>
-      :root {
+    :root {
       --bg: #0f1724;
       --card: #1e293b;
       --accent: #06b6d4;
@@ -839,16 +839,20 @@
   </div>
 
   <script type="module">
-    // Import Firebase modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-    
-    // Your Firebase configuration
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
       apiKey: "AIzaSyDlo2UFN0zO8oI9xDF3YKMeObKvA3poxns",
       authDomain: "nasa-a3871.firebaseapp.com",
       projectId: "nasa-a3871",
-      storageBucket: "nasa-a3871.appspot.com",
+      storageBucket: "nasa-a3871.firebasestorage.app",
       messagingSenderId: "109624295870",
       appId: "1:109624295870:web:51070271ce74e2d63879ef",
       measurementId: "G-1L6HPZS3MB"
@@ -856,8 +860,24 @@
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
     const db = getFirestore(app);
-    
+    const reviewCol = collection(db, "reviews");
+    // Fungsi untuk simpan review ke Firestore
+    async function saveReview(card, score) {
+      try {
+        await addDoc(reviewCol, {
+          front: card.front,
+          back: card.back,
+          score: score,
+          timestamp: Date.now()
+        });
+        console.log("Review saved:", card.front, score);
+      } catch (err) {
+        console.error("Error saving review:", err);
+      }
+    }
+
     // --- Core: simple SM-2 implementation and data management ---
     const STORAGE_KEY = 'vocabsr:deck';
     let deck = [];
@@ -868,75 +888,6 @@
     // API Keys (replace with your own)
     const DEEPL_API_KEY = ''; // Get from https://www.deepl.com/pro#developer
     const GOOGLE_API_KEY = ''; // Get from Google Cloud Console
-
-    // Function to save deck to Firestore
-    async function saveToFirestore() {
-      try {
-        // Clear existing collection (for simplicity, in production you'd want to update individual docs)
-        const querySnapshot = await getDocs(collection(db, "vocabulary"));
-        const deletePromises = [];
-        querySnapshot.forEach((doc) => {
-          deletePromises.push(deleteDoc(doc.ref));
-        });
-        await Promise.all(deletePromises);
-        
-        // Add all cards to Firestore
-        const addPromises = [];
-        for (const card of deck) {
-          addPromises.push(addDoc(collection(db, "vocabulary"), {
-            front: card.front,
-            back: card.back,
-            id: card.id,
-            interval: card.interval,
-            repetition: card.repetition,
-            ef: card.ef,
-            due: card.due,
-            easeHistory: card.easeHistory,
-            history: card.history,
-            category: card.category || null,
-            createdAt: new Date().toISOString()
-          }));
-        }
-        await Promise.all(addPromises);
-        console.log("Data saved to Firestore");
-      } catch (error) {
-        console.error("Error saving to Firestore: ", error);
-      }
-    }
-
-    // Function to load deck from Firestore
-    async function loadFromFirestore() {
-      try {
-        const querySnapshot = await getDocs(collection(db, "vocabulary"));
-        deck = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          deck.push({
-            front: data.front,
-            back: data.back,
-            id: data.id,
-            interval: data.interval,
-            repetition: data.repetition,
-            ef: data.ef,
-            due: data.due,
-            easeHistory: data.easeHistory || [],
-            history: data.history || [],
-            category: data.category || null
-          });
-        });
-        
-        // If no data in Firestore, load from local storage
-        if (deck.length === 0) {
-          loadFromStorage();
-        } else {
-          saveToStorage(); // Sync to local storage
-          renderAll();
-        }
-      } catch (error) {
-        console.error("Error loading from Firestore: ", error);
-        loadFromStorage(); // Fallback to local storage
-      }
-    }
 
     function todayDate() {
       const d = new Date();
@@ -959,8 +910,7 @@
             ef: card.ef || 2.5,
             due: card.due || todayDate(),
             easeHistory: card.easeHistory || [],
-            history: card.history || [],
-            category: card.category || null
+            history: card.history || []
           }));
         } catch (e) {
           console.error('Error parsing storage', e);
@@ -976,7 +926,7 @@
       const sample = [
         ['ask', 'meminta/tanya'],
         ['abandon', 'meninggalkan/mengabaikan'],
-         ['ability', 'kemampuan'],
+        ['ability', 'kemampuan'],
         ['able', 'mampu/bisa'],
         ['about', 'tentang/sekitar'],
         ['above', 'di atas'],
@@ -6312,12 +6262,10 @@
         ef: 2.5,
         due: todayDate(),
         easeHistory: [],
-        history: [],
-        category: null
+        history: []
       }));
 
       saveToStorage();
-      saveToFirestore();
     }
 
     function saveToStorage() {
@@ -6342,9 +6290,9 @@
       // Betulin tanda baca ganda (misal .. jadi .)
       translatedText = translatedText.replace(/([.!?])\1+/g, '$1');
 
+
       return translatedText;
     }
-
     async function translateText(text, fromLang, toLang) {
       text = preprocessText(text);
       if (!text.trim()) {
@@ -6696,13 +6644,11 @@
           ef: 2.5,
           due: todayDate(),
           easeHistory: [],
-          history: [],
-          category: null
+          history: []
         };
 
         deck.push(newCard);
         saveToStorage();
-        saveToFirestore();
         renderAll();
 
         // Clear input
@@ -6737,13 +6683,11 @@
           ef: 2.5,
           due: todayDate(),
           easeHistory: [],
-          history: [],
-          category: null
+          history: []
         };
 
         deck.push(newCard);
         saveToStorage();
-        saveToFirestore();
         renderAll();
 
         // Clear input
@@ -6771,10 +6715,10 @@
 
       if (loading) {
         addBtn.textContent = 'Menerjemahkan...';
-        document.body.classList.add('loading');
+        document.body.classList.add('Sabar');
       } else {
         addBtn.textContent = 'Tambah Kata';
-        document.body.classList.remove('loading');
+        document.body.classList.remove('Sabar');
       }
     }
 
@@ -6928,23 +6872,11 @@
         card.ef = Math.max(1.3, card.ef + (0.1 - (5 - score) * (0.08 + (5 - score) * 0.02)));
       }
 
-      // Determine category based on score
-      let category;
-      if (score === 0) category = 'lupa';
-      else if (score === 3) category = 'susah';
-      else if (score === 4) category = 'bagus';
-      else if (score === 5) category = 'mudah';
-      
-      card.category = category;
       card.due = new Date(now + card.interval * 24 * 60 * 60 * 1000).getTime();
       card.history = card.history || [];
       card.history.push({ date: Date.now(), score });
       card.easeHistory = card.easeHistory || [];
       card.easeHistory.push(card.ef);
-
-      // Save to both storage and Firestore
-      saveToStorage();
-      saveToFirestore();
     }
 
     // --- Review Page Functions ---
@@ -6959,19 +6891,30 @@
       document.getElementById('reviewPage').style.display = 'none';
     }
 
-    function renderReviewCategories() {
+    async function renderReviewCategories() {
       const categoriesEl = document.getElementById('reviewCategories');
       categoriesEl.innerHTML = '';
 
-      // Group cards by their category
+      // Ambil semua review dari Firestore
+      const snapshot = await getDocs(reviewCol);
+      const allReviews = snapshot.docs.map(doc => doc.data());
+
+      // Kelompokkan berdasarkan score
       const categorized = {
-        lupa: deck.filter(card => card.category === 'lupa'),
-        susah: deck.filter(card => card.category === 'susah'),
-        bagus: deck.filter(card => card.category === 'bagus'),
-        mudah: deck.filter(card => card.category === 'mudah')
+        lupa: [],
+        susah: [],
+        bagus: [],
+        mudah: []
       };
 
-      // Create category sections
+      allReviews.forEach(r => {
+        if (r.score === 0) categorized.lupa.push(r);
+        else if (r.score === 3) categorized.susah.push(r);
+        else if (r.score === 4) categorized.bagus.push(r);
+        else if (r.score === 5) categorized.mudah.push(r);
+      });
+
+      // Daftar kategori
       const categories = [
         { id: 'lupa', name: 'Lupa', color: 'var(--danger)', cards: categorized.lupa },
         { id: 'susah', name: 'Susah', color: 'var(--warning)', cards: categorized.susah },
@@ -6979,16 +6922,17 @@
         { id: 'mudah', name: 'Mudah', color: 'var(--info)', cards: categorized.mudah }
       ];
 
+      // Render kategori ke halaman
       categories.forEach(category => {
         const categoryEl = document.createElement('div');
         categoryEl.className = 'review-category';
         categoryEl.innerHTML = `
-          <h3 style="color: ${category.color}">
-            ${category.name}
-            <span class="count">${category.cards.length}</span>
-          </h3>
-          <div id="${category.id}-list"></div>
-        `;
+      <h3 style="color: ${category.color}">
+        ${category.name}
+        <span class="count">${category.cards.length}</span>
+      </h3>
+      <div id="${category.id}-list"></div>
+    `;
         categoriesEl.appendChild(categoryEl);
 
         const listEl = document.getElementById(`${category.id}-list`);
@@ -6999,16 +6943,17 @@
             const itemEl = document.createElement('div');
             itemEl.className = 'review-item';
             itemEl.innerHTML = `
-              <div>
-                <div class="word">${card.front}</div>
-                <div class="translation">${card.back}</div>
-              </div>
-            `;
+          <div>
+            <div class="word">${card.front}</div>
+            <div class="translation">${card.back}</div>
+          </div>
+        `;
             listEl.appendChild(itemEl);
           });
         }
       });
     }
+
 
     // --- UI Event Listeners ---
     document.getElementById('search').addEventListener('input', e => {
@@ -7024,7 +6969,6 @@
         if (!isNaN(idx) && confirm('Hapus kata ini dari daftar?')) {
           deck.splice(idx, 1);
           saveToStorage();
-          saveToFirestore();
           renderAll();
         }
         return;
@@ -7078,13 +7022,21 @@
         if (current === null) return;
 
         const score = parseInt(e.target.dataset.score);
-        applySM2(deck[current], score);
+        const card = deck[current]; // ambil kartu sekarang
+
+        applySM2(card, score);
+        saveToStorage();
+
+        // 🔥 simpan ke Firestore
+        saveReview(card, score);
+
         rebuildQueue();
         loadNext();
         renderStats();
         renderDeckPreview();
       });
     });
+
 
     // Review page navigation
     document.getElementById('reviewBtn').addEventListener('click', showReviewPage);
@@ -7125,8 +7077,7 @@
             ef: 2.5,
             due: todayDate(),
             easeHistory: [],
-            history: [],
-            category: null
+            history: []
           };
         }).filter(card => card.front && card.back);
 
@@ -7137,7 +7088,6 @@
 
         deck = imported;
         saveToStorage();
-        saveToFirestore();
         rebuildQueue();
         renderAll();
         alert(`Berhasil mengimpor ${imported.length} kosakata!`);
@@ -7165,12 +7115,9 @@
     document.getElementById('reset').addEventListener('click', () => {
       if (confirm('Anda yakin ingin mereset semua progres?')) {
         localStorage.removeItem(STORAGE_KEY);
-        // Also clear Firestore data
-        saveToFirestore().then(() => {
-          loadFromStorage();
-          rebuildQueue();
-          renderAll();
-        });
+        loadFromStorage();
+        rebuildQueue();
+        renderAll();
       }
     });
 
@@ -7205,7 +7152,7 @@
     }
 
     // Initialize
-    loadFromFirestore(); // Changed from loadFromStorage to loadFromFirestore
+    loadFromStorage();
     renderAll();
 
     // Initialize character counter
@@ -7216,4 +7163,5 @@
     });
   </script>
 </body>
+
 </html>
