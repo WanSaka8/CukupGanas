@@ -7043,12 +7043,13 @@
 
 
     // Review page navigation
-    function showReviewPage() {
-      document.getElementById('mainPage').style.display = 'none';
-      document.getElementById('reviewPage').style.display = 'block';
+    document.getElementById('reviewBtn').addEventListener('click', () => {
+      showReviewPage();
+      renderReviewCategories();
+    });
 
-      renderReviewCategories(); // ✅ ini yang bikin data muncul
-    }
+    document.getElementById('backBtn').addEventListener('click', showMainPage);
+
 
 
     // Keyboard shortcuts
