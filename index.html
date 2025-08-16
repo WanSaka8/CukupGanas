@@ -807,7 +807,7 @@
             <div id="qualityIndicator" class="quality-indicator" style="display: none;">
               <span>Kualitas terjemahan:</span>
               <div class="quality-dot"></div>
-              <span id="qualityText">Sedang</span>
+              <span id="qualityText">Tinggi</span>
             </div>
             <button id="translateBtn" class="translate-btn">Terjemahkan</button>
           </div>
@@ -6909,9 +6909,9 @@
 
       allReviews.forEach(r => {
         if (r.score === 0) categorized.lupa.push(r);
-        else if (r.score === 3) categorized.susah.push(r);
-        else if (r.score === 4) categorized.bagus.push(r);
-        else if (r.score === 5) categorized.mudah.push(r);
+        else if (r.score === 1) categorized.susah.push(r);
+        else if (r.score === 2) categorized.bagus.push(r);
+        else if (r.score === 3) categorized.mudah.push(r);
       });
 
       // Daftar kategori
@@ -6953,6 +6953,7 @@
         }
       });
     }
+
 
 
     // --- UI Event Listeners ---
