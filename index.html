@@ -7043,8 +7043,13 @@
 
 
     // Review page navigation
-    document.getElementById('reviewBtn').addEventListener('click', showReviewPage);
-    document.getElementById('backBtn').addEventListener('click', showMainPage);
+    function showReviewPage() {
+      document.getElementById('mainPage').style.display = 'none';
+      document.getElementById('reviewPage').style.display = 'block';
+
+      renderReviewCategories(); // ✅ ini yang bikin data muncul
+    }
+
 
     // Keyboard shortcuts
     window.addEventListener('keydown', e => {
@@ -7108,7 +7113,7 @@
 
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'vocabsr_deck.csv';
+      a.download = 'nasa_deck.csv';
       a.click();
 
       setTimeout(() => {
