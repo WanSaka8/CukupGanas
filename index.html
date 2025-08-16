@@ -6903,6 +6903,8 @@
       const snapshot = await getDocs(reviewCol);
       const allReviews = snapshot.docs.map(doc => doc.data());
 
+      console.log("🔥 Semua review dari Firestore:", allReviews);
+
       // Kelompokkan berdasarkan score
       const categorized = {
         lupa: [],
@@ -6912,16 +6914,16 @@
       };
 
       allReviews.forEach(r => {
-        console.log("Proses review:", r);
+        console.log("➡️ Proses:", r.front, r.back, "score=", r.score);
+
         if (r.score === 0) categorized.lupa.push(r);
         else if (r.score === 1) categorized.susah.push(r);
         else if (r.score === 2) categorized.bagus.push(r);
         else if (r.score === 3) categorized.mudah.push(r);
-        else console.warn("Score tidak dikenal:", r.score);
+        else console.warn("⚠️ Score tidak dikenali:", r);
       });
 
-      console.log("Hasil pengelompokan:", categorized);
-  
+      console.log("✅ Hasil pengelompokan:", categorized);
 
       // Daftar kategori
       const categories = [
@@ -6962,8 +6964,6 @@
         }
       });
     }
-
-
 
     // --- UI Event Listeners ---
     document.getElementById('search').addEventListener('input', e => {
@@ -7028,40 +7028,40 @@
     });
 
     document.querySelectorAll('.rate-btn').forEach(btn => {
-  btn.addEventListener('click', async e => {
-    if (current === null) return;
+      btn.addEventListener('click', async e => {
+        if (current === null) return;
 
-    const score = parseInt(e.target.dataset.score);
-    const card = deck[current]; // ambil kartu sekarang
+        const score = parseInt(btn.dataset.score);
+        const card = deck[current]; // ambil kartu sekarang
 
-    applySM2(card, score);
-    saveToStorage();
+        applySM2(card, score);
+        saveToStorage();
 
-    // 🔥 simpan ke Firestore dengan logging
-    try {
-      console.log("Mau simpan ke Firestore:", {
-        front: card.front,
-        back: card.back,
-        score: score
+        // 🔥 simpan ke Firestore dengan logging
+        try {
+          console.log("Mau simpan ke Firestore:", {
+            front: card.front,
+            back: card.back,
+            score: score
+          });
+
+          await addDoc(reviewCol, {
+            front: card.front,
+            back: card.back,
+            score: score // ✅ langsung pakai nilai tombol
+          });
+
+          console.log("✅ Data berhasil disimpan ke Firestore!");
+        } catch (err) {
+          console.error("❌ Gagal simpan ke Firestore:", err);
+        }
+
+        rebuildQueue();
+        loadNext();
+        renderStats();
+        renderDeckPreview();
       });
-
-      await addDoc(reviewCol, {
-        front: card.front,
-        back: card.back,
-        score: score // ✅ langsung pakai nilai tombol
-      });
-
-      console.log("✅ Data berhasil disimpan ke Firestore!");
-    } catch (err) {
-      console.error("❌ Gagal simpan ke Firestore:", err);
-    }
-
-    rebuildQueue();
-    loadNext();
-    renderStats();
-    renderDeckPreview();
-  });
-});
+    });
 
 
 
