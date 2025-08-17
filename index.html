@@ -7031,7 +7031,7 @@
       btn.addEventListener('click', async e => {
         if (current === null) return;
 
-        const score = parseInt(e.dataset.score);
+        const score = parseInt(btn.dataset.score);
         const card = deck[current]; // ambil kartu sekarang
 
         applySM2(card, score);
