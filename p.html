@@ -5332,3 +5332,1356 @@
       <button class="rate-btn hard" data-score="1">Susah</button>
       <button class="rate-btn good" data-score="2">Bagus</button>
       <button class="rate-btn easy" data-score="3">Mudah</button>
+
+
+
+
+
+
+      <!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VocabSR - Simple Anki-like Spaced Repetition</title>
+  <style>
+    :root {
+      --bg: #0f1724;
+      --card: #1e293b;
+      --accent: #06b6d4;
+      --accent-dark: #0891b2;
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-pink: #ec4899;
+      --accent-orange: #f59e0b;
+      --muted: #94a3b8;
+      --text: #e2e8f0;
+      --text-light: #f8fafc;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-strong: rgba(255, 255, 255, 0.12);
+      --success: #34d399;
+      --warning: #f59e0b;
+      --danger: #fb7185;
+      --info: #60a5fa;
+      --border: rgba(255, 255, 255, 0.15);
+      --radius: 16px;
+      --radius-lg: 24px;
+      --shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.25);
+      --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-card-front: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --gradient-card-back: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: var(--text);
+      background: radial-gradient(ellipse at top left, #1e293b 0%, var(--bg) 50%, #0f1419 100%);
+      line-height: 1.6;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 15% 25%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 45% 60%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 75% 25%, rgba(236, 72, 153, 0.05) 0%, transparent 40%);
+      z-index: -1;
+      animation: float 25s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+      }
+
+      33% {
+        transform: translateY(-15px) rotate(1deg);
+      }
+
+      66% {
+        transform: translateY(10px) rotate(-1deg);
+      }
+    }
+
+    /* Sidebar Toggle Button */
+    .sidebar-toggle {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 1001;
+      background: var(--gradient-bg);
+      border: none;
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-toggle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+    }
+
+    .sidebar-toggle:active {
+      transform: scale(0.95);
+    }
+
+    .sidebar-toggle svg {
+      width: 24px;
+      height: 24px;
+      transition: all 0.3s ease;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -420px;
+      width: 400px;
+      height: 100vh;
+      background: rgba(15, 23, 36, 0.95);
+      backdrop-filter: blur(20px) saturate(1.2);
+      border-right: 1px solid var(--border);
+      z-index: 1000;
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* Sidebar Header */
+    .sidebar-header {
+      padding: 24px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--gradient-bg);
+      color: white;
+    }
+
+    .sidebar-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    /* Sidebar Sections */
+    .sidebar-section {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-section:last-child {
+      border-bottom: none;
+    }
+
+    .sidebar-section h3 {
+      color: var(--text-light);
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-section h3 svg {
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+    }
+
+    /* Sidebar Overlay */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Main App Container */
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .app.sidebar-open {
+      margin-left: 200px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px 0;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+      letter-spacing: -1px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 400;
+      margin-top: 8px;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .pill {
+      background: var(--glass-strong);
+      backdrop-filter: blur(15px);
+      padding: 16px 24px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      cursor: default;
+    }
+
+    .pill:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .pill span {
+      font-weight: 700;
+      color: var(--text-light);
+    }
+
+    .pill svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.8;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* Card Study Section */
+    .study-section {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .card-container {
+      margin-bottom: 32px;
+    }
+
+    .card-preview {
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-lg);
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      perspective: 1000px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-preview::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--gradient-card-front);
+      opacity: 0.05;
+      z-index: -1;
+    }
+
+    .card {
+      width: 85%;
+      height: 75%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border-radius: var(--radius);
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-front {
+      background: var(--gradient-card-front);
+      color: white;
+    }
+
+    .card-back {
+      background: var(--gradient-card-back);
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .word {
+      font-size: 42px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+      letter-spacing: -0.5px;
+    }
+
+    .translation {
+      font-size: 22px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 400;
+    }
+
+    /* Buttons */
+    button {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-ghost {
+      background: var(--glass-strong);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Study Controls */
+    .study-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .rating-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .rate-btn {
+      padding: 18px 12px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      font-size: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 85px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rate-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .rate-btn:hover::before {
+      left: 100%;
+    }
+
+    .rate-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .rate-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .rate-btn small {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .again {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    }
+
+    .hard {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .good {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    .easy {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    }
+
+    /* Sidebar Form Elements */
+    .add-word-form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-direction: column;
+    }
+
+    .add-word-form input,
+    .search,
+    .translator-input,
+    .language-select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .add-word-form input:focus,
+    .search:focus,
+    .translator-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .search {
+      margin-bottom: 16px;
+    }
+
+    /* Deck List */
+    .deck-list {
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .deck-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .deck-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    .deck-list::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .list-item {
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .list-item:hover {
+      transform: translateX(6px);
+      background: var(--glass-strong);
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .list-item:active {
+      transform: translateX(4px) scale(0.98);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Translator Styles */
+    .translator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .translator-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+
+    .language-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .language-select {
+      min-width: 60px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .swap-btn {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swap-btn:hover {
+      background: var(--accent);
+      color: white;
+      transform: rotate(180deg);
+    }
+
+    .translator-input {
+      min-height: 100px;
+      resize: vertical;
+      margin-bottom: 8px;
+    }
+
+    .translator-output {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .translator-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .translate-btn {
+      background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: var(--shadow);
+    }
+
+    .translate-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Control Panel */
+    .control-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .control-row button {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    /* Error Messages */
+    .error-message {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: var(--danger);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .translator-loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .translator-error {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    /* Character counter */
+    .char-counter {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      margin-bottom: 12px;
+    }
+
+    /* Quality indicator */
+    .quality-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .quality-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+
+    .quality-dot.good {
+      background: var(--success);
+    }
+
+    .quality-dot.fair {
+      background: var(--warning);
+    }
+
+    .quality-dot.poor {
+      background: var(--danger);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100vw;
+        left: -100vw;
+      }
+
+      .sidebar-toggle {
+        width: 52px;
+        height: 52px;
+      }
+
+      .app {
+        padding: 16px;
+      }
+
+      .app.sidebar-open {
+        margin-left: 0;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      .word {
+        font-size: 32px;
+      }
+
+      .translation {
+        font-size: 18px;
+      }
+
+      .rating-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card-preview {
+        height: 250px;
+      }
+
+      .stats {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .pill {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .sidebar-header {
+        padding: 20px 20px 16px;
+      }
+
+      .sidebar-section {
+        padding: 20px;
+      }
+    }
+
+    /* Animations */
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .card-enter {
+      animation: cardIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Review page styles (existing) */
+    .review-page {
+      display: none;
+      padding: 16px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .review-categories {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .review-categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .review-category {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .review-category h3 {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-category .count {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+    }
+
+    .review-item {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .review-item .word {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .review-item .translation {
+      font-size: 14px;
+    }
+
+    .back-btn {
+      background: var(--accent-dark);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    /* Tips styling */
+    .tips {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: var(--accent-green);
+      backdrop-filter: blur(10px);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar Toggle Button -->
+  <button class="sidebar-toggle" id="sidebarToggle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </button>
+
+  <!-- Sidebar Overlay -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-title">Menu</div>
+      <div class="sidebar-subtitle">Kelola kosakata dan fitur lainnya</div>
+    </div>
+
+    <!-- Add Word Section -->
+    <div class="sidebar-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Tambah Kata
+      </h3>
+
+      <div class="add-word-form">
+        <input id="wordInput" placeholder="Masukkan kata bahasa Inggris..." />
+        <button id="addWordBtn">Tambah Kata</button>
+      </div>
+
+      <div class="tips">
+        💡 Tips: Untuk kata yang tidak ditemukan, gunakan format manual: "kata,terjemahan"
+      </div>
+
+      <div id="errorMessage" class="error-message" style="display: none;"></div>
+    </div>
+
+    <!-- Search & Browse Section -->
+    <div class="sidebar-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        Cari & Jelajahi
+      </h3>
+
+      <input id="search" class="search" placeholder="Cari kata atau arti..." />
+
+      <div class="deck-list" id="list"></div>
+    </div>
+
+    <!-- Translator Section -->
+    <div class="sidebar-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z">
+          </path>
+        </svg>
+        Penerjemah
+      </h3>
+
+      <div class="translator-header">
+        <div class="language-selector">
+          <select id="translateFrom" class="language-select">
+            <option value="en">English</option>
+            <option value="id" selected>Indonesia</option>
+          </select>
+          <button id="swapLanguages" class="swap-btn" title="Tukar bahasa">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="17 1 21 5 17 9"></polyline>
+              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+              <polyline points="7 23 3 19 7 15"></polyline>
+              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+            </svg>
+          </button>
+          <select id="translateTo" class="language-select">
+            <option value="en" selected>English</option>
+            <option value="id">Indonesia</option>
+          </select>
+        </div>
+      </div>
+
+      <textarea id="translateInput" class="translator-input" placeholder="Ketik teks di sini..."></textarea>
+      <div id="charCounter" class="char-counter">0/5000 karakter</div>
+
+      <div id="translateOutput" class="translator-output">
+        <div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>
+      </div>
+
+      <div id="translatorError" class="translator-error" style="display: none;"></div>
+
+      <div class="translator-footer">
+        <div id="qualityIndicator" class="quality-indicator" style="display: none;">
+          <span>Kualitas:</span>
+          <div class="quality-dot"></div>
+          <span id="qualityText">Tinggi</span>
+        </div>
+        <button id="translateBtn" class="translate-btn">Terjemahkan</button>
+      </div>
+    </div>
+
+    <!-- Export/Import & Controls Section -->
+    <div class="sidebar-section">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+        Kontrol & Data
+      </h3>
+
+      <div class="control-panel">
+        <div class="control-row">
+          <label for="filein" class="btn-ghost"
+            style="display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 8px;">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14,2 14,8 20,8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Import CSV
+          </label>
+          <input id="filein" type="file" accept=".csv" style="display:none">
+
+          <button id="export" style="display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 8px;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7,10 12,15 17,10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Export CSV
+          </button>
+        </div>
+
+        <div class="control-row">
+          <button id="reviewBtn"
+            style="background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%); display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 8px;">
+              <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-4"></path>
+              <rect x="13" y="1" width="8" height="8" rx="2"></rect>
+            </svg>
+            Tinjau Kembali
+          </button>
+        </div>
+
+        <div class="control-row">
+          <button id="reset"
+            style="background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%); display: flex; align-items: center; justify-content: center;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              style="margin-right: 8px;">
+              <polyline points="3,6 5,6 21,6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+            Reset Data
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="app" id="mainPage">
+    <header>
+      <div>
+        <h1>VocabSR</h1>
+        <div class="muted">Belajar kosakata dengan teknik pengulangan bertahap</div>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <!-- Stats -->
+      <div class="stats">
+        <div class="pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+          </svg>
+          Total: <span id="total" style="color: var(--accent-purple);">0</span>
+        </div>
+        <div class="pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12,6 12,12 16,14"></polyline>
+          </svg>
+          Hari ini: <span id="due" style="color: var(--accent-orange);">0</span>
+        </div>
+        <div class="pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="16"></line>
+            <line x1="8" y1="12" x2="16" y2="12"></line>
+          </svg>
+          Baru: <span id="new" style="color: var(--accent-green);">0</span>
+        </div>
+        <div class="pill">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22,4 12,14.01 9,11.01"></polyline>
+          </svg>
+          Dipelajari: <span id="studied" style="color: var(--accent);">0</span>
+        </div>
+      </div>
+
+      <!-- Study Section -->
+      <div class="study-section">
+        <div class="card-container">
+          <div class="card-preview">
+            <div class="card" id="card">
+              <div class="card-face card-front">
+                <div class="word" id="front">Siap belajar?</div>
+                <div class="translation">Klik "Mulai Belajar" untuk memulai</div>
+              </div>
+              <div class="card-face card-back">
+                <div class="word" id="back"></div>
+                <div class="translation" id="translation"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="study-controls">
+            <div class="card-actions">
+              <button id="flip" class="btn-ghost">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right: 8px;">
+                  <path d="M14.828 14.828a4 4 0 0 1-5.656 0M9 10h1M15 10h1M9 14h1M15 14h1"></path>
+                  <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9Z"></path>
+                </svg>
+                Balik (Space)
+              </button>
+              <button id="skip" class="btn-ghost">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right: 8px;">
+                  <polygon points="5,4 15,12 5,20"></polygon>
+                  <line x1="19" y1="5" x2="19" y2="19"></line>
+                </svg>
+                Lewati
+              </button>
+              <button id="studyNext"
+                style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-green) 100%); display: flex; align-items: center; justify-content: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  style="margin-right: 8px;">
+                  <polygon points="5,3 19,12 5,21"></polygon>
+                </svg>
+                Mulai Belajar
+              </button>
+            </div>
+
+            <div id="studyPanel" style="display:none">
+              <div class="rating-actions">
+                <button class="rate-btn again" data-score="0">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-bottom: 4px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                  Lupa
+                  <small>(1)</small>
+                </button>
+                <button class="rate-btn hard" data-score="1">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-bottom: 4px;">
+                    <path
+                      d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z">
+                    </path>
+                  </svg>
+                  Susah
+                  <small>(2)</small>
+                </button>
+                <button class="rate-btn good" data-score="2">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-bottom: 4px;">
+                    <polyline points="20,6 9,17 4,12"></polyline>
+                  </svg>
+                  Bagus
+                  <small>(3)</small>
+                </button>
+                <button class="rate-btn easy" data-score="3">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    style="margin-bottom: 4px;">
+                    <path d="M8 19a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4h1l3-3 3 3h1a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4"></path>
+                    <circle cx="12" cy="12" r="2"></circle>
+                  </svg>
+                  Mudah
+                  <small>(4)</small>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div
+        style="background: linear-gradient(90deg, var(--accent) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; font-size: 16px; margin-bottom: 8px;">
+        VocabSR © 2025
+      </div>
+      <div class="muted">Dibuat dengan ❤️ untuk belajar bahasa</div>
+    </footer>
+  </div>
+
+  <!-- Review Page -->
+  <div class="app review-page" id="reviewPage">
+    <div class="review-header">
+      <h1
+        style="background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Tinjau Kembali Kosakata
+      </h1>
+      <button class="back-btn" id="backBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          style="margin-right: 8px;">
+          <polyline points="15,18 9,12 15,6"></polyline>
+        </svg>
+        Kembali
+      </button>
+    </div>
+
+    <div class="review-categories" id="reviewCategories">
+      <button class="rate-btn again" data-score="0">Lupa</button>
+      <button class="rate-btn hard" data-score="1">Susah</button>
+      <button class="rate-btn good" data-score="2">Bagus</button>
+      <button class="rate-btn easy" data-score="3">Mudah</button>
+    </div>
+
+
+    <script>
+      // Sidebar functionality
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+      sidebar.classList.toggle('open');
+      sidebarOverlay.classList.toggle('active');
+
+      // Update toggle icon with smooth transition
+      const icon = sidebarToggle.querySelector('svg');
+      if (sidebar.classList.contains('open')) {
+        icon.innerHTML = `<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>`;
+      } else {
+        icon.innerHTML = `<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>`;
+      }
+    }
+
+    sidebarToggle.addEventListener('click', toggleSidebar);
+    sidebarOverlay.addEventListener('click', toggleSidebar);
+
+    // Close sidebar on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        toggleSidebar();
+      }
+    });
+
+    </script>

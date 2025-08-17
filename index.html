@@ -15,6 +15,7 @@
       --accent-green: #10b981;
       --accent-pink: #ec4899;
       --accent-orange: #f59e0b;
+      --accent-red: #ef4444;
       --muted: #94a3b8;
       --text: #e2e8f0;
       --text-light: #f8fafc;
@@ -124,15 +125,17 @@
       position: fixed;
       top: 0;
       left: -420px;
-      width: 400px;
+      width: 380px;
       height: 100vh;
-      background: rgba(15, 23, 36, 0.95);
+      background: rgba(15, 23, 36, 0.98);
       backdrop-filter: blur(20px) saturate(1.2);
       border-right: 1px solid var(--border);
       z-index: 1000;
       transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       overflow-y: auto;
       box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
     }
 
     .sidebar.open {
@@ -158,6 +161,9 @@
       border-bottom: 1px solid var(--border);
       background: var(--gradient-bg);
       color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
 
     .sidebar-title {
@@ -223,10 +229,7 @@
       margin: 0 auto;
       padding: 24px;
       transition: all 0.3s ease;
-    }
-
-    .app.sidebar-open {
-      margin-left: 200px;
+      position: relative;
     }
 
     /* Header */
@@ -520,19 +523,19 @@
     }
 
     .again {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: linear-gradient(135deg, var(--accent-red) 0%, #dc2626 100%);
     }
 
     .hard {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      background: linear-gradient(135deg, var(--accent-orange) 0%, #d97706 100%);
     }
 
     .good {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(135deg, var(--accent-green) 0%, #059669 100%);
     }
 
     .easy {
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
     }
 
     /* Sidebar Form Elements */
@@ -815,10 +818,6 @@
         padding: 16px;
       }
 
-      .app.sidebar-open {
-        margin-left: 0;
-      }
-
       h1 {
         font-size: 36px;
       }
@@ -876,7 +875,7 @@
       animation: cardIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Review page styles (existing) */
+    /* Review page styles */
     .review-page {
       display: none;
       padding: 16px;
@@ -887,6 +886,8 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .review-categories {
@@ -915,6 +916,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      color: var(--text-light);
     }
 
     .review-category .count {
@@ -932,6 +934,13 @@
       justify-content: space-between;
       align-items: center;
       background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border);
+      transition: all 0.2s ease;
+    }
+
+    .review-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
     }
 
     .review-item .word {
@@ -941,6 +950,7 @@
 
     .review-item .translation {
       font-size: 14px;
+      color: var(--muted);
     }
 
     .back-btn {
@@ -950,6 +960,15 @@
       padding: 8px 16px;
       border-radius: var(--radius);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
     }
 
     /* Tips styling */
@@ -971,6 +990,30 @@
       font-size: 14px;
       text-align: center;
       padding: 20px 0;
+    }
+
+    /* Colorful category headers */
+    .category-again h3 {
+      color: var(--accent-red);
+    }
+
+    .category-hard h3 {
+      color: var(--accent-orange);
+    }
+
+    .category-good h3 {
+      color: var(--accent-green);
+    }
+
+    .category-easy h3 {
+      color: var(--accent);
+    }
+
+    /* Scrollable content */
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 24px;
     }
   </style>
 </head>
@@ -996,154 +1039,157 @@
       <div class="sidebar-subtitle">Kelola kosakata dan fitur lainnya</div>
     </div>
 
-    <!-- Add Word Section -->
-    <div class="sidebar-section">
-      <h3>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-        Tambah Kata
-      </h3>
+    <!-- Scrollable Content -->
+    <div class="sidebar-content">
+      <!-- Add Word Section -->
+      <div class="sidebar-section">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Tambah Kata
+        </h3>
 
-      <div class="add-word-form">
-        <input id="wordInput" placeholder="Masukkan kata bahasa Inggris..." />
-        <button id="addWordBtn">Tambah Kata</button>
+        <div class="add-word-form">
+          <input id="wordInput" placeholder="Masukkan kata bahasa Inggris..." />
+          <button id="addWordBtn">Tambah Kata</button>
+        </div>
+
+        <div class="tips">
+          💡 Tips: Untuk kata yang tidak ditemukan, gunakan format manual: "kata,terjemahan"
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none;"></div>
       </div>
 
-      <div class="tips">
-        💡 Tips: Untuk kata yang tidak ditemukan, gunakan format manual: "kata,terjemahan"
+      <!-- Search & Browse Section -->
+      <div class="sidebar-section">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          Cari & Jelajahi
+        </h3>
+
+        <input id="search" class="search" placeholder="Cari kata atau arti..." />
+
+        <div class="deck-list" id="list"></div>
       </div>
 
-      <div id="errorMessage" class="error-message" style="display: none;"></div>
-    </div>
+      <!-- Translator Section -->
+      <div class="sidebar-section">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z">
+            </path>
+          </svg>
+          Penerjemah
+        </h3>
 
-    <!-- Search & Browse Section -->
-    <div class="sidebar-section">
-      <h3>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-        Cari & Jelajahi
-      </h3>
+        <div class="translator-header">
+          <div class="language-selector">
+            <select id="translateFrom" class="language-select">
+              <option value="en">English</option>
+              <option value="id" selected>Indonesia</option>
+            </select>
+            <button id="swapLanguages" class="swap-btn" title="Tukar bahasa">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="17,1 21,5 17,9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7,23 3,19 7,15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+            </button>
+            <select id="translateTo" class="language-select">
+              <option value="en" selected>English</option>
+              <option value="id">Indonesia</option>
+            </select>
+          </div>
+        </div>
 
-      <input id="search" class="search" placeholder="Cari kata atau arti..." />
+        <textarea id="translateInput" class="translator-input" placeholder="Ketik teks di sini..."></textarea>
+        <div id="charCounter" class="char-counter">0/5000 karakter</div>
 
-      <div class="deck-list" id="list"></div>
-    </div>
+        <div id="translateOutput" class="translator-output">
+          <div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>
+        </div>
 
-    <!-- Translator Section -->
-    <div class="sidebar-section">
-      <h3>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z">
-          </path>
-        </svg>
-        Penerjemah
-      </h3>
+        <div id="translatorError" class="translator-error" style="display: none;"></div>
 
-      <div class="translator-header">
-        <div class="language-selector">
-          <select id="translateFrom" class="language-select">
-            <option value="en">English</option>
-            <option value="id" selected>Indonesia</option>
-          </select>
-          <button id="swapLanguages" class="swap-btn" title="Tukar bahasa">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="17 1 21 5 17 9"></polyline>
-              <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-              <polyline points="7 23 3 19 7 15"></polyline>
-              <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-            </svg>
-          </button>
-          <select id="translateTo" class="language-select">
-            <option value="en" selected>English</option>
-            <option value="id">Indonesia</option>
-          </select>
+        <div class="translator-footer">
+          <div id="qualityIndicator" class="quality-indicator" style="display: none;">
+            <span>Kualitas:</span>
+            <div class="quality-dot"></div>
+            <span id="qualityText">Tinggi</span>
+          </div>
+          <button id="translateBtn" class="translate-btn">Terjemahkan</button>
         </div>
       </div>
 
-      <textarea id="translateInput" class="translator-input" placeholder="Ketik teks di sini..."></textarea>
-      <div id="charCounter" class="char-counter">0/5000 karakter</div>
+      <!-- Export/Import & Controls Section -->
+      <div class="sidebar-section">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+          </svg>
+          Kontrol & Data
+        </h3>
 
-      <div id="translateOutput" class="translator-output">
-        <div style="color: var(--muted);">Terjemahan akan muncul di sini...</div>
-      </div>
+        <div class="control-panel">
+          <div class="control-row">
+            <label for="filein" class="btn-ghost"
+              style="display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 8px;">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14,2 14,8 20,8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              Import CSV
+            </label>
+            <input id="filein" type="file" accept=".csv" style="display:none">
 
-      <div id="translatorError" class="translator-error" style="display: none;"></div>
+            <button id="export" style="display: flex; align-items: center; justify-content: center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 8px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7,10 12,15 17,10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Export CSV
+            </button>
+          </div>
 
-      <div class="translator-footer">
-        <div id="qualityIndicator" class="quality-indicator" style="display: none;">
-          <span>Kualitas:</span>
-          <div class="quality-dot"></div>
-          <span id="qualityText">Tinggi</span>
-        </div>
-        <button id="translateBtn" class="translate-btn">Terjemahkan</button>
-      </div>
-    </div>
+          <div class="control-row">
+            <button id="reviewBtn"
+              style="background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%); display: flex; align-items: center; justify-content: center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 8px;">
+                <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-4"></path>
+                <rect x="13" y="1" width="8" height="8" rx="2"></rect>
+              </svg>
+              Tinjau Kembali
+            </button>
+          </div>
 
-    <!-- Export/Import & Controls Section -->
-    <div class="sidebar-section">
-      <h3>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path
-            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-          </path>
-        </svg>
-        Kontrol & Data
-      </h3>
-
-      <div class="control-panel">
-        <div class="control-row">
-          <label for="filein" class="btn-ghost"
-            style="display: flex; align-items: center; justify-content: center; text-decoration: none; cursor: pointer;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              style="margin-right: 8px;">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14,2 14,8 20,8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-            </svg>
-            Import CSV
-          </label>
-          <input id="filein" type="file" accept=".csv" style="display:none">
-
-          <button id="export" style="display: flex; align-items: center; justify-content: center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              style="margin-right: 8px;">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7,10 12,15 17,10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Export CSV
-          </button>
-        </div>
-
-        <div class="control-row">
-          <button id="reviewBtn"
-            style="background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%); display: flex; align-items: center; justify-content: center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              style="margin-right: 8px;">
-              <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2v-4"></path>
-              <rect x="13" y="1" width="8" height="8" rx="2"></rect>
-            </svg>
-            Tinjau Kembali
-          </button>
-        </div>
-
-        <div class="control-row">
-          <button id="reset"
-            style="background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%); display: flex; align-items: center; justify-content: center;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              style="margin-right: 8px;">
-              <polyline points="3,6 5,6 21,6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-            Reset Data
-          </button>
+          <div class="control-row">
+            <button id="reset"
+              style="background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%); display: flex; align-items: center; justify-content: center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                style="margin-right: 8px;">
+                <polyline points="3,6 5,6 21,6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Reset Data
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1199,7 +1245,6 @@
             <div class="card" id="card">
               <div class="card-face card-front">
                 <div class="word" id="front">Siap belajar?</div>
-                <div class="translation">Klik "Mulai Belajar" untuk memulai</div>
               </div>
               <div class="card-face card-back">
                 <div class="word" id="back"></div>
@@ -1313,15 +1358,6 @@
       <button class="rate-btn good" data-score="2">Bagus</button>
       <button class="rate-btn easy" data-score="3">Mudah</button>
     </div>
-
-    <footer>
-      <div
-        style="background: linear-gradient(90deg, var(--accent) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; font-size: 16px; margin-bottom: 8px;">
-        VocabSR © 2025
-      </div>
-      <div class="muted">Dibuat dengan ❤️ untuk belajar bahasa</div>
-    </footer>
-  </div>
 
   <script type="module">
     // Import the functions you need from the SDKs you need
@@ -6754,33 +6790,43 @@
       saveToStorage();
     }
 
-    // Sidebar functionality
+    // Sidebar toggle functionality
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const mainPage = document.getElementById('mainPage');
+    const reviewPage = document.getElementById('reviewPage');
+    const reviewBtn = document.getElementById('reviewBtn');
+    const backBtn = document.getElementById('backBtn');
 
-    function toggleSidebar() {
+    // Toggle sidebar
+    sidebarToggle.addEventListener('click', () => {
       sidebar.classList.toggle('open');
       sidebarOverlay.classList.toggle('active');
-
-      // Update toggle icon with smooth transition
-      const icon = sidebarToggle.querySelector('svg');
-      if (sidebar.classList.contains('open')) {
-        icon.innerHTML = `<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>`;
-      } else {
-        icon.innerHTML = `<line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line>`;
-      }
-    }
-
-    sidebarToggle.addEventListener('click', toggleSidebar);
-    sidebarOverlay.addEventListener('click', toggleSidebar);
-
-    // Close sidebar on escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-        toggleSidebar();
-      }
     });
+
+    // Close sidebar when clicking overlay
+    sidebarOverlay.addEventListener('click', () => {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+    });
+
+    // Review page navigation
+    reviewBtn.addEventListener('click', () => {
+      mainPage.style.display = 'none';
+      reviewPage.style.display = 'block';
+      // Close sidebar when opening review page
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('active');
+      // Populate review data (mock data for demo)
+      populateReviewData();
+    });
+
+    backBtn.addEventListener('click', () => {
+      reviewPage.style.display = 'none';
+      mainPage.style.display = 'block';
+    });
+
 
     function saveToStorage() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
