@@ -80,15 +80,20 @@
     .translator-output,
     .review-category,
     .tips {
-      backdrop-filter: blur(5px) saturate(1.1); /* Reduced from 8px to 5px */
-      -webkit-backdrop-filter: blur(5px) saturate(1.1); /* Safari support */
+      backdrop-filter: blur(5px) saturate(1.1);
+      /* Reduced from 8px to 5px */
+      -webkit-backdrop-filter: blur(5px) saturate(1.1);
+      /* Safari support */
     }
 
     /* Optimized animation with fewer properties */
     @keyframes float {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: translateY(0px);
       }
+
       50% {
         transform: translateY(-8px);
       }
@@ -108,7 +113,8 @@
       border-radius: 50%;
       cursor: pointer;
       box-shadow: var(--shadow-lg);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease; /* Split transitions */
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+      /* Split transitions */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -137,8 +143,10 @@
       width: 380px;
       height: 100vh;
       background: rgba(15, 23, 36, 0.98);
-      backdrop-filter: blur(12px) saturate(1.2); /* Reduced from 20px */
-      -webkit-backdrop-filter: blur(12px) saturate(1.2); /* Safari support */
+      backdrop-filter: blur(12px) saturate(1.2);
+      /* Reduced from 20px */
+      -webkit-backdrop-filter: blur(12px) saturate(1.2);
+      /* Safari support */
       border-right: 1px solid var(--border);
       z-index: 1000;
       transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -153,7 +161,8 @@
     }
 
     .sidebar::-webkit-scrollbar {
-      width: 6px; /* Reduced from 8px */
+      width: 6px;
+      /* Reduced from 8px */
     }
 
     .sidebar::-webkit-scrollbar-track {
@@ -162,12 +171,14 @@
 
     .sidebar::-webkit-scrollbar-thumb {
       background: var(--accent);
-      border-radius: 3px; /* Reduced from 4px */
+      border-radius: 3px;
+      /* Reduced from 4px */
     }
 
     /* Sidebar Header */
     .sidebar-header {
-      padding: 20px 20px 16px; /* Slightly reduced padding */
+      padding: 20px 20px 16px;
+      /* Slightly reduced padding */
       border-bottom: 1px solid var(--border);
       background: var(--gradient-bg);
       color: white;
@@ -177,19 +188,23 @@
     }
 
     .sidebar-title {
-      font-size: 22px; /* Slightly reduced */
+      font-size: 22px;
+      /* Slightly reduced */
       font-weight: 700;
-      margin-bottom: 6px; /* Reduced */
+      margin-bottom: 6px;
+      /* Reduced */
     }
 
     .sidebar-subtitle {
-      font-size: 13px; /* Slightly reduced */
+      font-size: 13px;
+      /* Slightly reduced */
       opacity: 0.9;
     }
 
     /* Sidebar Sections */
     .sidebar-section {
-      padding: 20px; /* Reduced from 24px */
+      padding: 20px;
+      /* Reduced from 24px */
       border-bottom: 1px solid var(--border);
     }
 
@@ -199,17 +214,22 @@
 
     .sidebar-section h3 {
       color: var(--text-light);
-      font-size: 17px; /* Slightly reduced */
+      font-size: 17px;
+      /* Slightly reduced */
       font-weight: 600;
-      margin-bottom: 16px; /* Reduced */
+      margin-bottom: 16px;
+      /* Reduced */
       display: flex;
       align-items: center;
-      gap: 8px; /* Reduced */
+      gap: 8px;
+      /* Reduced */
     }
 
     .sidebar-section h3 svg {
-      width: 18px; /* Slightly reduced */
-      height: 18px; /* Slightly reduced */
+      width: 18px;
+      /* Slightly reduced */
+      height: 18px;
+      /* Slightly reduced */
       color: var(--accent);
     }
 
@@ -226,7 +246,8 @@
       visibility: hidden;
       transition: all 0.3s ease;
       backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px); /* Safari support */
+      -webkit-backdrop-filter: blur(2px);
+      /* Safari support */
     }
 
     .sidebar-overlay.active {
@@ -238,7 +259,8 @@
     .app {
       max-width: 900px;
       margin: 0 auto;
-      padding: 20px; /* Reduced from 24px */
+      padding: 20px;
+      /* Reduced from 24px */
       transition: all 0.3s ease;
       position: relative;
     }
@@ -246,56 +268,72 @@
     /* Header */
     header {
       text-align: center;
-      margin-bottom: 32px; /* Reduced from 40px */
-      padding: 16px 0; /* Reduced */
+      margin-bottom: 32px;
+      /* Reduced from 40px */
+      padding: 16px 0;
+      /* Reduced */
     }
 
     h1 {
-      font-size: 42px; /* Slightly reduced */
+      font-size: 42px;
+      /* Slightly reduced */
       font-weight: 800;
       background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 50%, #ec4899 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 10px; /* Reduced */
-      text-shadow: 0 0 20px rgba(139, 92, 246, 0.3); /* Reduced blur */
-      letter-spacing: -0.5px; /* Reduced */
+      margin-bottom: 10px;
+      /* Reduced */
+      text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+      /* Reduced blur */
+      letter-spacing: -0.5px;
+      /* Reduced */
     }
 
     .muted {
       color: var(--muted);
-      font-size: 16px; /* Reduced */
+      font-size: 16px;
+      /* Reduced */
       font-weight: 400;
-      margin-top: 6px; /* Reduced */
+      margin-top: 6px;
+      /* Reduced */
     }
 
     /* Stats */
     .stats {
       display: flex;
-      gap: 12px; /* Reduced */
+      gap: 12px;
+      /* Reduced */
       justify-content: center;
       flex-wrap: wrap;
-      margin-bottom: 24px; /* Reduced */
+      margin-bottom: 24px;
+      /* Reduced */
     }
 
     .pill {
       background: var(--glass-strong);
-      backdrop-filter: blur(10px); /* Reduced from 15px */
-      -webkit-backdrop-filter: blur(10px); /* Safari support */
-      padding: 12px 20px; /* Reduced */
+      backdrop-filter: blur(10px);
+      /* Reduced from 15px */
+      -webkit-backdrop-filter: blur(10px);
+      /* Safari support */
+      padding: 12px 20px;
+      /* Reduced */
       border-radius: 999px;
       border: 1px solid var(--border);
-      font-size: 14px; /* Slightly reduced */
+      font-size: 14px;
+      /* Slightly reduced */
       font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 6px; /* Reduced */
+      gap: 6px;
+      /* Reduced */
       box-shadow: var(--shadow);
       transition: all 0.3s ease;
       cursor: default;
     }
 
     .pill:hover {
-      transform: translateY(-2px); /* Reduced movement */
+      transform: translateY(-2px);
+      /* Reduced movement */
       box-shadow: var(--shadow-lg);
     }
 
@@ -305,8 +343,10 @@
     }
 
     .pill svg {
-      width: 16px; /* Slightly reduced */
-      height: 16px; /* Slightly reduced */
+      width: 16px;
+      /* Slightly reduced */
+      height: 16px;
+      /* Slightly reduced */
       opacity: 0.8;
     }
 
@@ -315,7 +355,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 24px; /* Reduced */
+      gap: 24px;
+      /* Reduced */
     }
 
     /* Card Study Section */
@@ -325,18 +366,22 @@
     }
 
     .card-container {
-      margin-bottom: 24px; /* Reduced */
+      margin-bottom: 24px;
+      /* Reduced */
     }
 
     .card-preview {
-      height: 300px; /* Slightly reduced */
+      height: 300px;
+      /* Slightly reduced */
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: var(--radius-lg);
       background: var(--glass);
-      backdrop-filter: blur(12px); /* Reduced from 20px */
-      -webkit-backdrop-filter: blur(12px); /* Safari support */
+      backdrop-filter: blur(12px);
+      /* Reduced from 20px */
+      -webkit-backdrop-filter: blur(12px);
+      /* Safari support */
       border: 1px solid var(--border);
       perspective: 1000px;
       box-shadow: var(--shadow-lg);
@@ -361,7 +406,8 @@
       height: 75%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Slightly slower */
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      /* Slightly slower */
       border-radius: var(--radius);
     }
 
@@ -378,10 +424,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 28px; /* Slightly reduced */
+      padding: 28px;
+      /* Slightly reduced */
       text-align: center;
       border-radius: var(--radius);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Reduced shadow */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      /* Reduced shadow */
     }
 
     .card-front {
@@ -396,16 +444,20 @@
     }
 
     .word {
-      font-size: 36px; /* Reduced from 42px */
+      font-size: 36px;
+      /* Reduced from 42px */
       font-weight: 700;
       color: white;
-      margin-bottom: 12px; /* Reduced */
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Reduced shadow */
+      margin-bottom: 12px;
+      /* Reduced */
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      /* Reduced shadow */
       letter-spacing: -0.5px;
     }
 
     .translation {
-      font-size: 20px; /* Reduced from 22px */
+      font-size: 20px;
+      /* Reduced from 22px */
       color: rgba(255, 255, 255, 0.9);
       font-weight: 400;
     }
@@ -415,12 +467,15 @@
       background: var(--accent);
       border: none;
       color: white;
-      padding: 12px 18px; /* Slightly reduced */
+      padding: 12px 18px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       cursor: pointer;
       font-weight: 600;
-      font-size: 14px; /* Slightly reduced */
-      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Split transitions */
+      font-size: 14px;
+      /* Slightly reduced */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      /* Split transitions */
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
@@ -434,7 +489,8 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s; /* Slightly faster */
+      transition: left 0.5s;
+      /* Slightly faster */
     }
 
     button:hover::before {
@@ -457,8 +513,10 @@
 
     .btn-ghost {
       background: var(--glass-strong);
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
       border: 1px solid var(--border);
       color: var(--text);
     }
@@ -471,12 +529,14 @@
     .study-controls {
       display: flex;
       flex-direction: column;
-      gap: 16px; /* Reduced */
+      gap: 16px;
+      /* Reduced */
     }
 
     .card-actions {
       display: flex;
-      gap: 10px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -484,23 +544,27 @@
     .rating-actions {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
     }
 
     .rate-btn {
-      padding: 16px 10px; /* Slightly reduced */
+      padding: 16px 10px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       border: none;
       cursor: pointer;
       font-weight: 600;
       color: white;
       transition: all 0.3s ease;
-      font-size: 14px; /* Slightly reduced */
+      font-size: 14px;
+      /* Slightly reduced */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 80px; /* Slightly reduced */
+      min-height: 80px;
+      /* Slightly reduced */
       box-shadow: var(--shadow);
       position: relative;
       overflow: hidden;
@@ -514,7 +578,8 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s; /* Slightly faster */
+      transition: left 0.5s;
+      /* Slightly faster */
     }
 
     .rate-btn:hover::before {
@@ -522,7 +587,8 @@
     }
 
     .rate-btn:hover {
-      transform: translateY(-2px); /* Reduced movement */
+      transform: translateY(-2px);
+      /* Reduced movement */
       box-shadow: var(--shadow-lg);
     }
 
@@ -531,7 +597,8 @@
     }
 
     .rate-btn small {
-      font-size: 11px; /* Slightly reduced */
+      font-size: 11px;
+      /* Slightly reduced */
       opacity: 0.9;
       margin-top: 4px;
     }
@@ -555,8 +622,10 @@
     /* Sidebar Form Elements */
     .add-word-form {
       display: flex;
-      gap: 10px; /* Reduced */
-      margin-bottom: 16px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
+      margin-bottom: 16px;
+      /* Reduced */
       flex-direction: column;
     }
 
@@ -565,12 +634,15 @@
     .translator-input,
     .language-select {
       width: 100%;
-      padding: 10px 14px; /* Slightly reduced */
+      padding: 10px 14px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       border: 1px solid var(--border);
       background: var(--glass);
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
       color: var(--text);
       font-size: 14px;
       transition: all 0.3s ease;
@@ -581,23 +653,28 @@
     .translator-input:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2); /* Reduced spread */
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+      /* Reduced spread */
       transform: translateY(-1px);
     }
 
     .search {
-      margin-bottom: 12px; /* Reduced */
+      margin-bottom: 12px;
+      /* Reduced */
     }
 
     /* Deck List */
     .deck-list {
-      max-height: 280px; /* Slightly reduced */
+      max-height: 280px;
+      /* Slightly reduced */
       overflow-y: auto;
-      padding-right: 6px; /* Reduced */
+      padding-right: 6px;
+      /* Reduced */
     }
 
     .deck-list::-webkit-scrollbar {
-      width: 5px; /* Reduced from 6px */
+      width: 5px;
+      /* Reduced from 6px */
     }
 
     .deck-list::-webkit-scrollbar-track {
@@ -611,13 +688,17 @@
     }
 
     .list-item {
-      padding: 12px 14px; /* Slightly reduced */
+      padding: 12px 14px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       background: var(--glass);
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
       border: 1px solid var(--border);
-      margin-bottom: 8px; /* Reduced */
+      margin-bottom: 8px;
+      /* Reduced */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -626,19 +707,22 @@
     }
 
     .list-item:hover {
-      transform: translateX(4px); /* Reduced movement */
+      transform: translateX(4px);
+      /* Reduced movement */
       background: var(--glass-strong);
       border-color: var(--accent);
       box-shadow: var(--shadow);
     }
 
     .list-item:active {
-      transform: translateX(3px) scale(0.98); /* Reduced movement */
+      transform: translateX(3px) scale(0.98);
+      /* Reduced movement */
     }
 
     .empty-state {
       text-align: center;
-      padding: 20px; /* Reduced */
+      padding: 20px;
+      /* Reduced */
       color: var(--muted);
       font-style: italic;
     }
@@ -648,13 +732,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px; /* Reduced */
+      margin-bottom: 12px;
+      /* Reduced */
       flex-wrap: wrap;
-      gap: 10px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
     }
 
     .translator-title {
-      font-size: 15px; /* Slightly reduced */
+      font-size: 15px;
+      /* Slightly reduced */
       font-weight: 600;
       color: var(--text-light);
     }
@@ -662,12 +749,14 @@
     .language-selector {
       display: flex;
       align-items: center;
-      gap: 6px; /* Reduced */
+      gap: 6px;
+      /* Reduced */
     }
 
     .language-select {
       min-width: 60px;
-      padding: 7px 10px; /* Slightly reduced */
+      padding: 7px 10px;
+      /* Slightly reduced */
       font-size: 13px;
     }
 
@@ -676,8 +765,10 @@
       border: 1px solid var(--border);
       color: var(--accent);
       cursor: pointer;
-      padding: 7px; /* Slightly reduced */
-      border-radius: 6px; /* Reduced */
+      padding: 7px;
+      /* Slightly reduced */
+      border-radius: 6px;
+      /* Reduced */
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
@@ -691,23 +782,30 @@
     }
 
     .translator-input {
-      min-height: 90px; /* Slightly reduced */
+      min-height: 90px;
+      /* Slightly reduced */
       resize: vertical;
-      margin-bottom: 8px; /* Reduced */
+      margin-bottom: 8px;
+      /* Reduced */
     }
 
     .translator-output {
       width: 100%;
-      min-height: 90px; /* Slightly reduced */
-      padding: 10px 14px; /* Slightly reduced */
+      min-height: 90px;
+      /* Slightly reduced */
+      padding: 10px 14px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       background: var(--glass);
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
       border: 1px solid var(--border);
       color: var(--text);
       font-size: 14px;
-      margin-bottom: 10px; /* Reduced */
+      margin-bottom: 10px;
+      /* Reduced */
     }
 
     .translator-footer {
@@ -715,14 +813,16 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
     }
 
     .translate-btn {
       background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-pink) 100%);
       color: white;
       border: none;
-      padding: 9px 18px; /* Slightly reduced */
+      padding: 9px 18px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       cursor: pointer;
       font-weight: 600;
@@ -739,17 +839,20 @@
     .control-panel {
       display: flex;
       flex-direction: column;
-      gap: 10px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
     }
 
     .control-row {
       display: flex;
-      gap: 10px; /* Reduced */
+      gap: 10px;
+      /* Reduced */
     }
 
     .control-row button {
       flex: 1;
-      font-size: 13px; /* Slightly reduced */
+      font-size: 13px;
+      /* Slightly reduced */
     }
 
     /* Error Messages */
@@ -757,12 +860,17 @@
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.4);
       color: var(--danger);
-      padding: 10px 14px; /* Slightly reduced */
+      padding: 10px 14px;
+      /* Slightly reduced */
       border-radius: var(--radius);
-      margin-bottom: 12px; /* Reduced */
-      font-size: 13px; /* Slightly reduced */
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      margin-bottom: 12px;
+      /* Reduced */
+      font-size: 13px;
+      /* Slightly reduced */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
     }
 
     .loading {
@@ -774,36 +882,45 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px; /* Reduced */
+      padding: 16px;
+      /* Reduced */
       color: var(--muted);
       font-style: italic;
     }
 
     .translator-error {
       color: var(--danger);
-      font-size: 12px; /* Slightly reduced */
-      margin-top: 6px; /* Reduced */
+      font-size: 12px;
+      /* Slightly reduced */
+      margin-top: 6px;
+      /* Reduced */
     }
 
     /* Character counter */
     .char-counter {
-      font-size: 11px; /* Slightly reduced */
+      font-size: 11px;
+      /* Slightly reduced */
       color: var(--muted);
       text-align: right;
-      margin-bottom: 10px; /* Reduced */
+      margin-bottom: 10px;
+      /* Reduced */
     }
 
     /* Quality indicator */
     .quality-indicator {
       display: flex;
       align-items: center;
-      gap: 5px; /* Reduced */
-      font-size: 11px; /* Slightly reduced */
+      gap: 5px;
+      /* Reduced */
+      font-size: 11px;
+      /* Slightly reduced */
     }
 
     .quality-dot {
-      width: 7px; /* Slightly reduced */
-      height: 7px; /* Slightly reduced */
+      width: 7px;
+      /* Slightly reduced */
+      height: 7px;
+      /* Slightly reduced */
       border-radius: 50%;
       background: var(--muted);
     }
@@ -828,24 +945,30 @@
       }
 
       .sidebar-toggle {
-        width: 48px; /* Reduced */
-        height: 48px; /* Reduced */
+        width: 48px;
+        /* Reduced */
+        height: 48px;
+        /* Reduced */
       }
 
       .app {
-        padding: 12px; /* Reduced */
+        padding: 12px;
+        /* Reduced */
       }
 
       h1 {
-        font-size: 32px; /* Reduced from 36px */
+        font-size: 32px;
+        /* Reduced from 36px */
       }
 
       .word {
-        font-size: 28px; /* Reduced from 32px */
+        font-size: 28px;
+        /* Reduced from 32px */
       }
 
       .translation {
-        font-size: 16px; /* Reduced from 18px */
+        font-size: 16px;
+        /* Reduced from 18px */
       }
 
       .rating-actions {
@@ -853,7 +976,8 @@
       }
 
       .card-preview {
-        height: 220px; /* Reduced from 250px */
+        height: 220px;
+        /* Reduced from 250px */
       }
 
       .stats {
@@ -863,16 +987,19 @@
 
       .pill {
         width: 100%;
-        max-width: 280px; /* Reduced */
+        max-width: 280px;
+        /* Reduced */
         justify-content: center;
       }
 
       .sidebar-header {
-        padding: 16px 16px 12px; /* Reduced */
+        padding: 16px 16px 12px;
+        /* Reduced */
       }
 
       .sidebar-section {
-        padding: 16px; /* Reduced */
+        padding: 16px;
+        /* Reduced */
       }
     }
 
@@ -880,7 +1007,8 @@
     @keyframes cardIn {
       from {
         opacity: 0;
-        transform: translateY(15px) scale(0.96); /* Reduced movement */
+        transform: translateY(15px) scale(0.96);
+        /* Reduced movement */
       }
 
       to {
@@ -890,29 +1018,35 @@
     }
 
     .card-enter {
-      animation: cardIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Slightly faster */
+      animation: cardIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Slightly faster */
     }
 
     /* Review page styles */
     .review-page {
       display: none;
-      padding: 12px; /* Reduced */
+      padding: 12px;
+      /* Reduced */
     }
 
     .review-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px; /* Reduced */
+      margin-bottom: 16px;
+      /* Reduced */
       flex-wrap: wrap;
-      gap: 12px; /* Reduced */
+      gap: 12px;
+      /* Reduced */
     }
 
     .review-categories {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 12px; /* Reduced */
-      margin-top: 16px; /* Reduced */
+      gap: 12px;
+      /* Reduced */
+      margin-top: 16px;
+      /* Reduced */
     }
 
     @media (min-width: 768px) {
@@ -923,32 +1057,41 @@
 
     .review-category {
       background: var(--glass);
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      padding: 14px; /* Reduced */
+      padding: 14px;
+      /* Reduced */
     }
 
     .review-category h3 {
-      margin-bottom: 10px; /* Reduced */
+      margin-bottom: 10px;
+      /* Reduced */
       display: flex;
       align-items: center;
-      gap: 6px; /* Reduced */
+      gap: 6px;
+      /* Reduced */
       color: var(--text-light);
     }
 
     .review-category .count {
       background: rgba(255, 255, 255, 0.1);
-      padding: 2px 6px; /* Slightly reduced */
+      padding: 2px 6px;
+      /* Slightly reduced */
       border-radius: 999px;
-      font-size: 11px; /* Slightly reduced */
+      font-size: 11px;
+      /* Slightly reduced */
     }
 
     .review-item {
-      padding: 8px; /* Reduced */
+      padding: 8px;
+      /* Reduced */
       border-radius: 6px;
-      margin-bottom: 6px; /* Reduced */
+      margin-bottom: 6px;
+      /* Reduced */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -959,16 +1102,19 @@
 
     .review-item:hover {
       background: rgba(255, 255, 255, 0.05);
-      transform: translateY(-1px); /* Reduced movement */
+      transform: translateY(-1px);
+      /* Reduced movement */
     }
 
     .review-item .word {
-      font-size: 15px; /* Slightly reduced */
+      font-size: 15px;
+      /* Slightly reduced */
       font-weight: 500;
     }
 
     .review-item .translation {
-      font-size: 13px; /* Slightly reduced */
+      font-size: 13px;
+      /* Slightly reduced */
       color: var(--muted);
     }
 
@@ -976,18 +1122,21 @@
       background: var(--accent-dark);
       color: white;
       border: none;
-      padding: 7px 14px; /* Slightly reduced */
+      padding: 7px 14px;
+      /* Slightly reduced */
       border-radius: var(--radius);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px; /* Reduced */
+      gap: 6px;
+      /* Reduced */
       transition: all 0.2s ease;
     }
 
     .back-btn:hover {
       background: var(--accent);
-      transform: translateY(-1px); /* Reduced movement */
+      transform: translateY(-1px);
+      /* Reduced movement */
     }
 
     /* Tips styling */
@@ -995,21 +1144,29 @@
       background: rgba(16, 185, 129, 0.15);
       border: 1px solid rgba(16, 185, 129, 0.3);
       border-radius: var(--radius);
-      padding: 10px 14px; /* Slightly reduced */
-      margin-bottom: 12px; /* Reduced */
-      font-size: 12px; /* Slightly reduced */
+      padding: 10px 14px;
+      /* Slightly reduced */
+      margin-bottom: 12px;
+      /* Reduced */
+      font-size: 12px;
+      /* Slightly reduced */
       color: var(--accent-green);
-      backdrop-filter: blur(8px); /* Reduced from 10px */
-      -webkit-backdrop-filter: blur(8px); /* Safari support */
+      backdrop-filter: blur(8px);
+      /* Reduced from 10px */
+      -webkit-backdrop-filter: blur(8px);
+      /* Safari support */
     }
 
     /* Footer */
     footer {
-      margin-top: 32px; /* Reduced */
+      margin-top: 32px;
+      /* Reduced */
       color: var(--muted);
-      font-size: 13px; /* Slightly reduced */
+      font-size: 13px;
+      /* Slightly reduced */
       text-align: center;
-      padding: 16px 0; /* Reduced */
+      padding: 16px 0;
+      /* Reduced */
     }
 
     /* Colorful category headers */
@@ -1033,7 +1190,8 @@
     .sidebar-content {
       flex: 1;
       overflow-y: auto;
-      padding-bottom: 20px; /* Reduced */
+      padding-bottom: 20px;
+      /* Reduced */
     }
   </style>
 </head>
@@ -1426,10 +1584,6 @@
       let queue = [];
       let current = null;
       let isLoading = false;
-
-      // API Keys (replace with your own)
-      const DEEPL_API_KEY = ''; // Get from https://www.deepl.com/pro#developer
-      const GOOGLE_API_KEY = ''; // Get from Google Cloud Console
 
       function todayDate() {
         const d = new Date();
@@ -5936,6 +6090,1088 @@
           ['inspire', 'mengilhami'], ['install', 'memasang'], ['intend', 'berniat'], ['interact', 'berinteraksi'],
           ['interfere', 'mengganggu'], ['introduce', 'memperkenalkan'], ['investigate', 'menyelidiki'],
           ['invite', 'mengundang'],
+          ['ice', 'mendinginkan dengan es'],
+['identify', 'mengidentifikasi'],
+['idle', 'menganggur'],
+['ignite', 'menyalakan'],
+['ignore', 'mengabaikan'],
+['illuminate', 'menerangi'],
+['illustrate', 'menggambarkan'],
+['imagine', 'membayangkan'],
+['imitate', 'meniru'],
+['immerse', 'menyelupkan'],
+['impact', 'memengaruhi'],
+['impair', 'merusak'],
+['impart', 'memberikan'],
+['implement', 'melaksanakan'],
+['imply', 'menyiratkan'],
+['import', 'mengimpor'],
+['impose', 'memaksakan'],
+['impress', 'mengesankan'],
+['improve', 'memperbaiki'],
+['improvise', 'berimprovisasi'],
+['incite', 'menghasut'],
+['include', 'menyertakan'],
+['incorporate', 'menggabungkan'],
+['increase', 'meningkatkan'],
+['indicate', 'menunjukkan'],
+['induce', 'menginduksi'],
+['infect', 'menginfeksi'],
+['infer', 'menyimpulkan'],
+['inflate', 'mengembungkan'],
+['influence', 'memengaruhi'],
+['inform', 'memberitahu'],
+['inhabit', 'menghuni'],
+['inherit', 'mewarisi'],
+['inhibit', 'menghambat'],
+['initiate', 'memulai'],
+['inject', 'menyuntikkan'],
+['injure', 'melukai'],
+['innovate', 'berinovasi'],
+['inquire', 'menanyakan'],
+['inscribe', 'menuliskan'],
+['insert', 'memasukkan'],
+['inspect', 'memeriksa'],
+['inspire', 'menginspirasi'],
+['install', 'memasang'],
+['instruct', 'mengajar'],
+['insult', 'menghina'],
+['integrate', 'mengintegrasikan'],
+['intend', 'bermaksud'],
+['interact', 'berinteraksi'],
+['interfere', 'mengganggu'],
+['interpret', 'menafsirkan'],
+['interrupt', 'menyela'],
+['interview', 'mewawancarai'],
+['intimidate', 'mengintimidasi'],
+['introduce', 'memperkenalkan'],
+['invade', 'menyerang'],
+['invent', 'menciptakan'],
+['invest', 'berinvestasi'],
+['investigate', 'menyelidiki'],
+['invite', 'mengundang'],
+['involve', 'melibatkan'],
+['irrigate', 'mengairi'],
+['irritate', 'mengiritasi'],
+['isolate', 'mengisolasi'],
+['issue', 'mengeluarkan'],
+['itch', 'gatal'],
+['ice-skate', 'bermain ice skating'],
+['idealize', 'mengidealkan'],
+['idolize', 'memujakan'],
+['ignite', 'membakar'],
+['illuminate', 'menyinari'],
+['imagine', 'mengkhayalkan'],
+['immobilize', 'melumpuhkan'],
+['immunize', 'mengimunisasi'],
+['impale', 'menusuk'],
+['impeach', 'memakzulkan'],
+['impede', 'menghalangi'],
+['impel', 'mendorong'],
+['impersonate', 'menyamar'],
+['implant', 'menanamkan'],
+['implicate', 'terlibat'],
+['implore', 'memohon'],
+['incapacitate', 'melumpuhkan'],
+['incarnate', 'mewujudkan'],
+['incline', 'condong'],
+['indict', 'mendakwa'],
+['industrialize', 'mengindustrialisasi'],
+['infiltrate', 'menyusup'],
+['inflict', 'menimbulkan'],
+['infringe', 'melanggar'],
+['ingrain', 'menanamkan'],
+['inhale', 'menghirup'],
+['initialize', 'menginisialisasi'],
+['innovate', 'memperbarui'],
+['inoculate', 'menyuntik vaksin'],
+['inscribe', 'mengukir'],
+['insinuate', 'menyindir'],
+['instigate', 'menghasut'],
+['institute', 'mendirikan'],
+['insulate', 'mengisolasi'],
+['intensify', 'mengintensifkan'],
+['intercept', 'mencegat'],
+['interchange', 'bertukar'],
+['interlock', 'saling mengunci'],
+['intermarry', 'kawin campur'],
+['intermingle', 'berbaur'],
+['internalize', 'menginternalisasi'],
+['interpolate', 'menginterpolasi'],
+['interrogate', 'menginterogasi'],
+['intersect', 'berpotongan'],
+['intervene', 'ikut campur'],
+['interweave', 'menenun'],
+['intoxicate', 'memabukkan'],
+['intrigue', 'menarik perhatian'],
+['intrude', 'mengganggu'],
+['inundate', 'membanjiri'],
+['invalidate', 'membatalkan'],
+['invent', 'mereka cipta'],
+['inventory', 'mendata'],
+['invert', 'membalik'],
+['invoke', 'menyeru'],
+['ionize', 'mengionisasi'],
+['iron', 'menyetrika'],
+['irradiate', 'menyinari'],
+['itemize', 'merinci'],
+['ice', 'es'],
+['iceberg', 'gunung es'],
+['icon', 'ikon'],
+['idea', 'ide'],
+['ideal', 'ideal'],
+['identity', 'identitas'],
+['ideology', 'ideologi'],
+['idiom', 'idiom'],
+['idol', 'berhala'],
+['ignition', 'penyalaan'],
+['ignorance', 'ketidaktahuan'],
+['illness', 'penyakit'],
+['illusion', 'ilusi'],
+['image', 'gambar'],
+['imagination', 'imajinasi'],
+['imitation', 'tiruan'],
+['impact', 'dampak'],
+['impediment', 'hambatan'],
+['implement', 'alat'],
+['implication', 'implikasi'],
+['importance', 'kepentingan'],
+['impression', 'kesan'],
+['improvement', 'perbaikan'],
+['impulse', 'dorongan'],
+['inch', 'inci'],
+['incident', 'kejadian'],
+['income', 'pendapatan'],
+['increase', 'peningkatan'],
+['independence', 'kemerdekaan'],
+['index', 'indeks'],
+['indication', 'indikasi'],
+['individual', 'individu'],
+['industry', 'industri'],
+['infection', 'infeksi'],
+['influence', 'pengaruh'],
+['information', 'informasi'],
+['ingredient', 'bahan'],
+['inhabitant', 'penduduk'],
+['inheritance', 'warisan'],
+['inhibition', 'hambatan'],
+['initial', 'inisial'],
+['initiative', 'inisiatif'],
+['injection', 'suntikan'],
+['injury', 'cedera'],
+['ink', 'tinta'],
+['inn', 'penginapan'],
+['innocence', 'kepolosan'],
+['innovation', 'inovasi'],
+['input', 'masukan'],
+['inquiry', 'pertanyaan'],
+['insect', 'serangga'],
+['insertion', 'penyisipan'],
+['insight', 'wawasan'],
+['inspection', 'pemeriksaan'],
+['inspiration', 'inspirasi'],
+['installation', 'instalasi'],
+['instance', 'contoh'],
+['instant', 'instan'],
+['instinct', 'naluri'],
+['institute', 'lembaga'],
+['instruction', 'instruksi'],
+['instrument', 'alat'],
+['insult', 'hinaan'],
+['insurance', 'asuransi'],
+['intelligence', 'kecerdasan'],
+['intention', 'niat'],
+['interaction', 'interaksi'],
+['interest', 'minat'],
+['interference', 'gangguan'],
+['interior', 'interior'],
+['interpretation', 'interpretasi'],
+['interruption', 'gangguan'],
+['interval', 'interval'],
+['interview', 'wawancara'],
+['intimacy', 'keintiman'],
+['introduction', 'perkenalan'],
+['invasion', 'invasi'],
+['invention', 'penemuan'],
+['investigation', 'investigasi'],
+['investment', 'investasi'],
+['invitation', 'undangan'],
+['involvement', 'keterlibatan'],
+['iron', 'besi'],
+['irrigation', 'irigasi'],
+['irritation', 'iritasi'],
+['island', 'pulau'],
+['isolation', 'isolasi'],
+['issue', 'masalah'],
+['item', 'barang'],
+['icebox', 'kotak es'],
+['icicle', 'es yang menetes'],
+['icing', 'lapisan es'],
+['idealist', 'idealis'],
+['identification', 'identifikasi'],
+['idiot', 'idiot'],
+['igloo', 'igloo'],
+['igniter', 'pemantik'],
+['illiteracy', 'buta huruf'],
+['illumination', 'penerangan'],
+['imagery', 'citra'],
+['immigrant', 'imigran'],
+['immunity', 'kekebalan'],
+['impeachment', 'pemakzulan'],
+['impedance', 'impedansi'],
+['impeller', 'pendorong'],
+['implementation', 'implementasi'],
+['import', 'impor'],
+['impostor', 'penyamar'],
+['imprisonment', 'pemenjaraan'],
+['impulse', 'impuls'],
+['inadequacy', 'ketidakcukupan'],
+['inauguration', 'pelantikan'],
+['incentive', 'insentif'],
+['incision', 'sayatan'],
+['inclusion', 'penyertaan'],
+['incompetence', 'ketidakmampuan'],
+['inconsistency', 'inkonsistensi'],
+['inconvenience', 'ketidaknyamanan'],
+['incorporation', 'penggabungan'],
+['increment', 'penambahan'],
+['incubation', 'inkubasi'],
+['incubator', 'inkubator'],
+['indemnity', 'ganti rugi'],
+['indentation', 'lekukan'],
+['indicator', 'indikator'],
+['indictment', 'dakwaan'],
+['indifference', 'ketidakpedulian'],
+['indigestion', 'gangguan pencernaan'],
+['indignation', 'kemarahan'],
+['indiscipline', 'ketidakdisiplinan'],
+['induction', 'induksi'],
+['inductor', 'induktor'],
+['inefficiency', 'ketidakefisienan'],
+['inequality', 'ketidaksetaraan'],
+['inertia', 'inersia'],
+['inexperience', 'ketidakberpengalaman'],
+['infancy', 'masa bayi'],
+['infant', 'bayi'],
+['infantry', 'infanteri'],
+['infectious', 'infeksi'],
+['inference', 'kesimpulan'],
+['inferiority', 'inferioritas'],
+['infertility', 'kemandulan'],
+['infiltration', 'infiltrasi'],
+['infinity', 'ketidakhinggaan'],
+['infirmary', 'rumah sakit kecil'],
+['inflammation', 'peradangan'],
+['inflation', 'inflasi'],
+['inflection', 'infleksi'],
+['influx', 'aliran masuk'],
+['infrastructure', 'infrastruktur'],
+['infringement', 'pelanggaran'],
+['infusion', 'infus'],
+['ingenuity', 'kecerdikan'],
+['ingredient', 'ramuan'],
+['inhalation', 'inhalasi'],
+['inhibitor', 'penghambat'],
+['initiation', 'inisiasi'],
+['injector', 'injektor'],
+['inkpad', 'bantalan tinta'],
+['inmate', 'tahanan'],
+['innocence', 'kepolosan'],
+['inoculation', 'inokulasi'],
+['inscription', 'prasasti'],
+['insecurity', 'ketidakamanan'],
+['insider', 'orang dalam'],
+['insignia', 'lencana'],
+['insistence', 'desakan'],
+['insolvency', 'kebangkrutan'],
+['inspector', 'inspektur'],
+['installer', 'pemasang'],
+['instability', 'ketidakstabilan'],
+['institute', 'institut'],
+['instructor', 'instruktur'],
+['insufficiency', 'kekurangan'],
+['insulation', 'isolasi'],
+['insurgency', 'pemberontakan'],
+['intake', 'asupan'],
+['integration', 'integrasi'],
+['integrity', 'integritas'],
+['intellect', 'akal'],
+['intensity', 'intensitas'],
+['intercept', 'intersepsi'],
+['interchange', 'pertukaran'],
+['intercom', 'interkom'],
+['interdependence', 'saling ketergantungan'],
+['interface', 'antarmuka'],
+['interference', 'interferensi'],
+['interjection', 'seruan'],
+['intermediary', 'perantara'],
+['intermission', 'istirahat'],
+['intern', 'magang'],
+['internationalization', 'internasionalisasi'],
+['internet', 'internet'],
+['interpretation', 'penafsiran'],
+['interpreter', 'penerjemah'],
+['interrogation', 'interogasi'],
+['intersection', 'persimpangan'],
+['intervention', 'intervensi'],
+['intestine', 'usus'],
+['intimation', 'petunjuk'],
+['intimidation', 'intimidasi'],
+['intolerance', 'intoleransi'],
+['intonation', 'intonasi'],
+['intoxication', 'keracunan'],
+['intricate', 'rumit'],
+['intrigue', 'intrik'],
+['intrinsic', 'intrinsik'],
+['introvert', 'introvert'],
+['intrusion', 'gangguan'],
+['intuition', 'intuisi'],
+['invalid', 'tidak sah'],
+['invasion', 'serangan'],
+['inventor', 'penemu'],
+['inventory', 'inventaris'],
+['inversion', 'pembalikan'],
+['investor', 'investor'],
+['invocation', 'doa'],
+['invoice', 'faktur'],
+['iodine', 'yodium'],
+['iris', 'iris'],
+['irony', 'ironi'],
+['irregularity', 'ketidakteraturan'],
+['isolation', 'pengasingan'],
+['isthmus', 'tanah genting'],
+['itinerary', 'rencana perjalanan'],
+['icy', 'dingin seperti es'],
+['ideal', 'ideal'],
+['identical', 'identik'],
+['idle', 'menganggur'],
+['ignorant', 'bodoh'],
+['ill', 'sakit'],
+['illegal', 'ilegal'],
+['illegible', 'tidak terbaca'],
+['illiterate', 'buta huruf'],
+['illogical', 'tidak logis'],
+['imaginary', 'imajiner'],
+['imitative', 'meniru'],
+['immature', 'belum dewasa'],
+['immediate', 'segera'],
+['immense', 'sangat besar'],
+['immune', 'kebal'],
+['impatient', 'tidak sabar'],
+['imperfect', 'tidak sempurna'],
+['imperial', 'kekaisaran'],
+['impolite', 'tidak sopan'],
+['important', 'penting'],
+['impossible', 'tidak mungkin'],
+['impressive', 'mengesankan'],
+['improper', 'tidak pantas'],
+['inadequate', 'tidak memadai'],
+['inappropriate', 'tidak tepat'],
+['incapable', 'tidak mampu'],
+['incomplete', 'tidak lengkap'],
+['inconsistent', 'tidak konsisten'],
+['incorrect', 'salah'],
+['incredible', 'luar biasa'],
+['independent', 'mandiri'],
+['indirect', 'tidak langsung'],
+['individual', 'individual'],
+['indoor', 'dalam ruangan'],
+['industrial', 'industri'],
+['ineffective', 'tidak efektif'],
+['inefficient', 'tidak efisien'],
+['inevitable', 'tak terelakkan'],
+['inexperienced', 'tidak berpengalaman'],
+['infamous', 'terkenal buruk'],
+['infant', 'bayi'],
+['inferior', 'rendah'],
+['infinite', 'tak terhingga'],
+['informal', 'tidak resmi'],
+['initial', 'awal'],
+['innocent', 'tidak bersalah'],
+['innovative', 'inovatif'],
+['insane', 'gila'],
+['insecure', 'tidak aman'],
+['inside', 'di dalam'],
+['insignificant', 'tidak penting'],
+['instant', 'instan'],
+['instinctive', 'naluriah'],
+['insufficient', 'tidak cukup'],
+['intellectual', 'intelektual'],
+['intelligent', 'cerdas'],
+['intense', 'intens'],
+['intentional', 'disengaja'],
+['interactive', 'interaktif'],
+['interesting', 'menarik'],
+['internal', 'internal'],
+['international', 'internasional'],
+['intimate', 'intim'],
+['intolerant', 'tidak toleran'],
+['invalid', 'tidak valid'],
+['invisible', 'tidak terlihat'],
+['irregular', 'tidak teratur'],
+['irrelevant', 'tidak relevan'],
+['irresponsible', 'tidak bertanggung jawab'],
+['isolated', 'terisolasi'],
+['ice', 'mendinginkan dengan es'],
+['identify', 'mengidentifikasi'],
+['idle', 'menganggur'],
+['ignite', 'menyalakan'],
+['ignore', 'mengabaikan'],
+['illuminate', 'menerangi'],
+['illustrate', 'menggambarkan'],
+['imagine', 'membayangkan'],
+['imitate', 'meniru'],
+['immerse', 'menyelupkan'],
+['impact', 'memengaruhi'],
+['impair', 'merusak'],
+['impart', 'memberikan'],
+['implement', 'melaksanakan'],
+['imply', 'menyiratkan'],
+['import', 'mengimpor'],
+['impose', 'memaksakan'],
+['impress', 'mengesankan'],
+['improve', 'memperbaiki'],
+['improvise', 'berimprovisasi'],
+['incite', 'menghasut'],
+['include', 'menyertakan'],
+['incorporate', 'menggabungkan'],
+['increase', 'meningkatkan'],
+['indicate', 'menunjukkan'],
+['induce', 'menginduksi'],
+['infect', 'menginfeksi'],
+['infer', 'menyimpulkan'],
+['inflate', 'mengembungkan'],
+['influence', 'memengaruhi'],
+['inform', 'memberitahu'],
+['inhabit', 'menghuni'],
+['inherit', 'mewarisi'],
+['inhibit', 'menghambat'],
+['initiate', 'memulai'],
+['inject', 'menyuntikkan'],
+['injure', 'melukai'],
+['innovate', 'berinovasi'],
+['inquire', 'menanyakan'],
+['inscribe', 'menuliskan'],
+['insert', 'memasukkan'],
+['inspect', 'memeriksa'],
+['inspire', 'menginspirasi'],
+['install', 'memasang'],
+['instruct', 'mengajar'],
+['insult', 'menghina'],
+['integrate', 'mengintegrasikan'],
+['intend', 'bermaksud'],
+['interact', 'berinteraksi'],
+['interfere', 'mengganggu'],
+['interpret', 'menafsirkan'],
+['interrupt', 'menyela'],
+['interview', 'mewawancarai'],
+['intimidate', 'mengintimidasi'],
+['introduce', 'memperkenalkan'],
+['invade', 'menyerang'],
+['invent', 'menciptakan'],
+['invest', 'berinvestasi'],
+['investigate', 'menyelidiki'],
+['invite', 'mengundang'],
+['involve', 'melibatkan'],
+['irrigate', 'mengairi'],
+['irritate', 'mengiritasi'],
+['isolate', 'mengisolasi'],
+['issue', 'mengeluarkan'],
+['itch', 'gatal'],
+['ice-skate', 'bermain ice skating'],
+['idealize', 'mengidealkan'],
+['idolize', 'memujakan'],
+['ignite', 'membakar'],
+['illuminate', 'menyinari'],
+['imagine', 'mengkhayalkan'],
+['immobilize', 'melumpuhkan'],
+['immunize', 'mengimunisasi'],
+['impale', 'menusuk'],
+['impeach', 'memakzulkan'],
+['impede', 'menghalangi'],
+['impel', 'mendorong'],
+['impersonate', 'menyamar'],
+['implant', 'menanamkan'],
+['implicate', 'terlibat'],
+['implore', 'memohon'],
+['incapacitate', 'melumpuhkan'],
+['incarnate', 'mewujudkan'],
+['incline', 'condong'],
+['indict', 'mendakwa'],
+['industrialize', 'mengindustrialisasi'],
+['infiltrate', 'menyusup'],
+['inflict', 'menimbulkan'],
+['infringe', 'melanggar'],
+['ingrain', 'menanamkan'],
+['inhale', 'menghirup'],
+['initialize', 'menginisialisasi'],
+['innovate', 'memperbarui'],
+['inoculate', 'menyuntik vaksin'],
+['inscribe', 'mengukir'],
+['insinuate', 'menyindir'],
+['instigate', 'menghasut'],
+['institute', 'mendirikan'],
+['insulate', 'mengisolasi'],
+['intensify', 'mengintensifkan'],
+['intercept', 'mencegat'],
+['interchange', 'bertukar'],
+['interlock', 'saling mengunci'],
+['intermarry', 'kawin campur'],
+['intermingle', 'berbaur'],
+['internalize', 'menginternalisasi'],
+['interpolate', 'menginterpolasi'],
+['interrogate', 'menginterogasi'],
+['intersect', 'berpotongan'],
+['intervene', 'ikut campur'],
+['interweave', 'menenun'],
+['intoxicate', 'memabukkan'],
+['intrigue', 'menarik perhatian'],
+['intrude', 'mengganggu'],
+['inundate', 'membanjiri'],
+['invalidate', 'membatalkan'],
+['invent', 'mereka cipta'],
+['inventory', 'mendata'],
+['invert', 'membalik'],
+['invoke', 'menyeru'],
+['ionize', 'mengionisasi'],
+['iron', 'menyetrika'],
+['irradiate', 'menyinari'],
+['itemize', 'merinci'],
+['ice', 'es'],
+['iceberg', 'gunung es'],
+['icon', 'ikon'],
+['idea', 'ide'],
+['ideal', 'ideal'],
+['identity', 'identitas'],
+['ideology', 'ideologi'],
+['idiom', 'idiom'],
+['idol', 'berhala'],
+['ignition', 'penyalaan'],
+['ignorance', 'ketidaktahuan'],
+['illness', 'penyakit'],
+['illusion', 'ilusi'],
+['image', 'gambar'],
+['imagination', 'imajinasi'],
+['imitation', 'tiruan'],
+['impact', 'dampak'],
+['impediment', 'hambatan'],
+['implement', 'alat'],
+['implication', 'implikasi'],
+['importance', 'kepentingan'],
+['impression', 'kesan'],
+['improvement', 'perbaikan'],
+['impulse', 'dorongan'],
+['inch', 'inci'],
+['incident', 'kejadian'],
+['income', 'pendapatan'],
+['increase', 'peningkatan'],
+['independence', 'kemerdekaan'],
+['index', 'indeks'],
+['indication', 'indikasi'],
+['individual', 'individu'],
+['industry', 'industri'],
+['infection', 'infeksi'],
+['influence', 'pengaruh'],
+['information', 'informasi'],
+['ingredient', 'bahan'],
+['inhabitant', 'penduduk'],
+['inheritance', 'warisan'],
+['inhibition', 'hambatan'],
+['initial', 'inisial'],
+['initiative', 'inisiatif'],
+['injection', 'suntikan'],
+['injury', 'cedera'],
+['ink', 'tinta'],
+['inn', 'penginapan'],
+['innocence', 'kepolosan'],
+['innovation', 'inovasi'],
+['input', 'masukan'],
+['inquiry', 'pertanyaan'],
+['insect', 'serangga'],
+['insertion', 'penyisipan'],
+['insight', 'wawasan'],
+['inspection', 'pemeriksaan'],
+['inspiration', 'inspirasi'],
+['installation', 'instalasi'],
+['instance', 'contoh'],
+['instant', 'instan'],
+['instinct', 'naluri'],
+['institute', 'lembaga'],
+['instruction', 'instruksi'],
+['instrument', 'alat'],
+['insult', 'hinaan'],
+['insurance', 'asuransi'],
+['intelligence', 'kecerdasan'],
+['intention', 'niat'],
+['interaction', 'interaksi'],
+['interest', 'minat'],
+['interference', 'gangguan'],
+['interior', 'interior'],
+['interpretation', 'interpretasi'],
+['interruption', 'gangguan'],
+['interval', 'interval'],
+['interview', 'wawancara'],
+['intimacy', 'keintiman'],
+['introduction', 'perkenalan'],
+['invasion', 'invasi'],
+['invention', 'penemuan'],
+['investigation', 'investigasi'],
+['investment', 'investasi'],
+['invitation', 'undangan'],
+['involvement', 'keterlibatan'],
+['iron', 'besi'],
+['irrigation', 'irigasi'],
+['irritation', 'iritasi'],
+['island', 'pulau'],
+['isolation', 'isolasi'],
+['issue', 'masalah'],
+['item', 'barang'],
+
+['icebox', 'kotak es'],
+['icicle', 'es yang menetes'],
+['icing', 'lapisan es'],
+['idealist', 'idealis'],
+['identification', 'identifikasi'],
+['idiot', 'idiot'],
+['igloo', 'igloo'],
+['igniter', 'pemantik'],
+['illiteracy', 'buta huruf'],
+['illumination', 'penerangan'],
+['imagery', 'citra'],
+['immigrant', 'imigran'],
+['immunity', 'kekebalan'],
+['impeachment', 'pemakzulan'],
+['impedance', 'impedansi'],
+['impeller', 'pendorong'],
+['implementation', 'implementasi'],
+['import', 'impor'],
+['impostor', 'penyamar'],
+['imprisonment', 'pemenjaraan'],
+['impulse', 'impuls'],
+['inadequacy', 'ketidakcukupan'],
+['inauguration', 'pelantikan'],
+['incentive', 'insentif'],
+['incision', 'sayatan'],
+['inclusion', 'penyertaan'],
+['incompetence', 'ketidakmampuan'],
+['inconsistency', 'inkonsistensi'],
+['inconvenience', 'ketidaknyamanan'],
+['incorporation', 'penggabungan'],
+['increment', 'penambahan'],
+['incubation', 'inkubasi'],
+['incubator', 'inkubator'],
+['indemnity', 'ganti rugi'],
+['indentation', 'lekukan'],
+['indicator', 'indikator'],
+['indictment', 'dakwaan'],
+['indifference', 'ketidakpedulian'],
+['indigestion', 'gangguan pencernaan'],
+['indignation', 'kemarahan'],
+['indiscipline', 'ketidakdisiplinan'],
+['induction', 'induksi'],
+['inductor', 'induktor'],
+['inefficiency', 'ketidakefisienan'],
+['inequality', 'ketidaksetaraan'],
+['inertia', 'inersia'],
+['inexperience', 'ketidakberpengalaman'],
+['infancy', 'masa bayi'],
+['infant', 'bayi'],
+['infantry', 'infanteri'],
+['infectious', 'infeksi'],
+['inference', 'kesimpulan'],
+['inferiority', 'inferioritas'],
+['infertility', 'kemandulan'],
+['infiltration', 'infiltrasi'],
+['infinity', 'ketidakhinggaan'],
+['infirmary', 'rumah sakit kecil'],
+['inflammation', 'peradangan'],
+['inflation', 'inflasi'],
+['inflection', 'infleksi'],
+['influx', 'aliran masuk'],
+['infrastructure', 'infrastruktur'],
+['infringement', 'pelanggaran'],
+['infusion', 'infus'],
+['ingenuity', 'kecerdikan'],
+['ingredient', 'ramuan'],
+['inhalation', 'inhalasi'],
+['inhibitor', 'penghambat'],
+['initiation', 'inisiasi'],
+['injector', 'injektor'],
+['inkpad', 'bantalan tinta'],
+['inmate', 'tahanan'],
+['innocence', 'kepolosan'],
+['inoculation', 'inokulasi'],
+['inscription', 'prasasti'],
+['insecurity', 'ketidakamanan'],
+['insider', 'orang dalam'],
+['insignia', 'lencana'],
+['insistence', 'desakan'],
+['insolvency', 'kebangkrutan'],
+['inspector', 'inspektur'],
+['installer', 'pemasang'],
+['instability', 'ketidakstabilan'],
+['institute', 'institut'],
+['instructor', 'instruktur'],
+['insufficiency', 'kekurangan'],
+['insulation', 'isolasi'],
+['insurgency', 'pemberontakan'],
+['intake', 'asupan'],
+['integration', 'integrasi'],
+['integrity', 'integritas'],
+['intellect', 'akal'],
+['intensity', 'intensitas'],
+['intercept', 'intersepsi'],
+['interchange', 'pertukaran'],
+['intercom', 'interkom'],
+['interdependence', 'saling ketergantungan'],
+['interface', 'antarmuka'],
+['interference', 'interferensi'],
+['interjection', 'seruan'],
+['intermediary', 'perantara'],
+['intermission', 'istirahat'],
+['intern', 'magang'],
+['internationalization', 'internasionalisasi'],
+['internet', 'internet'],
+['interpretation', 'penafsiran'],
+['interpreter', 'penerjemah'],
+['interrogation', 'interogasi'],
+['intersection', 'persimpangan'],
+['intervention', 'intervensi'],
+['intestine', 'usus'],
+['intimation', 'petunjuk'],
+['intimidation', 'intimidasi'],
+['intolerance', 'intoleransi'],
+['intonation', 'intonasi'],
+['intoxication', 'keracunan'],
+['intricate', 'rumit'],
+['intrigue', 'intrik'],
+['intrinsic', 'intrinsik'],
+['introvert', 'introvert'],
+['intrusion', 'gangguan'],
+['intuition', 'intuisi'],
+['invalid', 'tidak sah'],
+['invasion', 'serangan'],
+['inventor', 'penemu'],
+['inventory', 'inventaris'],
+['inversion', 'pembalikan'],
+['investor', 'investor'],
+['invocation', 'doa'],
+['invoice', 'faktur'],
+['iodine', 'yodium'],
+['iris', 'iris'],
+['irony', 'ironi'],
+['irregularity', 'ketidakteraturan'],
+['isolation', 'pengasingan'],
+['isthmus', 'tanah genting'],
+['itinerary', 'rencana perjalanan'],
+
+['icy', 'dingin seperti es'],
+['ideal', 'ideal'],
+['identical', 'identik'],
+['idle', 'menganggur'],
+['ignorant', 'bodoh'],
+['ill', 'sakit'],
+['illegal', 'ilegal'],
+['illegible', 'tidak terbaca'],
+['illiterate', 'buta huruf'],
+['illogical', 'tidak logis'],
+['imaginary', 'imajiner'],
+['imitative', 'meniru'],
+['immature', 'belum dewasa'],
+['immediate', 'segera'],
+['immense', 'sangat besar'],
+['immune', 'kebal'],
+['impatient', 'tidak sabar'],
+['imperfect', 'tidak sempurna'],
+['imperial', 'kekaisaran'],
+['impolite', 'tidak sopan'],
+['important', 'penting'],
+['impossible', 'tidak mungkin'],
+['impressive', 'mengesankan'],
+['improper', 'tidak pantas'],
+['inadequate', 'tidak memadai'],
+['inappropriate', 'tidak tepat'],
+['incapable', 'tidak mampu'],
+['incomplete', 'tidak lengkap'],
+['inconsistent', 'tidak konsisten'],
+['incorrect', 'salah'],
+['incredible', 'luar biasa'],
+['independent', 'mandiri'],
+['indirect', 'tidak langsung'],
+['individual', 'individual'],
+['indoor', 'dalam ruangan'],
+['industrial', 'industri'],
+['ineffective', 'tidak efektif'],
+['inefficient', 'tidak efisien'],
+['inevitable', 'tak terelakkan'],
+['inexperienced', 'tidak berpengalaman'],
+['infamous', 'terkenal buruk'],
+['infant', 'bayi'],
+['inferior', 'rendah'],
+['infinite', 'tak terhingga'],
+['informal', 'tidak resmi'],
+['initial', 'awal'],
+['innocent', 'tidak bersalah'],
+['innovative', 'inovatif'],
+['insane', 'gila'],
+['insecure', 'tidak aman'],
+['inside', 'di dalam'],
+['insignificant', 'tidak penting'],
+['instant', 'instan'],
+['instinctive', 'naluriah'],
+['insufficient', 'tidak cukup'],
+['intellectual', 'intelektual'],
+['intelligent', 'cerdas'],
+['intense', 'intens'],
+['intentional', 'disengaja'],
+['interactive', 'interaktif'],
+['interesting', 'menarik'],
+['internal', 'internal'],
+['international', 'internasional'],
+['intimate', 'intim'],
+['intolerant', 'tidak toleran'],
+['invalid', 'tidak valid'],
+['invisible', 'tidak terlihat'],
+['irregular', 'tidak teratur'],
+['irrelevant', 'tidak relevan'],
+['irresponsible', 'tidak bertanggung jawab'],
+['isolated', 'terisolasi'],
+['iconic', 'ikonik'],
+['idealistic', 'idealistis'],
+['idiomatic', 'idiomatik'],
+['idle', 'kosong'],
+['igneous', 'beku'],
+['ignorable', 'dapat diabaikan'],
+['illusive', 'menipu'],
+['immaculate', 'bersih sempurna'],
+['immaterial', 'tidak penting'],
+['immeasurable', 'tak terukur'],
+['immobile', 'tidak bergerak'],
+['immodest', 'tidak sopan'],
+['immortal', 'abadi'],
+['immutable', 'tidak berubah'],
+['impartial', 'tidak memihak'],
+['impassable', 'tidak dapat dilalui'],
+['impatient', 'tidak sabar'],
+['impeccable', 'sempurna'],
+['impedient', 'menghambat'],
+['impending', 'mendekat'],
+['imperative', 'mendesak'],
+['imperceptible', 'tidak dapat dipersepsi'],
+['imperfectible', 'tidak dapat disempurnakan'],
+['imperishable', 'tidak dapat binasa'],
+['impermeable', 'tidak tembus'],
+['impersonal', 'impersonal'],
+['impertinent', 'kurang ajar'],
+['impetuous', 'tergesa-gesa'],
+['implicit', 'tersirat'],
+['imponderable', 'tak terukur'],
+['imported', 'impor'],
+['imposing', 'megah'],
+['impoverished', 'miskin'],
+['impractical', 'tidak praktis'],
+['imprecise', 'tidak tepat'],
+['improbable', 'tidak mungkin'],
+['impromptu', 'dadakan'],
+['impure', 'tidak murni'],
+['inaccessible', 'tidak dapat diakses'],
+['inaccurate', 'tidak akurat'],
+['inactive', 'tidak aktif'],
+['inadequate', 'tidak memadai'],
+['inadvisable', 'tidak dianjurkan'],
+['inapplicable', 'tidak dapat diterapkan'],
+['inappropriate', 'tidak pantas'],
+['inarticulate', 'tidak dapat berbicara'],
+['inattentive', 'tidak memperhatikan'],
+['inaudible', 'tidak terdengar'],
+['incandescent', 'berpijar'],
+['incapable', 'tidak mampu'],
+['incidental', 'kebetulan'],
+['inclusive', 'inklusif'],
+['incoherent', 'tidak koheren'],
+['incomparable', 'tak tertandingi'],
+['incompatible', 'tidak kompatibel'],
+['incompetent', 'tidak kompeten'],
+['incomplete', 'tidak lengkap'],
+['inconceivable', 'tak terbayangkan'],
+['inconclusive', 'tidak meyakinkan'],
+['inconsequential', 'tidak penting'],
+['inconsiderate', 'tidak perhatian'],
+['inconspicuous', 'tidak mencolok'],
+['inconstant', 'tidak tetap'],
+['inconvenient', 'tidak nyaman'],
+['incredible', 'tidak percaya'],
+['incremental', 'bertahap'],
+['incurable', 'tidak dapat disembuhkan'],
+['indecent', 'tidak senonoh'],
+['indecisive', 'ragu-ragu'],
+['indefensible', 'tidak dapat dipertahankan'],
+['indefinite', 'tidak pasti'],
+['indelible', 'tidak dapat dihapus'],
+['indescribable', 'tak terlukiskan'],
+['indestructible', 'tidak dapat dihancurkan'],
+['indifferent', 'acuh tak acuh'],
+['indigenous', 'asli'],
+['indirect', 'tidak langsung'],
+['indispensable', 'tidak dapat dipisahkan'],
+['indistinct', 'tidak jelas'],
+['indivisible', 'tidak dapat dibagi'],
+['indomitable', 'tak terkalahkan'],
+['indoor', 'dalam ruangan'],
+['inductive', 'induktif'],
+['indulgent', 'memanjakan'],
+['industrious', 'rajin'],
+['inedible', 'tidak dapat dimakan'],
+['ineffable', 'tak terungkapkan'],
+['ineligible', 'tidak memenuhi syarat'],
+['inept', 'tidak cakap'],
+['inert', 'lembam'],
+['inescapable', 'tak terhindarkan'],
+['inexact', 'tidak tepat'],
+['inexcusable', 'tidak dapat dimaafkan'],
+['inexhaustible', 'tak habis-habis'],
+['inexpensive', 'murah'],
+['inexplicable', 'tak dapat dijelaskan'],
+['inextricable', 'tak terpisahkan'],
+['infallible', 'tidak salah'],
+['infantile', 'kekanak-kanakan'],
+['infected', 'terinfeksi'],
+['infectious', 'menular'],
+['inferential', 'berdasarkan kesimpulan'],
+['infertile', 'tidak subur'],
+['infinite', 'tak terbatas'],
+['infinitesimal', 'sangat kecil'],
+['infirm', 'lemah'],
+['inflamed', 'meradang'],
+['inflammable', 'mudah terbakar'],
+['inflammatory', 'menyebabkan peradangan'],
+['inflexible', 'tidak fleksibel'],
+['influential', 'berpengaruh'],
+['informal', 'tidak resmi'],
+['informative', 'informatif'],
+['infrared', 'inframerah'],
+['infrequent', 'jarang'],
+['ingenious', 'cerdik'],
+['ingenuous', 'polos'],
+['inherent', 'melekat'],
+['inhibited', 'terhambat'],
+['inhospitable', 'tidak ramah'],
+['inhuman', 'tidak berperikemanusiaan'],
+['inimitable', 'tidak dapat ditiru'],
+['initial', 'permulaan'],
+['injurious', 'merugikan'],
+['inky', 'seperti tinta'],
+['inland', 'pedalaman'],
+['innate', 'bawaan'],
+['inner', 'dalam'],
+['innocent', 'tidak bersalah'],
+['innocuous', 'tidak berbahaya'],
+['innovative', 'baru'],
+['innumerable', 'tak terhitung'],
+['inoperable', 'tidak dapat dioperasikan'],
+['inoperative', 'tidak berfungsi'],
+['inopportune', 'tidak tepat waktu'],
+['inorganic', 'anorganik'],
+['insatiable', 'tak pernah puas'],
+['inscribed', 'tertulis'],
+['inscrutable', 'tak terduga'],
+['insecure', 'tidak aman'],
+['insensible', 'tidak sadarkan diri'],
+['insensitive', 'tidak sensitif'],
+['inseparable', 'tak terpisahkan'],
+['inside', 'di dalam'],
+['insidious', 'berbahaya'],
+['insightful', 'berwawasan'],
+['insignificant', 'tidak berarti'],
+['insincere', 'tidak tulus'],
+['insipid', 'hambar'],
+['insolent', 'kurang ajar'],
+['insoluble', 'tidak dapat larut'],
+['insolvent', 'bangkrut'],
+['inspiring', 'menginspirasi'],
+['instable', 'tidak stabil'],
+['instantaneous', 'seketika'],
+['instinctive', 'naluriah'],
+['institutional', 'institusional'],
+['instructive', 'mendidik'],
+['instrumental', 'instrumental'],
+['insubordinate', 'membangkang'],
+['insufficient', 'tidak cukup'],
+['insular', 'terpencil'],
+['insulting', 'menghina'],
+['insuperable', 'tidak dapat diatasi'],
+['insupportable', 'tidak dapat ditahan'],
+['integral', 'integral'],
+['integrated', 'terintegrasi'],
+['intellectual', 'intelektual'],
+['intelligible', 'dapat dipahami'],
+['intemperate', 'tidak terkendali'],
+['intended', 'dimaksudkan'],
+['intensive', 'intensif'],
+['intentional', 'disengaja'],
+['interactive', 'interaktif'],
+['interchangeable', 'dapat dipertukarkan'],
+['interdependent', 'saling bergantung'],
+['interested', 'tertarik'],
+['interfering', 'mengganggu'],
+['interim', 'sementara'],
+['interior', 'interior'],
+['interlocking', 'saling mengunci'],
+['intermediate', 'menengah'],
+['interminable', 'tak berujung'],
+['intermittent', 'berkala'],
+['internal', 'internal'],
+['interpersonal', 'antarpribadi'],
+['interpretive', 'interpretatif'],
+['interrogative', 'interogatif'],
+['intimate', 'intim'],
+['intimidating', 'mengintimidasi'],
+['intolerable', 'tidak tertahankan'],
+['intractable', 'sulit diatur'],
+['intransitive', 'intransitif'],
+['intricate', 'rumit'],
+['intrinsic', 'intrinsik'],
+['introductory', 'pengantar'],
+['introverted', 'introvert'],
+['intrusive', 'mengganggu'],
+['intuitive', 'intuitif'],
+['invariable', 'tidak berubah'],
+['invasive', 'invasif'],
+['inventive', 'inventif'],
+['inverse', 'terbalik'],
+['invertebrate', 'invertebrata'],
+['invincible', 'tak terkalahkan'],
+['invisible', 'tidak terlihat'],
+['inviting', 'mengundang'],
+['involuntary', 'tidak sukarela'],
+['involved', 'terlibat'],
+['inward', 'ke dalam'],
+['irate', 'marah'],
+['iridescent', 'berkilauan'],
+['irksome', 'menjengkelkan'],
+['iron', 'besi'],
+['ironic', 'ironis'],
+['irrational', 'tidak rasional'],
+['irreducible', 'tidak dapat dikurangi'],
+['irrefutable', 'tak terbantahkan'],
+['irregular', 'tidak teratur'],
+['irrelevant', 'tidak relevan'],
+['irreplaceable', 'tak tergantikan'],
+['irrepressible', 'tak terbendung'],
+['irreproachable', 'tak tercela'],
+['irresistible', 'tak tertahankan'],
+['irresolute', 'tidak tegas'],
+['irrespective', 'tanpa memandang'],
+['irresponsible', 'tidak bertanggung jawab'],
+['irreversible', 'tidak dapat dibalik'],
+['irrevocable', 'tidak dapat dibatalkan'],
+['irritable', 'mudah marah'],
+['irritating', 'menjengkelkan'],
+['isolated', 'terisolasi'],
+['isotonic', 'isotonik'],
+['italic', 'miring'],
+['itchy', 'gatal'],
+['itemized', 'dirinci'],
 
           ['join', 'bergabung'], ['jump', 'melompat'], ['justify', 'membenarkan'],
 
@@ -6873,171 +8109,117 @@
 
         return translatedText;
       }
+      // Ganti fungsi translateText lama jadi ini
       async function translateText(text, fromLang, toLang) {
-        text = preprocessText(text);
-        if (!text.trim()) {
-          showTranslatorError('Masukkan teks yang akan diterjemahkan');
-          return '';
-        }
+  text = preprocessText(text);
+  if (!text.trim()) {
+    showTranslatorError('Masukkan teks yang akan diterjemahkan');
+    return '';
+  }
 
-        // Check if text contains comma (manual format)
-        if (text.includes(',')) {
-          return text;
-        }
+  // Manual format detection (kata,terjemahan)
+  if (text.includes(',')) return text;
 
-        try {
-          // 1. Try DeepL API first (if API key available)
-          if (DEEPL_API_KEY) {
-            try {
-              const deeplResponse = await fetchDeeplTranslation(text, fromLang, toLang);
-              if (deeplResponse) {
-                updateQualityIndicator('good');
-                return deeplResponse;
-              }
-            } catch (e) {
-              console.log('DeepL API failed, trying alternatives...');
-            }
-          }
+  // Normalize language codes (keep as-is, H56 auto-detects source)
+  const source = (fromLang || '').toLowerCase();
+  const target = (toLang || '').toLowerCase();
 
-          // 2. Try Google Cloud Translation (if API key available)
-          if (GOOGLE_API_KEY) {
-            try {
-              const googleResponse = await fetchGoogleCloudTranslation(text, fromLang, toLang);
-              if (googleResponse) {
-                updateQualityIndicator('good');
-                return googleResponse;
-              }
-            } catch (e) {
-              console.log('Google Cloud Translation failed, trying fallback...');
-            }
-          }
+  // 1) Try H56 API
+  try {
+    const h56Res = await fetch('https://h56-translator-api.netlify.app/api/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        // H56 docs example uses 'targetLang'. It will auto-detect source in most cases.
+        targetLang: target
+      })
+    });
 
-          // 3. Fallback to LibreTranslate
-          try {
-            const response = await fetch('https://libretranslate.de/translate', {
-              method: 'POST',
-              body: JSON.stringify({
-                q: text,
-                source: fromLang,
-                target: toLang
-              }),
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              }
-            });
-
-            if (response.ok) {
-              const data = await response.json();
-              if (data.translatedText) {
-                updateQualityIndicator('fair');
-                return postProcessTranslation(data.translatedText, text);
-              }
-            }
-          } catch (e) {
-            console.log('LibreTranslate failed, trying MyMemory...');
-          }
-
-          // 4. Final fallback to MyMemory
-          const myMemoryResponse = await fetchMyMemoryTranslation(text, fromLang, toLang);
-          if (myMemoryResponse) {
-            updateQualityIndicator(myMemoryResponse.matchScore > 0.8 ? 'fair' : 'poor');
-            return myMemoryResponse.translatedText;
-          }
-
-          throw new Error('Semua API terjemahan gagal');
-        } catch (error) {
-          console.error('Translation error:', error);
-          throw new Error('Gagal menerjemahkan. Silakan coba lagi atau gunakan format manual.');
-        }
+    if (h56Res.ok) {
+      const data = await h56Res.json();
+      // support multiple possible response field names
+      const translated = data.translatedText || data.translated_text || data.translated || data.result || (data.data && (data.data.translatedText || data.data.translated_text));
+      if (translated) {
+        updateQualityIndicator('good');
+        return postProcessTranslation(translated, text);
       }
+    } else {
+      console.warn('H56 returned status', h56Res.status);
+    }
+  } catch (err) {
+    console.warn('H56 API error:', err);
+  }
 
-      async function fetchDeeplTranslation(text, fromLang, toLang) {
-        if (!DEEPL_API_KEY) return null;
+  // 2) Fallback: LibreTranslate
+  try {
+    const libreRes = await fetch('https://libretranslate.de/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        q: text,
+        source: source || 'auto',
+        target: target,
+        format: 'text'
+      })
+    });
 
-        try {
-          const response = await fetch('https://api-free.deepl.com/v2/translate', {
-            method: 'POST',
-            headers: {
-              'Authorization': `DeepL-Auth-Key ${DEEPL_API_KEY}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              text: [text],
-              source_lang: fromLang.toUpperCase(),
-              target_lang: toLang.toUpperCase(),
-              preserve_formatting: true,
-              formality: 'prefer_more'
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            return data.translations?.[0]?.text || null;
-          }
-        } catch (e) {
-          console.error('DeepL API error:', e);
-          return null;
-        }
+    if (libreRes.ok) {
+      const data = await libreRes.json();
+      const translated = data.translatedText || data.translated;
+      if (translated) {
+        updateQualityIndicator('fair');
+        return postProcessTranslation(translated, text);
       }
+    } else {
+      console.warn('LibreTranslate returned status', libreRes.status);
+    }
+  } catch (err) {
+    console.warn('LibreTranslate error:', err);
+  }
 
-      async function fetchGoogleCloudTranslation(text, fromLang, toLang) {
-        if (!GOOGLE_API_KEY) return null;
+  // 3) Final fallback: MyMemory
+  try {
+    const myMemoryResponse = await fetchMyMemoryTranslation(text, fromLang, toLang);
+    if (myMemoryResponse) {
+      updateQualityIndicator(myMemoryResponse.matchScore > 0.8 ? 'fair' : 'poor');
+      return myMemoryResponse.translatedText;
+    }
+  } catch (err) {
+    console.warn('MyMemory fallback error:', err);
+  }
 
-        try {
-          const response = await fetch(
-            `https://translation.googleapis.com/language/translate/v2?key=${GOOGLE_API_KEY}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                q: text,
-                source: fromLang,
-                target: toLang,
-                format: 'text'
-                // model: 'nmt' // opsional, bisa dihapus kalau bikin error
-              })
-            }
-          );
+  // If everything fails, return original (and show error)
+  showTranslatorError('Gagal menerjemahkan. Gunakan format manual atau coba lagi.');
+  throw new Error('Semua API terjemahan gagal');
+}
 
-          const data = await response.json();
+// MyMemory fallback (keadaan semula — tetap dipakai sebagai cadangan)
+async function fetchMyMemoryTranslation(text, fromLang, toLang) {
+  try {
+    const response = await fetch(
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${(fromLang || 'auto')}|${toLang}`
+    );
 
-          if (!response.ok) {
-            console.error('Google Translate API error:', data);
-            return null;
-          }
-
-          return data?.data?.translations?.[0]?.translatedText || null;
-
-        } catch (err) {
-          console.error('Google Cloud Translation fetch error:', err);
-          return null;
-        }
+    if (response.ok) {
+      const data = await response.json();
+      if (data.responseData) {
+        return {
+          translatedText: postProcessTranslation(data.responseData.translatedText, text),
+          matchScore: data.responseData.match || 0
+        };
       }
+    } else {
+      console.warn('MyMemory returned status', response.status);
+    }
+  } catch (e) {
+    console.error('MyMemory error:', e);
+    return null;
+  }
+}
 
+// --- end replacement ---
 
-      async function fetchMyMemoryTranslation(text, fromLang, toLang) {
-        try {
-          const response = await fetch(
-            `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${fromLang}|${toLang}`
-          );
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.responseData) {
-              return {
-                translatedText: postProcessTranslation(data.responseData.translatedText, text),
-                matchScore: data.responseData.match || 0
-              };
-            }
-          }
-        } catch (e) {
-          console.error('MyMemory error:', e);
-          return null;
-        }
-      }
 
       function postProcessTranslation(translatedText, originalText) {
         // 1. Preserve capitalization
@@ -7621,40 +8803,36 @@
       });
 
       document.querySelectorAll('.rate-btn').forEach(btn => {
-        btn.addEventListener('click', async e => {
+        btn.addEventListener('click', e => {
           if (current === null) return;
 
-          const score = parseInt(btn.dataset.score);
+          const score = parseInt(btn.dataset.score, 10);
           const card = deck[current]; // ambil kartu sekarang
 
+          // 1️⃣ Update progres & UI langsung duluan
           applySM2(card, score);
           saveToStorage();
-
-          // 🔥 simpan ke Firestore dengan logging
-          try {
-            console.log("Mau simpan ke Firestore:", {
-              front: card.front,
-              back: card.back,
-              score: score
-            });
-
-            await addDoc(reviewCol, {
-              front: card.front,
-              back: card.back,
-              score: score // ✅ langsung pakai nilai tombol
-            });
-
-            console.log("✅ Data berhasil disimpan ke Firestore!");
-          } catch (err) {
-            console.error("❌ Gagal simpan ke Firestore:", err);
-          }
-
           rebuildQueue();
           loadNext();
           renderStats();
           renderDeckPreview();
+
+          // 2️⃣ Simpan ke Firestore TANPA await (biar nggak bikin lag)
+          addDoc(reviewCol, {
+            front: card.front,
+            back: card.back,
+            score: score,
+            timestamp: Date.now()
+          })
+            .then(() => {
+              console.log("✅ Data berhasil disimpan ke Firestore!");
+            })
+            .catch(err => {
+              console.error("❌ Gagal simpan ke Firestore:", err);
+            });
         });
       });
+
 
 
 
