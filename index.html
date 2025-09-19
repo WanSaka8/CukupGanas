@@ -6909,33 +6909,52 @@
       document.getElementById('startStudyBtn').style.display = 'none';
     }
 
+    let autoFlipInterval = null;
+
+function startAutoFlip() {
+  // bersihin interval lama kalau ada
+  if (autoFlipInterval) clearInterval(autoFlipInterval);
+
+  autoFlipInterval = setInterval(() => {
+    if (!currentCard) return;
+    flipCard(); // fungsi flipCard() udah ada di kode lo
+  }, 2000); // 3 detik sekali
+}
+
+function stopAutoFlip() {
+  if (autoFlipInterval) {
+    clearInterval(autoFlipInterval);
+    autoFlipInterval = null;
+  }
+}
+
+
     function showNextCard() {
-      currentCard = getNextCard();
+  currentCard = getNextCard();
+  
+  if (!currentCard) {
+    endStudySession();
+    return;
+  }
+  
+  const card = document.getElementById('studyCard');
+  card.classList.remove('flipped');
+  
+  document.getElementById('frontText').textContent = currentCard.front;
+  document.getElementById('backText').textContent = currentCard.front;
+  document.getElementById('backTranslation').textContent = currentCard.back;
+  
+  updateDifficultyIndicators();
+  
+  card.classList.add('animate-in');
+  setTimeout(() => card.classList.remove('animate-in'), 500);
+  
+  studySession.currentCardTime = Date.now();
 
-      if (!currentCard) {
-        endStudySession();
-        return;
-      }
+  // auto flip jalan lagi tiap kali kartu baru muncul
+  startAutoFlip();
+}
 
-      // Reset card display
-      const card = document.getElementById('studyCard');
-      card.classList.remove('flipped');
-
-      // Update card content
-      document.getElementById('frontText').textContent = currentCard.front;
-      document.getElementById('backText').textContent = currentCard.front;
-      document.getElementById('backTranslation').textContent = currentCard.back;
-
-      // Update difficulty indicators
-      updateDifficultyIndicators();
-
-      // Add animation
-      card.classList.add('animate-in');
-      setTimeout(() => card.classList.remove('animate-in'), 500);
-
-      // Start timing this card
-      studySession.currentCardTime = Date.now();
-    }
 
     function updateDifficultyIndicators() {
       const frontDots = document.querySelectorAll('.card-front .difficulty-dot');
