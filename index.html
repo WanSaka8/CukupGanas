@@ -956,6 +956,34 @@
         </div>
       </div>
 
+      <!-- Auto Translate Section -->
+      <div class="sidebar-section">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 5h7M9 3v2a7 7 0 0 0 7 7h2M15 12a7 7 0 0 1-7 7H6"></path>
+            <path d="M12 20l4-9 4 9"></path>
+          </svg>
+          Penerjemah Cepat
+        </h3>
+
+        <div class="form-group">
+          <select id="translateDirection" class="form-input">
+            <option value="en|id">Inggris → Indonesia</option>
+            <option value="id|en">Indonesia → Inggris</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <input class="form-input" id="translateInput" placeholder="Ketik kata/kalimat..." />
+        </div>
+
+        <div class="form-group">
+          <textarea class="form-input" id="translateOutput" placeholder="Hasil terjemahan..." readonly></textarea>
+        </div>
+      </div>
+
+
+
       <!-- Search Section -->
       <div class="sidebar-section">
         <h3>
@@ -6828,36 +6856,97 @@
     }
 
     // Translation Functions
-    async function translateWord(word) {
+    async function autoTranslate(text, target = 'id', source = 'auto') {
+      if (!text.trim()) return '';
+
+      // 1) H56 API
       try {
-        // Try multiple APIs for better coverage
-        const apis = [
-          {
-            url: 'https://api.mymemory.translated.net/get',
-            params: `q=${encodeURIComponent(word)}&langpair=en|id`,
-            process: (data) => data.responseData?.translatedText
-          }
-        ];
+        const h56Res = await fetch('https://h56-translator-api.netlify.app/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, targetLang: target })
+        });
+        if (h56Res.ok) {
+          const data = await h56Res.json();
+          const translated =
+            data.translatedText ||
+            data.translated_text ||
+            data.translated ||
+            data.result ||
+            (data.data && (data.data.translatedText || data.data.translated_text));
+          if (translated) return translated;
+        }
+      } catch (err) {
+        console.warn('H56 error:', err);
+      }
 
-        for (const api of apis) {
-          try {
-            const response = await fetch(`${api.url}?${api.params}`);
-            const data = await response.json();
-            const translation = api.process(data);
+      // 2) LibreTranslate
+      try {
+        const libreRes = await fetch('https://libretranslate.de/translate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          },
+          body: JSON.stringify({ q: text, source: 'auto', target, format: 'text' })
+        });
+        if (libreRes.ok) {
+          const data = await libreRes.json();
+          if (data.translatedText) return data.translatedText;
+        }
+      } catch (err) {
+        console.warn('Libre error:', err);
+      }
 
-            if (translation && translation !== word) {
-              return translation;
-            }
-          } catch (error) {
-            continue;
-          }
+      // 3) MyMemory fallback
+      try {
+        const res = await fetch(
+          `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+            text
+          )}&langpair=auto|${target}`
+        );
+        if (res.ok) {
+          const data = await res.json();
+          if (data.responseData?.translatedText) return data.responseData.translatedText;
+        }
+      } catch (err) {
+        console.warn('MyMemory error:', err);
+      }
+
+      return 'Gagal menerjemahkan';
+    }
+
+
+    const inputEl = document.getElementById('translateInput');
+    const outputEl = document.getElementById('translateOutput');
+    const directionEl = document.getElementById('translateDirection');
+
+    let typingTimer;
+    inputEl.addEventListener('input', () => {
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(async () => {
+        const text = inputEl.value.trim();
+        if (!text) {
+          outputEl.value = '';
+          return;
         }
 
-        throw new Error('Translation not available');
-      } catch (error) {
-        throw error;
-      }
-    }
+        // ambil arah terjemahan
+        const [source, target] = directionEl.value.split('|');
+
+        outputEl.value = 'Menerjemahkan...';
+        try {
+          const result = await autoTranslate(text, target, source);
+          outputEl.value = result;
+        } catch (e) {
+          outputEl.value = 'Terjadi error';
+          console.error(e);
+        }
+      }, 600);
+    });
+
+
+
 
     // Study Functions
     function buildStudyQueue() {
@@ -6911,49 +7000,49 @@
 
     let autoFlipInterval = null;
 
-function startAutoFlip() {
-  // bersihin interval lama kalau ada
-  if (autoFlipInterval) clearInterval(autoFlipInterval);
+    function startAutoFlip() {
+      // bersihin interval lama kalau ada
+      if (autoFlipInterval) clearInterval(autoFlipInterval);
 
-  autoFlipInterval = setInterval(() => {
-    if (!currentCard) return;
-    flipCard(); // fungsi flipCard() udah ada di kode lo
-  }, 2000); // 3 detik sekali
-}
+      autoFlipInterval = setInterval(() => {
+        if (!currentCard) return;
+        flipCard(); // fungsi flipCard() udah ada di kode lo
+      }, 2000); // 3 detik sekali
+    }
 
-function stopAutoFlip() {
-  if (autoFlipInterval) {
-    clearInterval(autoFlipInterval);
-    autoFlipInterval = null;
-  }
-}
+    function stopAutoFlip() {
+      if (autoFlipInterval) {
+        clearInterval(autoFlipInterval);
+        autoFlipInterval = null;
+      }
+    }
 
 
     function showNextCard() {
-  currentCard = getNextCard();
-  
-  if (!currentCard) {
-    endStudySession();
-    return;
-  }
-  
-  const card = document.getElementById('studyCard');
-  card.classList.remove('flipped');
-  
-  document.getElementById('frontText').textContent = currentCard.front;
-  document.getElementById('backText').textContent = currentCard.front;
-  document.getElementById('backTranslation').textContent = currentCard.back;
-  
-  updateDifficultyIndicators();
-  
-  card.classList.add('animate-in');
-  setTimeout(() => card.classList.remove('animate-in'), 500);
-  
-  studySession.currentCardTime = Date.now();
+      currentCard = getNextCard();
 
-  // auto flip jalan lagi tiap kali kartu baru muncul
-  startAutoFlip();
-}
+      if (!currentCard) {
+        endStudySession();
+        return;
+      }
+
+      const card = document.getElementById('studyCard');
+      card.classList.remove('flipped');
+
+      document.getElementById('frontText').textContent = currentCard.front;
+      document.getElementById('backText').textContent = currentCard.front;
+      document.getElementById('backTranslation').textContent = currentCard.back;
+
+      updateDifficultyIndicators();
+
+      card.classList.add('animate-in');
+      setTimeout(() => card.classList.remove('animate-in'), 500);
+
+      studySession.currentCardTime = Date.now();
+
+      // auto flip jalan lagi tiap kali kartu baru muncul
+      startAutoFlip();
+    }
 
 
     function updateDifficultyIndicators() {
