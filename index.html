@@ -125,6 +125,8 @@
       left: 0;
     }
 
+
+
     .sidebar-overlay {
       position: fixed;
       top: 0;
@@ -866,6 +868,8 @@
       box-shadow: var(--shadow-lg);
     }
 
+
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -894,6 +898,61 @@
       100% {
         transform: rotate(360deg);
       }
+    }
+
+    /* Base card untuk grammar */
+    .grammar-category {
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Warna per tense */
+    .grammar-category.present {
+      background: linear-gradient(135deg, #16a34a, #4ade80);
+    }
+
+    .grammar-category.past {
+      background: linear-gradient(135deg, #dc2626, #f87171);
+    }
+
+    .grammar-category.future {
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+    }
+
+    /* Judul */
+    .grammar-category h3 {
+      margin: 0 0 10px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Formula box */
+    .formula {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      margin: 10px 0;
+      display: inline-block;
+    }
+
+    /* Examples box */
+    .examples {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .examples ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .examples li {
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -1066,6 +1125,13 @@
             Export CSV
           </button>
 
+          <button class="btn" id="grammarBtn" style="background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple)); 
+         color: white; 
+         border: none; 
+         width: 100%;">
+            Belajar Pola
+          </button>
+
           <button class="btn" id="reviewBtn"
             style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink)); color: white; border: none;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1089,7 +1155,7 @@
   </div>
 
   <!-- Review Page -->
-  <div class="app" id="reviewPage" style="display: none;">
+  <div class="app review-app" id="reviewPage" style="display: none;">
     <header>
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
         <div>
@@ -1111,6 +1177,187 @@
       <!-- Categories will be populated here -->
     </div>
   </div>
+
+  <!-- Grammar Page -->
+  <div class="app grammar-app" id="grammarPage" style="display: none;">
+    <header>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;">
+        <div>
+          <h1 style="font-size: 36px; margin-bottom: 5px;">Pola Kalimat Lengkap</h1>
+          <p class="subtitle">12 Tenses Bahasa Inggris + Penjelasan Verb Forms</p>
+        </div>
+        <button class="btn" id="backToMainFromGrammar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15,18 9,12 15,6"></polyline>
+          </svg>
+          Kembali
+        </button>
+      </div>
+    </header>
+
+    <div style="margin-top:30px; display:grid; gap:20px;">
+
+      <!-- Catatan Umum -->
+      <div class="grammar-category">
+        <h3>📌 Catatan Penting: Verb Forms</h3>
+        <ul>
+          <li><b>Verb 1 (V1)</b> → bentuk dasar, contoh: go, eat, study.</li>
+          <li><b>Verb 2 (V2)</b> → bentuk lampau, contoh: went, ate, studied.</li>
+          <li><b>Verb 3 (V3)</b> → past participle, contoh: gone, eaten, studied.</li>
+          <li><b>Verb-ing</b> → bentuk continuous, contoh: going, eating, studying.</li>
+        </ul>
+      </div>
+
+      <!-- PRESENT -->
+      <div class="grammar-category">
+        <h3>1. Present Simple</h3>
+        <p><b>Formula:</b> S + V1 (s/es untuk he, she, it) + O</p>
+        <p><b>Penggunaan:</b> kebiasaan, fakta umum, jadwal tetap.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>She <b>plays</b> piano every day. (habit)</li>
+          <li>Water <b>boils</b> at 100°C. (fact)</li>
+          <li>The train <b>leaves</b> at 7 p.m. (schedule)</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>2. Present Continuous</h3>
+        <p><b>Formula:</b> S + am/is/are + V-ing + O</p>
+        <p><b>Penggunaan:</b> aksi yang sedang berlangsung sekarang.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>I <b>am reading</b> a book right now.</li>
+          <li>They <b>are studying</b> English.</li>
+          <li>She <b>is cooking</b> dinner in the kitchen.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>3. Present Perfect</h3>
+        <p><b>Formula:</b> S + has/have + V3 + O</p>
+        <p><b>Penggunaan:</b> pengalaman, aksi yang sudah selesai tanpa waktu spesifik.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>I <b>have visited</b> Japan twice.</li>
+          <li>She <b>has finished</b> her homework.</li>
+          <li>We <b>have seen</b> that movie before.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>4. Present Perfect Continuous</h3>
+        <p><b>Formula:</b> S + has/have + been + V-ing + O</p>
+        <p><b>Penggunaan:</b> aksi yang dimulai di masa lalu dan masih berlangsung.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>She <b>has been studying</b> for three hours.</li>
+          <li>I <b>have been waiting</b> since morning.</li>
+          <li>They <b>have been playing</b> football all day.</li>
+        </ul>
+      </div>
+
+      <!-- PAST -->
+      <div class="grammar-category">
+        <h3>5. Past Simple</h3>
+        <p><b>Formula:</b> S + V2 + O</p>
+        <p><b>Penggunaan:</b> kejadian selesai di masa lalu.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>They <b>went</b> to Bali last year.</li>
+          <li>She <b>studied</b> hard yesterday.</li>
+          <li>I <b>watched</b> a movie last night.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>6. Past Continuous</h3>
+        <p><b>Formula:</b> S + was/were + V-ing + O</p>
+        <p><b>Penggunaan:</b> aksi yang sedang berlangsung di masa lalu.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>I <b>was sleeping</b> when he called.</li>
+          <li>They <b>were playing</b> football yesterday afternoon.</li>
+          <li>She <b>was reading</b> a book at 9 p.m.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>7. Past Perfect</h3>
+        <p><b>Formula:</b> S + had + V3 + O</p>
+        <p><b>Penggunaan:</b> aksi yang selesai sebelum aksi lain di masa lalu.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>She <b>had left</b> before I arrived.</li>
+          <li>They <b>had eaten</b> dinner when we came.</li>
+          <li>I <b>had studied</b> English before moving abroad.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>8. Past Perfect Continuous</h3>
+        <p><b>Formula:</b> S + had + been + V-ing + O</p>
+        <p><b>Penggunaan:</b> aksi yang sudah berlangsung lama sampai titik tertentu di masa lalu.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>They <b>had been working</b> for hours before I joined.</li>
+          <li>I <b>had been waiting</b> for two hours when she arrived.</li>
+          <li>She <b>had been studying</b> all night before the exam.</li>
+        </ul>
+      </div>
+
+      <!-- FUTURE -->
+      <div class="grammar-category">
+        <h3>9. Future Simple</h3>
+        <p><b>Formula:</b> S + will + V1 + O</p>
+        <p><b>Penggunaan:</b> prediksi, rencana, janji.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>I <b>will study</b> tonight.</li>
+          <li>She <b>will call</b> you tomorrow.</li>
+          <li>It <b>will rain</b> next week.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>10. Future Continuous</h3>
+        <p><b>Formula:</b> S + will + be + V-ing + O</p>
+        <p><b>Penggunaan:</b> aksi yang akan sedang berlangsung di masa depan.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>This time tomorrow, I <b>will be traveling</b> to Jakarta.</li>
+          <li>She <b>will be studying</b> at 8 p.m.</li>
+          <li>They <b>will be working</b> on the project next week.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>11. Future Perfect</h3>
+        <p><b>Formula:</b> S + will + have + V3 + O</p>
+        <p><b>Penggunaan:</b> aksi yang akan selesai sebelum waktu tertentu di masa depan.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>By next week, she <b>will have graduated</b>.</li>
+          <li>I <b>will have finished</b> the book by tomorrow.</li>
+          <li>They <b>will have arrived</b> before noon.</li>
+        </ul>
+      </div>
+
+      <div class="grammar-category">
+        <h3>12. Future Perfect Continuous</h3>
+        <p><b>Formula:</b> S + will + have + been + V-ing + O</p>
+        <p><b>Penggunaan:</b> aksi yang akan sudah berlangsung selama periode tertentu di masa depan.</p>
+        <p><i>Examples:</i></p>
+        <ul>
+          <li>By 2025, I <b>will have been working</b> here for 10 years.</li>
+          <li>She <b>will have been studying</b> for hours by the time you come.</li>
+          <li>They <b>will have been living</b> in Jakarta for a decade.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
 
   <!-- Main App -->
   <div class="app" id="mainApp">
@@ -8985,6 +9232,7 @@
     // Review Functions
     async function showReviewPage() {
       document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('grammarPage').style.display = 'none';
       document.getElementById('reviewPage').style.display = 'block';
 
       // Close sidebar
@@ -8994,10 +9242,22 @@
       await renderReviewCategories();
     }
 
+    function showGrammarPage() {
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('reviewPage').style.display = 'none';
+      document.getElementById('grammarPage').style.display = 'block';
+
+      // Tutup sidebar kalau kebuka
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+
     function showMainPage() {
       document.getElementById('reviewPage').style.display = 'none';
+      document.getElementById('grammarPage').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
     }
+
 
     async function renderReviewCategories() {
       const categoriesEl = document.getElementById('reviewCategories');
@@ -9398,6 +9658,13 @@
       // Review page navigation
       document.getElementById('reviewBtn').addEventListener('click', showReviewPage);
       document.getElementById('backToMainBtn').addEventListener('click', showMainPage);
+      document.getElementById("grammarBtn").addEventListener("click", showGrammarPage);
+
+      // Grammar → Balik ke Main
+      document.getElementById("backToMainFromGrammar").addEventListener("click", showMainPage);
+
+      // Review → Balik ke Main
+      document.getElementById("backToMainBtn").addEventListener("click", showMainPage);
 
       // Keyboard shortcuts
       document.addEventListener('keydown', (e) => {
