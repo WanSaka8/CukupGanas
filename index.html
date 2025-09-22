@@ -1653,12 +1653,22 @@
       renderIndex = end;
     }
 
+    function fillWordListUntilScrollable() {
+  const listEl = document.getElementById("wordList");
+  while (listEl.scrollHeight <= listEl.clientHeight && renderIndex < deck.length) {
+    renderWordBatch();
+  }
+}
+
+
     function resetWordList() {
-      const listEl = document.getElementById("wordList");
-      listEl.innerHTML = "";
-      renderIndex = 0;
-      renderWordBatch();
-    }
+  const listEl = document.getElementById("wordList");
+  listEl.innerHTML = "";
+  renderIndex = 0;
+  renderWordBatch();
+  fillWordListUntilScrollable(); // pastikan list bisa discroll
+}
+
 
 
 
