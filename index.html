@@ -1542,10 +1542,6 @@
     const STATS_KEY = 'vocabsr-enhanced:stats';
 
     let deck = [];
-    // Lazy loading state
-    let renderBatchSize = 100; // jumlah kata per batch
-    let renderIndex = 0;       // posisi terakhir yang sudah ditampilkan
-
     let studyQueue = [];
     let currentCard = null;
     let studySession = {
@@ -1582,102 +1578,63 @@
     }
 
     // ----- REPLACE loadData() -----
-    function loadData() {
+function loadData() {
+  try {
+    const deckData = localStorage.getItem(STORAGE_KEY);
+    const statsData = localStorage.getItem(STATS_KEY);
+
+    if (deckData) {
+      const parsed = JSON.parse(deckData);
+      if (Array.isArray(parsed)) {
+        deck = parsed.map(card => ({
+          ...card,
+          id: card.id || Date.now() + Math.random(),
+          interval: card.interval || 0,
+          repetition: card.repetition || 0,
+          ef: card.ef || 2.5,
+          due: card.due || todayDate(),
+          difficulty: card.difficulty || 3,
+          history: card.history || []
+        }));
+      } else {
+        console.warn('loadData: parsed deck is not an array, falling back to sample deck');
+        initSampleDeck();
+      }
+    } else {
+      initSampleDeck();
+    }
+
+    if (statsData) {
       try {
-        const deckData = localStorage.getItem(STORAGE_KEY);
-        const statsData = localStorage.getItem(STATS_KEY);
-
-        if (deckData) {
-          const parsed = JSON.parse(deckData);
-          if (Array.isArray(parsed)) {
-            deck = parsed.map(card => ({
-              ...card,
-              id: card.id || Date.now() + Math.random(),
-              interval: card.interval || 0,
-              repetition: card.repetition || 0,
-              ef: card.ef || 2.5,
-              due: card.due || todayDate(),
-              difficulty: card.difficulty || 3,
-              history: card.history || []
-            }));
-          } else {
-            console.warn('loadData: parsed deck is not an array, falling back to sample deck');
-            initSampleDeck();
-          }
-        } else {
-          initSampleDeck();
+        const parsedStats = JSON.parse(statsData);
+        if (parsedStats && typeof parsedStats === 'object') {
+          stats = { ...stats, ...parsedStats };
         }
-
-        if (statsData) {
-          try {
-            const parsedStats = JSON.parse(statsData);
-            if (parsedStats && typeof parsedStats === 'object') {
-              stats = { ...stats, ...parsedStats };
-            }
-          } catch (e) {
-            console.warn('loadData: invalid stats JSON, ignoring statsData');
-          }
-        }
-
-        updateStreak();
-      } catch (error) {
-        console.error('Error loading data:', error);
-        // Defensive fallback: coba initSampleDeck tapi protect jika itu juga error
-        try {
-          initSampleDeck();
-        } catch (e) {
-          console.error('initSampleDeck failed inside loadData catch:', e);
-          deck = [];
-          saveData();
-        }
+      } catch (e) {
+        console.warn('loadData: invalid stats JSON, ignoring statsData');
       }
     }
 
-    function renderWordBatch() {
-      const listEl = document.getElementById("wordList");
-      const end = Math.min(renderIndex + renderBatchSize, deck.length);
-
-      for (let i = renderIndex; i < end; i++) {
-        const item = deck[i];
-        const div = document.createElement("div");
-        div.className = "list-item";
-        div.innerHTML = `
-      <div>
-        <div class="word">${item.front || item[0]}</div>
-        <div class="translation">${item.back || item[1]}</div>
-      </div>
-    `;
-        listEl.appendChild(div);
-      }
-
-      renderIndex = end;
+    updateStreak();
+  } catch (error) {
+    console.error('Error loading data:', error);
+    // Defensive fallback: coba initSampleDeck tapi protect jika itu juga error
+    try {
+      initSampleDeck();
+    } catch (e) {
+      console.error('initSampleDeck failed inside loadData catch:', e);
+      deck = [];
+      saveData();
     }
-
-    function fillWordListUntilScrollable() {
-  const listEl = document.getElementById("wordList");
-  while (listEl.scrollHeight <= listEl.clientHeight && renderIndex < deck.length) {
-    renderWordBatch();
   }
 }
 
-
-    function resetWordList() {
-  const listEl = document.getElementById("wordList");
-  listEl.innerHTML = "";
-  renderIndex = 0;
-  renderWordBatch();
-  fillWordListUntilScrollable(); // pastikan list bisa discroll
-}
-
-
-
-
-    // ----- REPLACE initSampleDeck() -----
-    function initSampleDeck() {
-      const defaultSamples = [
-        ['ask', 'bertanya'],
-        ['answer', 'menjawab'],
-        ['apple', 'apel'],
+// ----- REPLACE initSampleDeck() -----
+function initSampleDeck() {
+  const defaultSamples = [
+    ['ask', 'bertanya'],
+    ['answer', 'menjawab'],
+    ['apple', 'apel'],
         ['apply', 'menerapkan/melamar'],
         ['area', 'area/wilayah'],
         ['argue', 'berdebat/berargumen'],
@@ -8118,671 +8075,46 @@
         ['situation', 'situasi'], ['apply', 'terapkan'], ['compare', 'bandingkan'], ['discuss', 'diskusikan'], ['develop', 'kembangkan'],
         ['increase', 'tingkatkan'], ['maintain', 'pertahankan'], ['improve', 'perbaiki'], ['support', 'dukung'], ['achieve', 'capai'],
         ['create', 'ciptakan'], ['manage', 'kelola'], ['understand', 'pahami'], ['explain', 'jelaskan'], ['describe', 'gambarkan'],
-        ['suggest', 'sarankan'], ['decide', 'putuskan'], ['choose', 'pilih'], ['find', 'temukan'], ['accept', 'menerima'], ['achieve', 'mencapai'], ['add', 'menambahkan'],
-        ['admire', 'mengagumi'],
-        ['admit', 'mengakui'],
-        ['advise', 'menasihati'],
-        ['afford', 'mampu membeli'],
-        ['agree', 'setuju'],
-        ['allow', 'mengizinkan'],
-        ['analyze', 'menganalisis'],
-        ['answer', 'menjawab'],
-        ['apologize', 'meminta maaf'],
-        ['appear', 'muncul'],
-        ['apply', 'menerapkan'],
-        ['argue', 'berdebat'],
-        ['arrange', 'mengatur'],
-        ['arrive', 'tiba'],
-        ['ask', 'bertanya'],
-        ['assist', 'membantu'],
-        ['assume', 'mengasumsikan'],
-        ['attack', 'menyerang'],
-        ['attempt', 'mencoba'],
-        ['attend', 'menghadiri'],
-        ['attract', 'menarik'],
-        ['avoid', 'menghindari'],
-        ['balance', 'menyeimbangkan'],
-        ['bake', 'memanggang'],
-        ['believe', 'percaya'],
-        ['belong', 'milik'],
-        ['borrow', 'meminjam'],
-        ['break', 'memecahkan'],
-        ['bring', 'membawa'],
-        ['build', 'membangun'],
-        ['burn', 'membakar'],
-        ['buy', 'membeli'],
-        ['call', 'memanggil'],
-        ['care', 'peduli'],
-        ['carry', 'membawa'],
-        ['catch', 'menangkap'],
-        ['change', 'mengubah'],
-        ['choose', 'memilih'],
-        ['clean', 'membersihkan'],
-        ['climb', 'memanjat'],
-        ['close', 'menutup'],
-        ['collect', 'mengumpulkan'],
-        ['combine', 'menggabungkan'],
-        ['come', 'datang'],
-        ['communicate', 'berkomunikasi'],
-        ['compare', 'membandingkan'],
-        ['complain', 'mengeluh'],
-        ['complete', 'menyelesaikan'],
-        ['concentrate', 'berkonsentrasi'],
-        ['confirm', 'mengonfirmasi'],
-        ['connect', 'menghubungkan'],
-        ['consider', 'mempertimbangkan'],
-        ['consist', 'terdiri dari'],
-        ['contain', 'mengandung'],
-        ['continue', 'melanjutkan'],
-        ['control', 'mengendalikan'],
-        ['cook', 'memasak'],
-        ['copy', 'menyalin'],
-        ['correct', 'membetulkan'],
-        ['cost', 'berharga'],
-        ['count', 'menghitung'],
-        ['cover', 'menutupi'],
-        ['create', 'menciptakan'],
-        ['cross', 'menyeberang'],
-        ['cry', 'menangis'],
-        ['cut', 'memotong'],
-        ['dance', 'menari'],
-        ['deal', 'menangani'],
-        ['decide', 'memutuskan'],
-        ['deliver', 'mengantarkan'],
-        ['depend', 'bergantung'],
-        ['describe', 'menggambarkan'],
-        ['design', 'merancang'],
-        ['destroy', 'menghancurkan'],
-        ['develop', 'mengembangkan'],
-        ['die', 'mati'],
-        ['discover', 'menemukan'],
-        ['discuss', 'membahas'],
-        ['divide', 'membagi'],
-        ['do', 'melakukan'],
-        ['draw', 'menggambar'],
-        ['dream', 'bermimpi'],
-        ['drink', 'minum'],
-        ['drive', 'mengemudi'],
-        ['drop', 'menjatuhkan'],
-        ['eat', 'makan'],
-        ['encourage', 'mendorong'],
-        ['enjoy', 'menikmati'],
-        ['enter', 'memasuki'],
-        ['escape', 'melarikan diri'],
-        ['examine', 'memeriksa'],
-        ['exist', 'ada'],
-        ['expect', 'mengharapkan'],
-        ['explain', 'menjelaskan'],
-        ['explore', 'menjelajahi'],
-        ['express', 'mengungkapkan'],
-        ['extend', 'memperpanjang'],
-        ['face', 'menghadapi'],
-        ['fail', 'gagal'],
-        ['fall', 'jatuh'],
-        ['feed', 'memberi makan'],
-        ['feel', 'merasakan'],
-        ['fight', 'bertarung'],
-        ['fill', 'mengisi'],
-        ['find', 'menemukan'],
-        ['finish', 'menyelesaikan'],
-        ['fit', 'cocok'],
-        ['fix', 'memperbaiki'],
-        ['fly', 'terbang'],
-        ['follow', 'mengikuti'],
-        ['forget', 'melupakan'],
-        ['forgive', 'memaafkan'],
-        ['form', 'membentuk'],
-        ['freeze', 'membekukan'],
-        ['gain', 'memperoleh'],
-        ['gather', 'mengumpulkan'],
-        ['give', 'memberi'],
-        ['go', 'pergi'],
-        ['grow', 'tumbuh'],
-        ['guess', 'menebak'],
-        ['handle', 'menangani'],
-        ['hang', 'menggantung'],
-        ['happen', 'terjadi'],
-        ['hate', 'membenci'],
-        ['have', 'memiliki'],
-        ['hear', 'mendengar'],
-        ['help', 'membantu'],
-        ['hide', 'bersembunyi'],
-        ['hit', 'memukul'],
-        ['hold', 'memegang'],
-        ['hope', 'berharap'],
-        ['hunt', 'berburu'],
-        ['hurry', 'bergegas'],
-        ['identify', 'mengidentifikasi'],
-        ['imagine', 'membayangkan'],
-        ['improve', 'memperbaiki'],
-        ['include', 'termasuk'],
-        ['increase', 'meningkatkan'],
-        ['influence', 'mempengaruhi'],
-        ['inform', 'memberitahu'],
-        ['introduce', 'memperkenalkan'],
-        ['invite', 'mengundang'],
-        ['join', 'bergabung'],
-        ['jump', 'melompat'],
-        ['keep', 'menyimpan'],
-        ['kick', 'menendang'],
-        ['kill', 'membunuh'],
-        ['kiss', 'mencium'],
-        ['knock', 'mengetuk'],
-        ['know', 'mengetahui'],
-        ['laugh', 'tertawa'],
-        ['lead', 'memimpin'],
-        ['learn', 'belajar'],
-        ['leave', 'meninggalkan'],
-        ['lend', 'meminjamkan'],
-        ['let', 'membiarkan'],
-        ['lie', 'berbohong'],
-        ['lift', 'mengangkat'],
-        ['like', 'menyukai'],
-        ['listen', 'mendengarkan'],
-        ['live', 'hidup'],
-        ['look', 'melihat'],
-        ['lose', 'kehilangan'],
-        ['love', 'mencintai'],
-        ['make', 'membuat'],
-        ['manage', 'mengelola'],
-        ['mark', 'menandai'],
-        ['marry', 'menikah'],
-        ['match', 'mencocokkan'],
-        ['mean', 'berarti'],
-        ['measure', 'mengukur'],
-        ['meet', 'bertemu'],
-        ['mention', 'menyebutkan'],
-        ['mind', 'mempermasalahkan'],
-        ['miss', 'merindukan'],
-        ['move', 'bergerak'],
-        ['need', 'membutuhkan'],
-        ['notice', 'memperhatikan'],
-        ['obtain', 'memperoleh'],
-        ['occur', 'terjadi'],
-        ['offer', 'menawarkan'],
-        ['open', 'membuka'],
-        ['operate', 'mengoperasikan'],
-        ['order', 'memesan'],
-        ['organize', 'mengatur'],
-        ['overcome', 'mengatasi'],
-        ['own', 'memiliki'],
-        ['pack', 'mengemas'],
-        ['paint', 'melukis'],
-        ['participate', 'berpartisipasi'],
-        ['pass', 'melewati'],
-        ['pay', 'membayar'],
-        ['perform', 'melakukan'],
-        ['plan', 'merencanakan'],
-        ['play', 'bermain'],
-        ['point', 'menunjuk'],
-        ['possess', 'memiliki'],
-        ['practice', 'berlatih'],
-        ['prefer', 'lebih suka'],
-        ['prepare', 'mempersiapkan'],
-        ['present', 'menyajikan'],
-        ['press', 'menekan'],
-        ['prevent', 'mencegah'],
-        ['produce', 'menghasilkan'],
-        ['promise', 'berjanji'],
-        ['protect', 'melindungi'],
-        ['prove', 'membuktikan'],
-        ['provide', 'menyediakan'],
-        ['pull', 'menarik'],
-        ['push', 'mendorong'],
-        ['put', 'meletakkan'],
-        ['ceremony', 'upacara'],
-        ['challenge', 'tantangan'],
-        ['champion', 'juara'],
-        ['character', 'karakter'],
-        ['charity', 'amal'],
-        ['chemical', 'kimia'],
-        ['choice', 'pilihan'],
-        ['circumstance', 'keadaan'],
-        ['citizen', 'warga negara'],
-        ['civilization', 'peradaban'],
-        ['claim', 'mengklaim'],
-        ['classroom', 'ruang kelas'],
-        ['climate', 'iklim'],
-        ['clue', 'petunjuk'],
-        ['collapse', 'runtuh'],
-        ['colleague', 'rekan kerja'],
-        ['comfort', 'kenyamanan'],
-        ['command', 'perintah'],
-        ['commerce', 'perdagangan'],
-        ['committee', 'panitia'],
-        ['community', 'komunitas'],
-        ['company', 'perusahaan'],
-        ['comparison', 'perbandingan'],
-        ['competition', 'kompetisi'],
-        ['complaint', 'keluhan'],
-        ['complex', 'rumit'],
-        ['component', 'komponen'],
-        ['concept', 'konsep'],
-        ['conclusion', 'kesimpulan'],
-        ['condition', 'kondisi'],
-        ['conference', 'konferensi'],
-        ['confidence', 'kepercayaan diri'],
-        ['conflict', 'konflik'],
-        ['connection', 'hubungan'],
-        ['consequence', 'konsekuensi'],
-        ['consideration', 'pertimbangan'],
-        ['construction', 'konstruksi'],
-        ['consumer', 'konsumen'],
-        ['contact', 'kontak'],
-        ['contest', 'kontes'],
-        ['context', 'konteks'],
-        ['continent', 'benua'],
-        ['contract', 'kontrak'],
-        ['contribution', 'kontribusi'],
-        ['control', 'kendali'],
-        ['conversation', 'percakapan'],
-        ['conviction', 'keyakinan'],
-        ['cooperation', 'kerja sama'],
-        ['corporation', 'perusahaan besar'],
-        ['corruption', 'korupsi'],
-        ['courage', 'keberanian'],
-        ['course', 'kursus'],
-        ['court', 'pengadilan'],
-        ['cousin', 'sepupu'],
-        ['creation', 'ciptaan'],
-        ['creature', 'makhluk'],
-        ['crime', 'kejahatan'],
-        ['crisis', 'krisis'],
-        ['criticism', 'kritik'],
-        ['crowd', 'kerumunan'],
-        ['culture', 'budaya'],
-        ['currency', 'mata uang'],
-        ['current', 'arus'],
-        ['customer', 'pelanggan'],
-        ['damage', 'kerusakan'],
-        ['danger', 'bahaya'],
-        ['data', 'data'],
-        ['database', 'basis data'],
-        ['deadline', 'batas waktu'],
-        ['deal', 'kesepakatan'],
-        ['debate', 'perdebatan'],
-        ['debt', 'utang'],
-        ['decision', 'keputusan'],
-        ['definition', 'definisi'],
-        ['degree', 'gelar'],
-        ['delivery', 'pengiriman'],
-        ['demand', 'permintaan'],
-        ['democracy', 'demokrasi'],
-        ['demonstration', 'demonstrasi'],
-        ['department', 'departemen'],
-        ['departure', 'keberangkatan'],
-        ['deposit', 'setoran'],
-        ['depression', 'depresi'],
-        ['depth', 'kedalaman'],
-        ['description', 'deskripsi'],
-        ['design', 'desain'],
-        ['desire', 'keinginan'],
-        ['desk', 'meja'],
-        ['destination', 'tujuan'],
-        ['detail', 'detail'],
-        ['detective', 'detektif'],
-        ['development', 'pengembangan'],
-        ['device', 'perangkat'],
-        ['devotion', 'pengabdian'],
-        ['dialogue', 'dialog'],
-        ['diet', 'pola makan'],
-        ['difference', 'perbedaan'],
-        ['difficulty', 'kesulitan'],
-        ['dinner', 'makan malam'],
-        ['direction', 'arah'],
-        ['director', 'direktur'],
-        ['disaster', 'bencana'],
-        ['discipline', 'disiplin'],
-        ['discount', 'diskon'],
-        ['discussion', 'diskusi'],
-        ['disease', 'penyakit'],
-        ['display', 'tampilan'],
-        ['distance', 'jarak'],
-        ['distribution', 'distribusi'],
-        ['district', 'wilayah'],
-        ['document', 'dokumen'],
-        ['donation', 'donasi'],
-        ['door', 'pintu'],
-        ['doubt', 'keraguan'],
-        ['draft', 'draf'],
-        ['drama', 'drama'],
-        ['dream', 'mimpi'],
-        ['driver', 'pengemudi'],
-        ['duty', 'tugas'],
-        ['eagle', 'elang'],
-        ['ear', 'telinga'],
-        ['earth', 'bumi'],
-        ['ease', 'kemudahan'],
-        ['east', 'timur'],
-        ['edge', 'tepi'],
-        ['education', 'pendidikan'],
-        ['effect', 'efek'],
-        ['effort', 'usaha'],
-        ['egg', 'telur'],
-        ['eight', 'delapan'],
-        ['eighteen', 'delapan belas'],
-        ['eighty', 'delapan puluh'],
-        ['either', 'baik'],
-        ['elevator', 'lift'],
-        ['elephant', 'gajah'],
-        ['email', 'surel'],
-        ['emergency', 'darurat'],
-        ['emotion', 'emosi'],
-        ['emphasis', 'penekanan'],
-        ['employee', 'karyawan'],
-        ['employer', 'majikan'],
-        ['employment', 'pekerjaan'],
-        ['empty', 'kosong'],
-        ['enable', 'mengaktifkan'],
-        ['encounter', 'pertemuan'],
-        ['encourage', 'mendorong'],
-        ['end', 'akhir'],
-        ['energy', 'energi'],
-        ['engine', 'mesin'],
-        ['enhance', 'meningkatkan'],
-        ['enjoy', 'menikmati'],
-        ['enough', 'cukup'],
-        ['ensure', 'memastikan'],
-        ['entertainment', 'hiburan'],
-        ['environment', 'lingkungan'],
-        ['equipment', 'peralatan'],
-        ['error', 'kesalahan'],
-        ['escape', 'melarikan diri'],
-        ['especially', 'terutama'],
-        ['establish', 'mendirikan'],
-        ['estimate', 'perkiraan'],
-        ['evaluate', 'menilai'],
-        ['event', 'acara'],
-        ['everybody', 'semua orang'],
-        ['evidence', 'bukti'],
-        ['evolution', 'evolusi'],
-        ['exactly', 'tepatnya'],
-        ['example', 'contoh'],
-        ['exchange', 'pertukaran'],
-        ['exciting', 'menarik'],
-        ['exercise', 'latihan'],
-        ['exist', 'ada'],
-        ['expect', 'mengharapkan'],
-        ['experience', 'pengalaman'],
-        ['experiment', 'percobaan'],
-        ['expert', 'ahli'],
-        ['explanation', 'penjelasan'],
-        ['exploration', 'penjelajahan'],
-        ['exposure', 'paparan'],
-        ['expression', 'ekspresi'],
-        ['extend', 'memperpanjang'],
-        ['extension', 'perpanjangan'],
-        ['extra', 'ekstra'],
-        ['eye', 'mata'],
-        ['face', 'wajah'], ['fact', 'fakta'], ['family', 'keluarga'], ['father', 'ayah'], ['fear', 'ketakutan'],
-        ['field', 'bidang'], ['figure', 'angka'], ['film', 'film'], ['fire', 'api'], ['fish', 'ikan'],
-        ['floor', 'lantai'], ['flower', 'bunga'], ['food', 'makanan'], ['force', 'gaya'], ['form', 'bentuk'],
-        ['friend', 'teman'], ['game', 'permainan'], ['garden', 'taman'], ['float', 'mengapung'],
-        ['fold', 'melipat'],
-        ['forbid', 'melarang'],
-        ['forecast', 'meramalkan'],
-        ['foresee', 'melihat sebelumnya'],
-        ['forgive', 'memaafkan'],
-        ['form', 'membentuk'],
-        ['formulate', 'merumuskan'],
-        ['fortify', 'memperkuat'],
-        ['found', 'mendirikan'],
-        ['frame', 'membingkai'],
-        ['freeze', 'membekukan'],
-        ['frighten', 'menakut-nakuti'],
-        ['fry', 'menggoreng'],
-        ['fulfill', 'memenuhi'],
-        ['function', 'berfungsi'],
-        ['fund', 'mendanai'],
-        ['gain', 'memperoleh'],
-        ['gather', 'mengumpulkan'],
-        ['generate', 'menghasilkan'],
-        ['glance', 'melirik'],
-        ['glide', 'meluncur'],
-        ['glow', 'bersinar'],
-        ['grab', 'meraih'],
-        ['grade', 'memberi nilai'],
-        ['graduate', 'lulus'],
-        ['grant', 'memberikan'],
-        ['grasp', 'memahami'],
-        ['grate', 'memarut'],
-        ['greet', 'menyapa'],
-        ['grind', 'menggiling'],
-        ['grip', 'mencengkeram'],
-        ['grow', 'tumbuh'],
-        ['guarantee', 'menjamin'],
-        ['guard', 'menjaga'],
-        ['guess', 'menebak'],
-        ['guide', 'memandu'],
-        ['halt', 'menghentikan'],
-        ['hammer', 'memalu'],
-        ['hand', 'memberikan'],
-        ['handle', 'menangani'],
-        ['hang', 'menggantung'],
-        ['happen', 'terjadi'],
-        ['harass', 'mengganggu'],
-        ['harm', 'mencelakai'],
-        ['harvest', 'memanen'],
-        ['hate', 'membenci'],
-        ['haul', 'mengangkut'],
-        ['heal', 'menyembuhkan'],
-        ['hear', 'mendengar'],
-        ['heat', 'memanaskan'],
-        ['help', 'membantu'],
-        ['hesitate', 'ragu-ragu'],
-        ['hide', 'menyembunyikan'],
-        ['highlight', 'menyoroti'],
-        ['hinder', 'menghalangi'],
-        ['hire', 'mempekerjakan'],
-        ['hit', 'memukul'],
-        ['hold', 'memegang'],
-        ['honor', 'menghormati'],
-        ['hook', 'mengaitkan'],
-        ['hope', 'berharap'],
-        ['hop', 'melompat'],
-        ['host', 'menjadi tuan rumah'],
-        ['hug', 'memeluk'],
-        ['hunt', 'berburu'],
-        ['hurry', 'bergegas'],
-        ['hurt', 'menyakiti'],
-        ['identify', 'mengidentifikasi'],
-        ['ignore', 'mengabaikan'],
-        ['illustrate', 'menggambarkan'],
-        ['imagine', 'membayangkan'],
-        ['imitate', 'meniru'],
-        ['immerse', 'membenamkan'],
-        ['impart', 'memberikan'],
-        ['implement', 'menerapkan'],
-        ['imply', 'menyiratkan'],
-        ['import', 'mengimpor'],
-        ['impose', 'memberlakukan'],
-        ['impress', 'mengagumkan'],
-        ['improve', 'memperbaiki'],
-        ['include', 'memasukkan'],
-        ['incorporate', 'menggabungkan'],
-        ['increase', 'meningkatkan'],
-        ['indicate', 'menunjukkan'],
-        ['induce', 'menyebabkan'],
-        ['infect', 'menginfeksi'],
-        ['infer', 'menyimpulkan'],
-        ['influence', 'mempengaruhi'],
-        ['inform', 'memberitahu'],
-        ['ingest', 'menelan'],
-        ['inhale', 'menghirup'],
-        ['inherit', 'mewarisi'],
-        ['initiate', 'memulai'],
-        ['inject', 'menyuntikkan'],
-        ['injure', 'melukai'],
-        ['innovate', 'berinovasi'],
-        ['inquire', 'menanyakan'],
-        ['insert', 'memasukkan'],
-        ['inspect', 'memeriksa'],
-        ['inspire', 'menginspirasi'],
-        ['install', 'menginstal'],
-        ['instruct', 'menginstruksikan'],
-        ['insult', 'menghina'],
-        ['integrate', 'mengintegrasikan'],
-        ['intend', 'bermaksud'],
-        ['intensify', 'memperkuat'],
-        ['interact', 'berinteraksi'],
-        ['intercept', 'mencegat'],
-        ['interfere', 'mengganggu'],
-        ['interpret', 'menafsirkan'],
-        ['interrupt', 'menginterupsi'],
-        ['intervene', 'campur tangan'],
-        ['introduce', 'memperkenalkan'],
-        ['invent', 'menciptakan'],
-        ['invest', 'menginvestasikan'],
-        ['invite', 'mengundang'],
-        ['involve', 'melibatkan'],
-        ['iron', 'menyetrika'], ['wander', 'mengembara'],
-        ['warehouse', 'gudang'],
-        ['warfare', 'pertempuran'],
-        ['warmth', 'kehangatan'],
-        ['warning', 'peringatan'],
-        ['warrior', 'pejuang'],
-        ['wash', 'mencuci'],
-        ['waste', 'membuang'],
-        ['watch', 'menonton'],
-        ['waterfall', 'air terjun'],
-        ['wave', 'gelombang'],
-        ['wealth', 'kekayaan'],
-        ['weapon', 'senjata'],
-        ['weary', 'lelah'],
-        ['weather', 'cuaca'],
-        ['weave', 'menenun'],
-        ['wedding', 'pernikahan'],
-        ['weed', 'gulma'],
-        ['weekend', 'akhir pekan'],
-        ['weep', 'menangis'],
-        ['weigh', 'menimbang'],
-        ['weight', 'berat'],
-        ['welcome', 'menyambut'],
-        ['welfare', 'kesejahteraan'],
-        ['wellbeing', 'kesehatan'],
-        ['west', 'barat'],
-        ['wet', 'basah'],
-        ['whale', 'paus'],
-        ['whatsoever', 'apa pun'],
-        ['wheat', 'gandum'],
-        ['wheel', 'roda'],
-        ['when', 'ketika'],
-        ['where', 'dimana'],
-        ['whereas', 'sedangkan'],
-        ['whether', 'apakah'],
-        ['whisper', 'berbisik'],
-        ['whistle', 'bersiul'],
-        ['white', 'putih'],
-        ['whole', 'seluruh'],
-        ['wholly', 'sepenuhnya'],
-        ['wicked', 'jahat'],
-        ['wide', 'lebar'],
-        ['widespread', 'tersebar luas'],
-        ['widow', 'janda'],
-        ['width', 'lebar'],
-        ['wild', 'liar'],
-        ['wilderness', 'alam liar'],
-        ['will', 'kehendak'],
-        ['willing', 'bersedia'],
-        ['win', 'menang'],
-        ['wind', 'angin'],
-        ['window', 'jendela'],
-        ['wine', 'anggur'],
-        ['wing', 'sayap'],
-        ['winner', 'pemenang'],
-        ['winter', 'musim dingin'],
-        ['wipe', 'menghapus'],
-        ['wire', 'kawat'],
-        ['wisdom', 'kebijaksanaan'],
-        ['wise', 'bijaksana'],
-        ['wish', 'berharap'],
-        ['wit', 'kecerdikan'],
-        ['withdraw', 'menarik'],
-        ['within', 'di dalam'],
-        ['without', 'tanpa'],
-        ['witness', 'saksi'],
-        ['wolf', 'serigala'],
-        ['woman', 'wanita'],
-        ['wonder', 'heran'],
-        ['wonderful', 'indah'],
-        ['wood', 'kayu'],
-        ['wool', 'wol'],
-        ['word', 'kata'],
-        ['work', 'bekerja'],
-        ['worker', 'pekerja'],
-        ['workplace', 'tempat kerja'],
-        ['world', 'dunia'],
-        ['worldwide', 'seluruh dunia'],
-        ['worm', 'cacing'],
-        ['worry', 'khawatir'],
-        ['worship', 'menyembah'],
-        ['worth', 'berharga'],
-        ['worthy', 'layak'],
-        ['would', 'akan'],
-        ['wound', 'luka'],
-        ['wrap', 'membungkus'],
-        ['wreck', 'merusak'],
-        ['wrestle', 'bergulat'],
-        ['wrinkle', 'kerutan'],
-        ['write', 'menulis'],
-        ['writer', 'penulis'],
-        ['writing', 'tulisan'],
-        ['wrong', 'salah'],
-        ['yard', 'halaman'],
-        ['year', 'tahun'],
-        ['yell', 'berteriak'],
-        ['yellow', 'kuning'],
-        ['yes', 'ya'],
-        ['yesterday', 'kemarin'],
-        ['yield', 'menghasilkan'],
-        ['young', 'muda'],
-        ['youth', 'pemuda'],
-        ['zeal', 'semangat'],
-        ['zebra', 'zebra'],
-        ['zero', 'nol'],
-        ['zone', 'zona'],
-        ['zoo', 'kebun binatang'],
-        ['zoom', 'memperbesar'],
-        ['zucchini', 'zucchini']
-      ];
+        ['suggest', 'sarankan'], ['decide', 'putuskan'], ['choose', 'pilih'], ['find', 'temukan'], ['accept', 'menerima'], ['achieve', 'mencapai'], ['add', 'menambahkan']
+  ];
 
-      let samples = defaultSamples; // kalau nanti ambil dari sumber lain, validate dulu
+  let samples = defaultSamples; // kalau nanti ambil dari sumber lain, validate dulu
 
-      try {
-        if (!Array.isArray(samples) || samples.length === 0) {
-          samples = defaultSamples;
-        }
-
-        deck = (samples || []).map(([front, back], index) => ({
-          id: Date.now() + index,
-          front: front || '',
-          back: back || '',
-          interval: 0,
-          repetition: 0,
-          ef: 2.5,
-          due: todayDate(),
-          difficulty: 3,
-          history: []
-        }));
-
-        saveData();
-      } catch (err) {
-        console.error('initSampleDeck fatal:', err);
-        // guaranteed minimal fallback
-        deck = defaultSamples.map(([front, back], index) => ({
-          id: Date.now() + index,
-          front,
-          back,
-          interval: 0,
-          repetition: 0,
-          ef: 2.5,
-          due: todayDate(),
-          difficulty: 3,
-          history: []
-        }));
-        saveData();
-      }
+  try {
+    if (!Array.isArray(samples) || samples.length === 0) {
+      samples = defaultSamples;
     }
+
+    deck = (samples || []).map(([front, back], index) => ({
+      id: Date.now() + index,
+      front: front || '',
+      back: back || '',
+      interval: 0,
+      repetition: 0,
+      ef: 2.5,
+      due: todayDate(),
+      difficulty: 3,
+      history: []
+    }));
+
+    saveData();
+  } catch (err) {
+    console.error('initSampleDeck fatal:', err);
+    // guaranteed minimal fallback
+    deck = defaultSamples.map(([front, back], index) => ({
+      id: Date.now() + index,
+      front,
+      back,
+      interval: 0,
+      repetition: 0,
+      ef: 2.5,
+      due: todayDate(),
+      difficulty: 3,
+      history: []
+    }));
+    saveData();
+  }
+}
 
 
 
@@ -9688,14 +9020,6 @@
       document.getElementById('wordInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addWord();
       });
-
-      // Lazy load saat scroll wordList
-      document.getElementById("wordList").addEventListener("scroll", function () {
-        if (this.scrollTop + this.clientHeight >= this.scrollHeight - 50) {
-          renderWordBatch();
-        }
-      });
-
 
       // Search
       document.getElementById('search').addEventListener('input', (e) => {
