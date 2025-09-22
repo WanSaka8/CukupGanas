@@ -1542,6 +1542,10 @@
     const STATS_KEY = 'vocabsr-enhanced:stats';
 
     let deck = [];
+    // Lazy loading state
+    let renderBatchSize = 100; // jumlah kata per batch
+    let renderIndex = 0;       // posisi terakhir yang sudah ditampilkan
+
     let studyQueue = [];
     let currentCard = null;
     let studySession = {
@@ -1578,63 +1582,92 @@
     }
 
     // ----- REPLACE loadData() -----
-function loadData() {
-  try {
-    const deckData = localStorage.getItem(STORAGE_KEY);
-    const statsData = localStorage.getItem(STATS_KEY);
-
-    if (deckData) {
-      const parsed = JSON.parse(deckData);
-      if (Array.isArray(parsed)) {
-        deck = parsed.map(card => ({
-          ...card,
-          id: card.id || Date.now() + Math.random(),
-          interval: card.interval || 0,
-          repetition: card.repetition || 0,
-          ef: card.ef || 2.5,
-          due: card.due || todayDate(),
-          difficulty: card.difficulty || 3,
-          history: card.history || []
-        }));
-      } else {
-        console.warn('loadData: parsed deck is not an array, falling back to sample deck');
-        initSampleDeck();
-      }
-    } else {
-      initSampleDeck();
-    }
-
-    if (statsData) {
+    function loadData() {
       try {
-        const parsedStats = JSON.parse(statsData);
-        if (parsedStats && typeof parsedStats === 'object') {
-          stats = { ...stats, ...parsedStats };
+        const deckData = localStorage.getItem(STORAGE_KEY);
+        const statsData = localStorage.getItem(STATS_KEY);
+
+        if (deckData) {
+          const parsed = JSON.parse(deckData);
+          if (Array.isArray(parsed)) {
+            deck = parsed.map(card => ({
+              ...card,
+              id: card.id || Date.now() + Math.random(),
+              interval: card.interval || 0,
+              repetition: card.repetition || 0,
+              ef: card.ef || 2.5,
+              due: card.due || todayDate(),
+              difficulty: card.difficulty || 3,
+              history: card.history || []
+            }));
+          } else {
+            console.warn('loadData: parsed deck is not an array, falling back to sample deck');
+            initSampleDeck();
+          }
+        } else {
+          initSampleDeck();
         }
-      } catch (e) {
-        console.warn('loadData: invalid stats JSON, ignoring statsData');
+
+        if (statsData) {
+          try {
+            const parsedStats = JSON.parse(statsData);
+            if (parsedStats && typeof parsedStats === 'object') {
+              stats = { ...stats, ...parsedStats };
+            }
+          } catch (e) {
+            console.warn('loadData: invalid stats JSON, ignoring statsData');
+          }
+        }
+
+        updateStreak();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        // Defensive fallback: coba initSampleDeck tapi protect jika itu juga error
+        try {
+          initSampleDeck();
+        } catch (e) {
+          console.error('initSampleDeck failed inside loadData catch:', e);
+          deck = [];
+          saveData();
+        }
       }
     }
 
-    updateStreak();
-  } catch (error) {
-    console.error('Error loading data:', error);
-    // Defensive fallback: coba initSampleDeck tapi protect jika itu juga error
-    try {
-      initSampleDeck();
-    } catch (e) {
-      console.error('initSampleDeck failed inside loadData catch:', e);
-      deck = [];
-      saveData();
-    }
-  }
-}
+    function renderWordBatch() {
+      const listEl = document.getElementById("wordList");
+      const end = Math.min(renderIndex + renderBatchSize, deck.length);
 
-// ----- REPLACE initSampleDeck() -----
-function initSampleDeck() {
-  const defaultSamples = [
-    ['ask', 'bertanya'],
-    ['answer', 'menjawab'],
-    ['apple', 'apel'],
+      for (let i = renderIndex; i < end; i++) {
+        const item = deck[i];
+        const div = document.createElement("div");
+        div.className = "list-item";
+        div.innerHTML = `
+      <div>
+        <div class="word">${item.front || item[0]}</div>
+        <div class="translation">${item.back || item[1]}</div>
+      </div>
+    `;
+        listEl.appendChild(div);
+      }
+
+      renderIndex = end;
+    }
+
+    function resetWordList() {
+      const listEl = document.getElementById("wordList");
+      listEl.innerHTML = "";
+      renderIndex = 0;
+      renderWordBatch();
+    }
+
+
+
+    // ----- REPLACE initSampleDeck() -----
+    function initSampleDeck() {
+      const defaultSamples = [
+        ['ask', 'bertanya'],
+        ['answer', 'menjawab'],
+        ['apple', 'apel'],
         ['apply', 'menerapkan/melamar'],
         ['area', 'area/wilayah'],
         ['argue', 'berdebat/berargumen'],
@@ -8701,45 +8734,45 @@ function initSampleDeck() {
         ['zoo', 'kebun binatang'],
         ['zoom', 'memperbesar'],
         ['zucchini', 'zucchini']
-  ];
+      ];
 
-  let samples = defaultSamples; // kalau nanti ambil dari sumber lain, validate dulu
+      let samples = defaultSamples; // kalau nanti ambil dari sumber lain, validate dulu
 
-  try {
-    if (!Array.isArray(samples) || samples.length === 0) {
-      samples = defaultSamples;
+      try {
+        if (!Array.isArray(samples) || samples.length === 0) {
+          samples = defaultSamples;
+        }
+
+        deck = (samples || []).map(([front, back], index) => ({
+          id: Date.now() + index,
+          front: front || '',
+          back: back || '',
+          interval: 0,
+          repetition: 0,
+          ef: 2.5,
+          due: todayDate(),
+          difficulty: 3,
+          history: []
+        }));
+
+        saveData();
+      } catch (err) {
+        console.error('initSampleDeck fatal:', err);
+        // guaranteed minimal fallback
+        deck = defaultSamples.map(([front, back], index) => ({
+          id: Date.now() + index,
+          front,
+          back,
+          interval: 0,
+          repetition: 0,
+          ef: 2.5,
+          due: todayDate(),
+          difficulty: 3,
+          history: []
+        }));
+        saveData();
+      }
     }
-
-    deck = (samples || []).map(([front, back], index) => ({
-      id: Date.now() + index,
-      front: front || '',
-      back: back || '',
-      interval: 0,
-      repetition: 0,
-      ef: 2.5,
-      due: todayDate(),
-      difficulty: 3,
-      history: []
-    }));
-
-    saveData();
-  } catch (err) {
-    console.error('initSampleDeck fatal:', err);
-    // guaranteed minimal fallback
-    deck = defaultSamples.map(([front, back], index) => ({
-      id: Date.now() + index,
-      front,
-      back,
-      interval: 0,
-      repetition: 0,
-      ef: 2.5,
-      due: todayDate(),
-      difficulty: 3,
-      history: []
-    }));
-    saveData();
-  }
-}
 
 
 
@@ -9645,6 +9678,14 @@ function initSampleDeck() {
       document.getElementById('wordInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addWord();
       });
+
+      // Lazy load saat scroll wordList
+      document.getElementById("wordList").addEventListener("scroll", function () {
+        if (this.scrollTop + this.clientHeight >= this.scrollHeight - 50) {
+          renderWordBatch();
+        }
+      });
+
 
       // Search
       document.getElementById('search').addEventListener('input', (e) => {
